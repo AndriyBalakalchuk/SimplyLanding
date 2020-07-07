@@ -114,3 +114,27 @@
   text-align: center;
   border-bottom: 1px solid black;
 }
+
+.headerDiv{
+  background:#ecebeb;
+  font-family: 'Open Sans', sans-serif;
+  text-align:center;
+  font-size:10pt;
+  font-weight:bold;
+  padding: 10px 0px 10px 0px;
+  margin: 0;
+  border-bottom: 1px solid #c7c7c7;
+}
+.JustRowDiv{
+  font-family: 'Open Sans', sans-serif;
+  text-align:center;
+  font-size:9pt;
+  padding: 5px 0px 5px 0px;
+  margin: 0;
+  border-bottom: 1px solid #efefef;
+  height:42px;
+  overflow: overlay;
+}
+.JustRowDiv:hover{
+  background-color:#efefef;
+}

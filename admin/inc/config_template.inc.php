@@ -12,6 +12,20 @@ $config['Logo']                 = $config['sitelink'].'/admin/images/SimplyLandi
 $config['Favicon']              = $config['sitelink'].'/admin/images/favicon-32x32.png';  #фавикон для сайта
 $config['Copyright']            = 'Created by BVStudio in 2020.';  #мелкий текст внизу интерфейса
 
+# Настройки меню навигации
+$menu                           = array();
+$menu['moders']	           	= 'Moderators'; 
+$menu['ChangePass']	       	= 'Change password'; 
+$menu['Telephone']	        = 'Telephone'; 
+$menu['Slider']	      	    = 'Header';
+$menu['Skills']	         	= 'Skills';
+$menu['Portfolio']	      	= 'Portfolio'; 
+$menu['Feedback']	      	= 'Feedback'; 
+$menu['Partners']	      	= 'Partners'; 
+$menu['Expirience']	        = 'Expirience';
+$menu['Contacts']	      	= 'Contacts'; 
+$menu['MapLocPoints']	    = 'Map Locations'; 
+
 # Настройки почты - если требуется отправки писем
 $email_config                   = array();
 $email_config['Host']           = '#EmailHost'; // SMTP сервера вашей почты

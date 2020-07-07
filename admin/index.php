@@ -32,113 +32,153 @@ if(file_exists($path.'inc/config.inc.php')){
 if(!$_SESSION['new']['Logined']){//пользователь не вошел, переброс на вход
   header("Location: LogIN.php");exit;
 }
-
+//получаем уровень доступа пользователя
+$intUserPermis = checkUserBy('signature', $_SESSION['new']['signature'], true, array('accesslevel'))[0]['accesslevel']*1;
 
 
 // Заголовок кодировки
 header('Content-type: text/html; charset='.$config['encoding']);
 
- $strIcoButton1 = 'fa-address-card'; //иконка по умолчанию для кнопки войти/выйти
- $strLinkButton1 = $config['sitelink']."admin/LogIN.php"; //ссылка по умолчанию для кнопки войти/выйти
- $strTextButton1 = 'Logout'; //текст по умолчанию для кнопки войти/выйти
 
- $strIcoButton2 = 'fa-plus-circle'; //иконка по умолчанию для кнопки подать задачу
- $strLinkButton2 = $config['sitelink'].'createtask.php'; //ссылка по умолчанию для кнопки подать задачу
- $strTextButton2 = 'Create new job'; //текст по умолчанию для кнопки подать задачу
-
- $intUserPermis = 0; //по умолчанию у пользователя доступ 0 - но он подтягивается из базы
-
-
+// принимаем информацию пришедшую из форм
+//--------------------------------------------------------------------------------
+if($_POST['strInnFromForm'] == 'ChanPassword'){ //пришел запрос на изменение пароля
+  if(trim($_POST['UserPass']) == '' or trim($_POST['UserPass_rep']) == '' or trim($_POST['UserPass']) != trim($_POST['UserPass_rep'])){header("Location: index.php?strPage=moders&ChangeMod=Password&strError=BadPass&strUsSign=".$_POST['UserSign']);exit;}
+  //проверяем есть ли права на действие
+  if($_POST['UserSign']==$_SESSION['new']['signature'] or checkUserBy('signature', $_POST['UserSign'], true, array('accesslevel'))[0]['accesslevel']*1>$intUserPermis or $_SESSION['new']['signature']==$config['SuperUser']){
+    //хешируем пароль
+    $intSolt=time();
+    $strPassword=sha1(md5(trim($_POST['UserPass'])).$intSolt);
+   //пробуем изменить пароль для юзера
+    if(updateTable('sl_users', array('password','solt','edited'), 'signature', $_POST['UserSign'], array($strPassword,$intSolt,$intSolt))){
+      header("Location: index.php?strPage=moders&strError=passOK");exit;
+      //если по какой-то причине пользователь не обновлен
+    }else{header("Location: index.php?strPage=moders&ChangeMod=Password&strError=BadAcces&strUsSign=".$_POST['UserSign']);exit;}
+  }else{header("Location: index.php?strPage=moders&ChangeMod=Password&strError=BadAcces&strUsSign=".$_POST['UserSign']);exit;}
+//--------------------------------------------------------------------------------
+}elseif($_POST['strInnFromForm'] == 'ChanEmail'){//пришел запрос на изменение адреса почты
+  //проверяем переданные переменные
+  if(trim($_POST['UserEmail']) == '' || checkUserBy('email',trim($_POST['UserEmail']), false)==1 || !validEmail(trim($_POST['UserEmail']))){header("Location: index.php?strPage=moders&ChangeMod=Email&strError=Empty&strUsSign=".$_POST['UserSign']);exit;}
+  //проверяем есть ли права на действие
+  if($_POST['UserSign']==$_SESSION['new']['signature'] or checkUserBy('signature', $_POST['UserSign'], true, array('accesslevel'))[0]['accesslevel']*1>$intUserPermis or $_SESSION['new']['signature']==$config['SuperUser']){
+    //пробуем изменить мейл для юзера
+     if(updateTable('sl_users', array('email','edited'), 'signature', $_POST['UserSign'], array(trim($_POST['UserEmail']),time()))){
+       //если меняли для себя то перезаписать текущие данніе сессии
+       if($_POST['UserSign']==$_SESSION['new']['signature']){$_SESSION['new']['email'] = trim($_POST['UserEmail']);}
+       header("Location: index.php?strPage=moders&strError=passOK");exit;
+       //если по какой-то причине пользователь не обновлен
+     }else{header("Location: index.php?strPage=moders&ChangeMod=Email&strError=BadAcces&strUsSign=".$_POST['UserSign']);exit;}
+   }else{header("Location: index.php?strPage=moders&ChangeMod=Email&strError=BadAcces&strUsSign=".$_POST['UserSign']);exit;}
+//--------------------------------------------------------------------------------
+}elseif($_POST['strInnFromForm'] == 'ChanName'){//пришел запрос на изменение имени юзера
+  //проверяем переданные переменные
+  if(trim($_POST['UserName']) == ''){header("Location: index.php?strPage=moders&ChangeMod=Name&strError=Empty&strUsSign=".$_POST['UserSign']);exit;}
+  //проверяем есть ли права на действие
+  if($_POST['UserSign']==$_SESSION['new']['signature'] or checkUserBy('signature', $_POST['UserSign'], true, array('accesslevel'))[0]['accesslevel']*1>$intUserPermis or $_SESSION['new']['signature']==$config['SuperUser']){
+    //пробуем изменить Имя для юзера
+     if(updateTable('sl_users', array('login','edited'), 'signature', $_POST['UserSign'], array(trim($_POST['UserName']),time()))){
+       //если меняли для себя то перезаписать текущие данніе сессии
+       if($_POST['UserSign']==$_SESSION['new']['signature']){$_SESSION['new']['login'] = trim($_POST['UserName']);}
+       header("Location: index.php?strPage=moders&strError=passOK");exit;
+       //если по какой-то причине пользователь не обновлен
+     }else{header("Location: index.php?strPage=moders&ChangeMod=Name&strError=BadAcces&strUsSign=".$_POST['UserSign']);exit;}
+   }else{header("Location: index.php?strPage=moders&ChangeMod=Name&strError=BadAcces&strUsSign=".$_POST['UserSign']);exit;}
+   //--------------------------------------------------------------------------------
+}elseif($_POST['strInnFromForm'] == 'remove'){//пришел запрос на удаление юзера
+  //проверяем есть ли права на действие
+  if($_POST['UserSign']!=$_SESSION['new']['signature'] and (checkUserBy('signature', $_POST['UserSign'], true, array('accesslevel'))[0]['accesslevel']*1>$intUserPermis or $_SESSION['new']['signature']==$config['SuperUser'])){
+    //пробуем удалить юзера
+     if(removeFromTable('sl_users', 'signature', $_POST['UserSign'])){
+       header("Location: index.php?strPage=moders&strError=passOK");exit;
+       //если по какой-то причине пользователь не обновлен
+     }else{header("Location: index.php?strPage=moders&ChangeMod=remove&strError=BadAcces&strUsSign=".$_POST['UserSign']);exit;}
+   }else{header("Location: index.php?strPage=moders&ChangeMod=remove&strError=BadAcces&strUsSign=".$_POST['UserSign']);exit;}
+   //--------------------------------------------------------------------------------
+}elseif($_POST['strInnFromForm'] == 'accesslevel'){//пришел запрос на изменение прав доступа юзера
+  //проверяем переданные переменные
+  if(trim($_POST['UserAccess']) != 'Employee' and trim($_POST['UserAccess']) != 'Manager'){
+    header("Location: index.php?strPage=moders&ChangeMod=accesslevel&strError=Empty&strUsSign=".$_POST['UserSign']);exit;
+  }else{//преобразуем уровень доступа из строки в числовое значение
+    if($_SESSION['new']['signature']==$config['SuperUser']){
+      if(trim($_POST['UserAccess'])== 'Manager'){
+        $intUserAccess = 1;
+      }else{
+        $intUserAccess = 2;
+      }
+    }else{
+      header("Location: index.php?strPage=moders&ChangeMod=accesslevel&strError=BadAcces&strUsSign=".$_POST['UserSign']);exit;
+    }
+  }
+  //проверяем есть ли права на действие
+  if($_POST['UserSign']!=$_SESSION['new']['signature']){
+    //пробуем изменить Имя для юзера
+     if(updateTable('sl_users', array('accesslevel','edited'), 'signature', $_POST['UserSign'], array($intUserAccess,time()))){
+       header("Location: index.php?strPage=moders&strError=passOK");exit;
+       //если по какой-то причине пользователь не обновлен
+     }else{header("Location: index.php?strPage=moders&ChangeMod=accesslevel&strError=BadAcces&strUsSign=".$_POST['UserSign']);exit;}
+   }else{header("Location: index.php?strPage=moders&ChangeMod=accesslevel&strError=BadAcces&strUsSign=".$_POST['UserSign']);exit;}
+   //--------------------------------------------------------------------------------
+}elseif($_POST['strInnFromForm'] == 'addUser'){//пришел запрос на добавление пользователя
+  //проверяем переданные переменные
+  if(trim($_POST['SuperUser']) == '' or checkUserBy('signature',trim($_POST['SuperUser']), false)){header("Location: index.php?strPage=moders&strError=Empty");exit;}
+  if(trim($_POST['UserLogin']) == ''){header("Location: index.php?strPage=moders&strError=Empty");exit;}
+  if(trim($_POST['UserEmail']) == '' or checkUserBy('email',trim($_POST['UserEmail']), false) or !validEmail(trim($_POST['UserEmail']))){header("Location: index.php?strPage=moders&strError=Empty");exit;}
+  if(trim($_POST['UserPass']) == '' or trim($_POST['UserPass_rep']) == '' or trim($_POST['UserPass']) != trim($_POST['UserPass_rep'])){header("Location: index.php?strPage=moders&strError=Empty");exit;}
+  if(trim($_POST['UserAccess']) != 'Employee' and trim($_POST['UserAccess']) != 'Manager'){
+    header("Location: index.php?strPage=moders&strError=Empty");exit;
+  }else{//преобразуем уровень доступа из строки в числовое значение
+    if($_SESSION['new']['signature']==$config['SuperUser'] and trim($_POST['UserAccess'])== 'Manager'){
+      $intUserAccess = 1;
+    }else{
+      $intUserAccess = 2;
+    }
+  }
+  //проверяем есть ли права на действие
+  if($intUserPermis==1){
+    //пробуем создать пользывателя, создался тру -- нет фолс
+    if(addUser(trim($_POST['UserLogin']), trim($_POST['UserEmail']), trim($_POST['UserPass']), $intUserAccess, trim($_POST['SuperUser']))){
+      header("Location: index.php?strPage=moders&strError=passOK");exit;
+    }else{header("Location: index.php?strPage=moders&strError=BadAcces");exit;}
+  }else{header("Location: index.php?strPage=moders&strError=BadAcces");exit;}
+}
 
 
 // принимаем информацию которую будет выводить ошибка или другая строка гет запроса
-if($_GET['strError'] == 'addOK'){
+if($_GET['strError'] == 'BadPass'){
+  $strError = '<div class="alert alert-danger alert-dismissible fade show" role="alert">
+                 <strong>Wrong data in required fields - password!</strong> Please add information at all fields marked with * which you see below.
+                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                   <span aria-hidden="true">&times;</span>
+                 </button>
+               </div>';
+}elseif($_GET['strError'] == 'BadAcces'){
+    $strError = '<div class="alert alert-danger alert-dismissible fade show" role="alert">
+                   <strong>Access denied</strong> Please try to edit only existing users and users with less than your permission.
+                   <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                     <span aria-hidden="true">&times;</span>
+                   </button>
+                 </div>';
+}elseif($_GET['strError'] == 'Empty'){
+  $strError = '<div class="alert alert-danger alert-dismissible fade show" role="alert">
+                 <strong>Wrong data in required field!</strong> Please add information at all fields marked with * which you see below.
+                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                   <span aria-hidden="true">&times;</span>
+                 </button>
+               </div>';
+}elseif($_GET['strError'] == 'passOK'){ // сообщение если все прошло хорошо
   $strError = '<div class="alert alert-info alert-dismissible fade show" role="alert">
-                 <strong>Done!</strong> Your task successfully added into workshop log.
+                 <strong>Done!</strong> All done successfully.
                  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                    <span aria-hidden="true">&times;</span>
                  </button>
                </div>';
-}elseif($_GET['strError'] == 'updOK'){
-  $strError = '<div class="alert alert-info alert-dismissible fade show" role="alert">
-                 <strong>Done!</strong> Task successfully defined.
-                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                   <span aria-hidden="true">&times;</span>
-                 </button>
-               </div>';
-}elseif($_GET['strError'] == 'remOK'){
-  $strError = '<div class="alert alert-info alert-dismissible fade show" role="alert">
-                 <strong>Done!</strong> Task successfully canceled.
-                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                   <span aria-hidden="true">&times;</span>
-                 </button>
-               </div>';
-}elseif($_GET['strError'] == 'remNon'){
-  $strError = '<div class="alert alert-danger alert-dismissible fade show" role="alert">
-                 <strong>Error!</strong> Task can`t be removed.
-                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                   <span aria-hidden="true">&times;</span>
-                 </button>
-               </div>';
-}elseif($_GET['strError'] == 'redOK'){
-  $strError = '<div class="alert alert-info alert-dismissible fade show" role="alert">
-                 <strong>Done!</strong> Task successfully redeemed.
-                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                   <span aria-hidden="true">&times;</span>
-                 </button>
-               </div>';
-}elseif($_GET['strError'] == 'redNon'){
-  $strError = '<div class="alert alert-danger alert-dismissible fade show" role="alert">
-                 <strong>Error!</strong> Task can`t be redeemed.
-                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                   <span aria-hidden="true">&times;</span>
-                 </button>
-               </div>';
-}elseif($_GET['strError'] == 'startOK'){
-  $strError = '<div class="alert alert-info alert-dismissible fade show" role="alert">
-                 <strong>Done!</strong> Task successfully started.
-                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                   <span aria-hidden="true">&times;</span>
-                 </button>
-               </div>';
-}elseif($_GET['strError'] == 'startNon'){
-  $strError = '<div class="alert alert-danger alert-dismissible fade show" role="alert">
-                 <strong>Error!</strong> Task can`t be started.
-                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                   <span aria-hidden="true">&times;</span>
-                 </button>
-               </div>';
-}elseif($_GET['strError'] == 'Access'){
-  $strError = '<div class="alert alert-danger alert-dismissible fade show" role="alert">
-                 <strong>Access denied!</strong> Your access level lower than needed.
-                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                   <span aria-hidden="true">&times;</span>
-                 </button>
-               </div>';
-}elseif($_GET['strError'] == 'NotStatus'){
-  $strError = '<div class="alert alert-danger alert-dismissible fade show" role="alert">
-                 <strong>Already started!</strong> Your trying to start work at already started task.
-                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                   <span aria-hidden="true">&times;</span>
-                 </button>
-               </div>';
-}elseif($_GET['strError'] == 'NotExist'){
-  $strError = '<div class="alert alert-danger alert-dismissible fade show" role="alert">
-                 <strong>An ID don`t Exist!</strong> You`re trying to work with non existing Id.
-                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                   <span aria-hidden="true">&times;</span>
-                 </button>
-               </div>';
+}else{
+  $strError = '';
 }
 
 //выводим на страницу по умолчанию
 $strPageTitle = 'Hello, '.$_SESSION['new']['login'];
-$strMessage = $strError.'You can use workshop job management (WJM) tool to manage jobs in your own access level using interface below, also you will find total lists of all jobs at the bottom of the screen.<br>
-                        <div class="row">
-                          <div class="col-sm-12">
-                            <a id="" class="btn btn-warning btn-sm btnModal " href="'.$config['sitelink'].'usmanage.php"><i class="fa fa-id-card"></i> User data</a>
-                          </div>
-                        </div>';
+
 
 
 
@@ -227,28 +267,23 @@ if($_GET['strDo'] == 'Remove'){ //запрос на отмену задачи
             <!-- шапка навбар -->
 
 
-            <!-- #bigModalHTML - переменная для вставки модальных окон с деталями  -->
-            <?=$arrMyTasks[7]?>
-            <!-- #bigModalHTML - переменная для вставки модальных окон с деталями  -->
-            <img width='40%' src='<?=$config['Logo']?>'>
-            <H1 style="color:#F89633;"><?=$strPageTitle?></H1>
-            <p><?=$strMessage?></p>
-            <hr/>
-            <div class="container">
+            <!-- большой блок -->
+            <div class="container-fluid">
               <div class="row">
-                <div class="col-xl-2 offset-xl-4 col-lg-3 offset-lg-3 col-md-3 offset-md-3 col-sm-4 offset-sm-2">
-                  <a id="" class="btn btn-info btn-sm btnModal " href='<?=$strLinkButton1?>'><i class="fa <?=$strIcoButton1?>"></i> <?=$strTextButton1?></a>
+                <!-- меню и контент -->
+                <div class="col-sm-4 col-md-2 myMenu">
+                    <div class='myMenuListStable'>MENU</div>
+                    <?php menu($_GET['strPage']); ?> <!-- выводит меню -->
                 </div>
-                <div class="col-xl-2 col-lg-3 col-md-3 col-sm-4 ">
-                  <a id="" class="btn btn-success btn-sm btnModal" href='<?=$strLinkButton2?>'><i class="fa <?=$strIcoButton2?>"></i> <?=$strTextButton2?></a>
+                <div class="col-sm-8 col-md-10 myContent">
+                    <?=$strError?>
+                    <?php Content($_GET['strPage'], $intUserPermis); ?> <!-- выводит контент -->
                 </div>
+                <!-- меню и контент -->
               </div>
             </div>
-            <hr/>
-            <!--тут блок текущих задач текущему пользователю-->
-            <!-- #genTaskLisForMe - переменная для задач текущему пользователю -->
-            
-            <!--конец блока текущих задач текущему пользователю-->
+            <!-- большой блок -->
+
             
           </div>
         </table>
