@@ -42,8 +42,9 @@ header('Content-type: text/html; charset='.$config['encoding']);
 
 // принимаем информацию пришедшую из форм
 //--------------------------------------------------------------------------------
+$strCurCuery=clearMyQuery($_SERVER['QUERY_STRING'],'strError');
 if($_POST['strInnFromForm'] == 'ChanPassword'){ //пришел запрос на изменение пароля
-  if(trim($_POST['UserPass']) == '' or trim($_POST['UserPass_rep']) == '' or trim($_POST['UserPass']) != trim($_POST['UserPass_rep'])){header("Location: index.php?strPage=moders&ChangeMod=Password&strError=BadPass&strUsSign=".$_POST['UserSign']);exit;}
+  if(trim($_POST['UserPass']) == '' or trim($_POST['UserPass_rep']) == '' or trim($_POST['UserPass']) != trim($_POST['UserPass_rep'])){header("Location: index.php?strError=BadPass&".$strCurCuery);exit;}
   //проверяем есть ли права на действие
   if($_POST['UserSign']==$_SESSION['new']['signature'] or checkUserBy('signature', $_POST['UserSign'], true, array('accesslevel'))[0]['accesslevel']*1>$intUserPermis or $_SESSION['new']['signature']==$config['SuperUser']){
     //хешируем пароль
@@ -51,38 +52,38 @@ if($_POST['strInnFromForm'] == 'ChanPassword'){ //пришел запрос на
     $strPassword=sha1(md5(trim($_POST['UserPass'])).$intSolt);
    //пробуем изменить пароль для юзера
     if(updateTable('sl_users', array('password','solt','edited'), 'signature', $_POST['UserSign'], array($strPassword,$intSolt,$intSolt))){
-      header("Location: index.php?strPage=moders&strError=passOK");exit;
+      header("Location: index.php?strError=passOK&".$strCurCuery);exit;
       //если по какой-то причине пользователь не обновлен
-    }else{header("Location: index.php?strPage=moders&ChangeMod=Password&strError=BadAcces&strUsSign=".$_POST['UserSign']);exit;}
-  }else{header("Location: index.php?strPage=moders&ChangeMod=Password&strError=BadAcces&strUsSign=".$_POST['UserSign']);exit;}
+    }else{header("Location: index.php?strError=BadAcces&".$strCurCuery);exit;}
+  }else{header("Location: index.php?strError=BadAcces&".$strCurCuery);exit;}
 //--------------------------------------------------------------------------------
 }elseif($_POST['strInnFromForm'] == 'ChanEmail'){//пришел запрос на изменение адреса почты
   //проверяем переданные переменные
-  if(trim($_POST['UserEmail']) == '' || checkUserBy('email',trim($_POST['UserEmail']), false)==1 || !validEmail(trim($_POST['UserEmail']))){header("Location: index.php?strPage=moders&ChangeMod=Email&strError=Empty&strUsSign=".$_POST['UserSign']);exit;}
+  if(trim($_POST['UserEmail']) == '' || checkUserBy('email',trim($_POST['UserEmail']), false)==1 || !validEmail(trim($_POST['UserEmail']))){header("Location: index.php?strError=Empty&".$strCurCuery);exit;}
   //проверяем есть ли права на действие
   if($_POST['UserSign']==$_SESSION['new']['signature'] or checkUserBy('signature', $_POST['UserSign'], true, array('accesslevel'))[0]['accesslevel']*1>$intUserPermis or $_SESSION['new']['signature']==$config['SuperUser']){
     //пробуем изменить мейл для юзера
      if(updateTable('sl_users', array('email','edited'), 'signature', $_POST['UserSign'], array(trim($_POST['UserEmail']),time()))){
        //если меняли для себя то перезаписать текущие данніе сессии
        if($_POST['UserSign']==$_SESSION['new']['signature']){$_SESSION['new']['email'] = trim($_POST['UserEmail']);}
-       header("Location: index.php?strPage=moders&strError=passOK");exit;
+       header("Location: index.php?strError=passOK&".$strCurCuery);exit;
        //если по какой-то причине пользователь не обновлен
-     }else{header("Location: index.php?strPage=moders&ChangeMod=Email&strError=BadAcces&strUsSign=".$_POST['UserSign']);exit;}
-   }else{header("Location: index.php?strPage=moders&ChangeMod=Email&strError=BadAcces&strUsSign=".$_POST['UserSign']);exit;}
+     }else{header("Location: index.php?strError=BadAcces&".$strCurCuery);exit;}
+   }else{header("Location: index.php?strError=BadAcces&".$strCurCuery);exit;}
 //--------------------------------------------------------------------------------
 }elseif($_POST['strInnFromForm'] == 'ChanName'){//пришел запрос на изменение имени юзера
   //проверяем переданные переменные
-  if(trim($_POST['UserName']) == ''){header("Location: index.php?strPage=moders&ChangeMod=Name&strError=Empty&strUsSign=".$_POST['UserSign']);exit;}
+  if(trim($_POST['UserName']) == ''){header("Location: index.php?strError=Empty&".$strCurCuery);exit;}
   //проверяем есть ли права на действие
   if($_POST['UserSign']==$_SESSION['new']['signature'] or checkUserBy('signature', $_POST['UserSign'], true, array('accesslevel'))[0]['accesslevel']*1>$intUserPermis or $_SESSION['new']['signature']==$config['SuperUser']){
     //пробуем изменить Имя для юзера
      if(updateTable('sl_users', array('login','edited'), 'signature', $_POST['UserSign'], array(trim($_POST['UserName']),time()))){
        //если меняли для себя то перезаписать текущие данніе сессии
        if($_POST['UserSign']==$_SESSION['new']['signature']){$_SESSION['new']['login'] = trim($_POST['UserName']);}
-       header("Location: index.php?strPage=moders&strError=passOK");exit;
+       header("Location: index.php?strError=passOK&".$strCurCuery);exit;
        //если по какой-то причине пользователь не обновлен
-     }else{header("Location: index.php?strPage=moders&ChangeMod=Name&strError=BadAcces&strUsSign=".$_POST['UserSign']);exit;}
-   }else{header("Location: index.php?strPage=moders&ChangeMod=Name&strError=BadAcces&strUsSign=".$_POST['UserSign']);exit;}
+     }else{header("Location: index.php?strError=BadAcces&".$strCurCuery);exit;}
+   }else{header("Location: index.php?strError=BadAcces&".$strCurCuery);exit;}
    //--------------------------------------------------------------------------------
 }elseif($_POST['strInnFromForm'] == 'remove'){//пришел запрос на удаление юзера
   //проверяем есть ли права на действие
@@ -260,7 +261,7 @@ if($_GET['strDo'] == 'Remove'){ //запрос на отмену задачи
                 <p class="leftstr myTopTextL"><?=$strPageTitle?></p>
                 <p class="rightstr myTopTextR">
                   <a href='<?=$config['sitelink']?>' target='_blank' style='padding-right:5px;border-right: 1px solid black;'>VIEW SITE</a>
-                  <a href='<?=$strLinkButton1?>'><?=$strTextButton1?></a>
+                  <a href='<?=$config['sitelink']?>admin/LogIN.php'>EXIT</a>
                 </p>
                 <div style="clear: left"></div>
             </div>

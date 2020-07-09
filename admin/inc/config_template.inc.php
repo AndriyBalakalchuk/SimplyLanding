@@ -14,8 +14,8 @@ $config['Copyright']            = 'Created by BVStudio in 2020.';  #мелкий
 
 # Настройки меню навигации
 $menu                           = array();
+$menu['MyData']	       	    = 'Edit Profile';  
 $menu['moders']	           	= 'Moderators'; 
-$menu['ChangePass']	       	= 'Change password'; 
 $menu['Telephone']	        = 'Telephone'; 
 $menu['Slider']	      	    = 'Header';
 $menu['Skills']	         	= 'Skills';

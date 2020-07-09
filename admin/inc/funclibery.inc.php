@@ -140,7 +140,7 @@ function getHTMLofUsers($intUserPermis){
                             User Name
                           </div>
                           <div class='col-sm-2'>
-                            Signature
+                            Login
                           </div>
                           <div class='col-sm-2'>
                             Email
@@ -395,7 +395,7 @@ foreach ($menu as $link => $name){
   if($Stranitsa==$link){
   echo "<div class='myMenuListActiv'>$name</div>";
   }else{
-  echo "<a class='myMenuList' href='{$config['sitelink']}admin/index.php?strPage=$link'>$name</a>"; 
+  echo "<a class='myMenuList btnModal' href='{$config['sitelink']}admin/index.php?strPage=$link'>$name</a>"; 
   }
 }
 
@@ -454,7 +454,7 @@ function Content($Stranitsa, $intUserPermis){
                         <button type="reset" class="btn btn-info btn-sm"><i class="fa fa-times"></i> Clear</button>
                       </div>
                       <div class="col-sm-3 col-lg-2">
-                        <button name="strInnFromForm" value="ChanPassword" id="" type="submit" class="btn btn-success btn-sm btnModal"><i class="fa fa-lock"></i> Save</button>
+                        <button name="strInnFromForm" value="ChanPassword" id="" type="submit" class="btn btn-success btn-sm "><i class="fa fa-lock"></i> Save</button>
                       </div>
                     </div>
                   </div>
@@ -486,7 +486,7 @@ function Content($Stranitsa, $intUserPermis){
                       <button type="reset" class="btn btn-info btn-sm"><i class="fa fa-times"></i> Clear</button>
                     </div>
                     <div class="col-sm-3 col-lg-2">
-                      <button name="strInnFromForm" value="ChanEmail" id="" type="submit" class="btn btn-success btn-sm btnModal"><i class="fa fa-at"></i> Save</button>
+                      <button name="strInnFromForm" value="ChanEmail" id="" type="submit" class="btn btn-success btn-sm "><i class="fa fa-at"></i> Save</button>
                     </div>
                   </div>
                 </div>
@@ -518,7 +518,7 @@ function Content($Stranitsa, $intUserPermis){
                       <button type="reset" class="btn btn-info btn-sm"><i class="fa fa-times"></i> Clear</button>
                     </div>
                     <div class="col-sm-3 col-lg-2">
-                      <button name="strInnFromForm" value="ChanName" id="" type="submit" class="btn btn-success btn-sm btnModal"><i class="fa fa-address-book-o"></i> Save</button>
+                      <button name="strInnFromForm" value="ChanName" id="" type="submit" class="btn btn-success btn-sm "><i class="fa fa-address-book-o"></i> Save</button>
                     </div>
                   </div>
                 </div>
@@ -553,7 +553,7 @@ function Content($Stranitsa, $intUserPermis){
                           <button type="reset" class="btn btn-info btn-sm"><i class="fa fa-times"></i> Clear</button>
                         </div>
                         <div class="col-sm-3 col-lg-2">
-                          <button name="strInnFromForm" value="accesslevel" id="" type="submit" class="btn btn-success btn-sm btnModal"><i class="fa fa-at"></i> Save</button>
+                          <button name="strInnFromForm" value="accesslevel" id="" type="submit" class="btn btn-success btn-sm "><i class="fa fa-at"></i> Save</button>
                         </div>
                       </div>
                     </div>
@@ -573,7 +573,7 @@ function Content($Stranitsa, $intUserPermis){
                           <a id="" class="btn btn-info btn-sm btnModal" href="'.$config['sitelink'].'admin/index.php"><i class="fa fa-reply"></i> Back</a>
                         </div>
                         <div class="col-sm-3 col-lg-2">
-                          <button name="strInnFromForm" value="remove" id="" type="submit" class="btn btn-danger btn-sm btnModal"><i class="fa fa-trash"></i> Approve</button>
+                          <button name="strInnFromForm" value="remove" id="" type="submit" class="btn btn-danger btn-sm "><i class="fa fa-trash"></i> Approve</button>
                         </div>
                       </div>
                     </div>
@@ -677,7 +677,7 @@ function Content($Stranitsa, $intUserPermis){
                               <a id="" class="btn btn-info btn-sm btnModal" href="'.$config['sitelink'].'admin/index.php"><i class="fa fa-reply"></i> Back</a>
                             </div>
                             <div class="col-sm-3 col-lg-2">
-                              <button name="strInnFromForm" value="addUser" id="" type="submit" class="btn btn-success btn-sm btnModal"><i class="fa fa-address-book-o"></i> Add User</button>
+                              <button name="strInnFromForm" value="addUser" id="" type="submit" class="btn btn-success btn-sm "><i class="fa fa-address-book-o"></i> Add User</button>
                             </div>
                           </div>
                         </div>
@@ -687,57 +687,226 @@ function Content($Stranitsa, $intUserPermis){
         echo "<div class='container-fluid' style='margin-top:5px; text-align:center;'>Viewing is disabled (for your permission level)</div>";
       }
     break;
-  
-case 'ChangePass': //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-      echo "<div class='myShapka'>{$menu['ChangePass']}</div>";
-echo " <form class='form-horizontal' role='form' action='' method='post' style='margin-top:30px;'>
-  <div class='form-group'>
-  <label for='pass1' class='col-sm-3 control-label'>New password</label>
-  <div class='col-sm-3'> <input type='password' class='form-control' name='pass1' id='pass1' placeholder='Password' autocomplete='off' required=''></div></div>
-  
-  <div class='form-group'>
-  <label for='pass2' class='col-sm-3 control-label'>Repeat password</label>
-  <div class='col-sm-3'><input class='form-control' type='password' name='pass2' id='pass2' placeholder='Password' autocomplete='off' required=''></div></div>
-  
-  <div class='form-group last'>
-  <div class='col-sm-offset-3 col-sm-9'>
-  <button type='submit' name='ChangeModerPass' class='btn btn-success btn-xs'>Change</button>
-  <a class='btn btn-default btn-xs' href='{$config['sitelink']}admin/index.php'>Cancel</a>
-</div></div></form>";
-break;
-case 'Telephone': //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  echo "<div class='myShapka'>{$menu['Telephone']}</div>";
-  if(CheckContact('Telephone')){ //tel. number есть
-      $ArrayData=CheckContact('Telephone', TRUE);
-      $data=date("d.m.y",$ArrayData['time']);
-      $Contact=$ArrayData['contact'];
-      $Edit=$ArrayData['edit_by'];
-  echo "<div style='text-align:center;'>Last editing $data, user: $Edit</div>";    
+    /*---------------------------------------------------------------------------------*/
+    /*--работа в раздете личные данные----------------------------------------------------*/
+    /*---------------------------------------------------------------------------------*/
+    case 'MyData': 
+      //получаем уровень доступа текущего пользователя
+      echo "<div class='myShapka'>{$menu['MyData']}</div>";
+      $arrMyData = selectFromTable('sl_users', array('login','email','accesslevel','edited'), true, 'signature', $_SESSION['new']['signature'])[0];
       
-  echo " <form class='form-horizontal' role='form' action='' method='post' style='margin-top:30px;'>
-          <div class='form-group'>
-          <label for='telephone' class='col-sm-3 control-label'>Contact tel. number</label>
-          <div class='col-sm-3'> 
-          <input type='text' class='form-control' name='telephone' id='telephone' autocomplete='off' placeholder='".$Contact."' required=''></div></div>
+      //вывод сводного по себе
+      echo "<!--шапка-->
+            <div class='row headerDiv'>
+              <div class='col-sm-3'>
+                User Name
+              </div>
+              <div class='col-sm-3'>
+                Login
+              </div>
+              <div class='col-sm-2'>
+                Email
+              </div>
+              <div class='col-sm-2'>
+                Last Edit
+              </div>
+              <div class='col-sm-2'>
+                Manage User
+              </div>
+            </div>
+            <!--шапка конец-->
+            <div class='row JustRowDiv'>
+              <div class='col-sm-3'>
+                ".$arrMyData['login']."
+              </div>
+              <div class='col-sm-3'>
+                ".$_SESSION['new']['signature']."
+              </div>
+              <div class='col-sm-2'>
+                ".$arrMyData['email']."
+              </div>
+              <div class='col-sm-2'>
+                ".getNormalDate($arrMyData['edited'])."
+              </div>
+              <div class='col-sm-2'>
+                <a class='btn btn-warning btn-sm btnModal' style='margin: 0px;' href='".$config['sitelink']."admin/index.php?strPage=MyData&ChangeMod=Password&strUsSign={$_SESSION['new']['signature']}' title='change password'><i class='fa fa-lock'></i></a>
+                <a class='btn btn-warning btn-sm btnModal' style='margin: 0px;' href='".$config['sitelink']."admin/index.php?strPage=MyData&ChangeMod=Email&strUsSign={$_SESSION['new']['signature']}' title='change email'><i class='fa fa-at'></i></a>
+                <a class='btn btn-warning btn-sm btnModal' style='margin: 0px;' href='".$config['sitelink']."admin/index.php?strPage=MyData&ChangeMod=Name&strUsSign={$_SESSION['new']['signature']}' title='change name'><i class='fa fa-address-book-o'></i></a>
+              </div>
+            </div>";
+        
 
-          <div class='form-group last'>
-          <div class='col-sm-offset-3 col-sm-9'>
-          <button type='submit' name='updateTelephone' class='btn btn-success btn-xs'>Change tel. number</button>
-          <a class='btn btn-default btn-xs' href='{$config['sitelink']}admin/index.php'>Cancel</a>
-  </div></div></form>";
-  }else{ //tel. numberа нету
-echo " <form class='form-horizontal' role='form' action='' method='post' style='margin-top:30px;'>
-  <div class='form-group'>
-  <label for='telephone' class='col-sm-3 control-label'>Contact tel. number</label>
-  <div class='col-sm-3'> <input type='text' class='form-control' autocomplete='off' name='telephone' id='telephone' placeholder='Введите tel. number' required=''></div></div>
-  
-  <div class='form-group last'>
-  <div class='col-sm-offset-3 col-sm-9'>
-  <button type='submit' name='addTelephone' class='btn btn-success btn-xs'>Add tel. number</button>
-  <a class='btn btn-default btn-xs' href='{$config['sitelink']}admin/index.php'>Cancel</a>
-</div></div></form>";
-  }
-break;
+      if($intUserPermis==1 or $intUserPermis==2){ //добавление юзера по дефолту и формы редактирования как возможность
+        if($_GET['ChangeMod']=="Password"){//смена пароля
+          echo "<div class='myShapka'>Change password for ".$_GET['strUsSign']."</div>";
+          echo '<!-- форма -->
+                <form action="" method="post" autocomplete="off">
+                <div class="form-row" style="padding-bottom: 15px;">
+                  <div class="col-lg-4 offset-lg-4">
+                    <label for="validationUserPass">NEW Password*</label>
+                    <div class="input-group">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text" id="inputGroupPrepend1"><i class="fa fa-lock"></i></span>
+                      </div>
+                      <input type="password" class="form-control" id="validationUserPass" name="UserPass" aria-describedby="inputGroupPrepend1" required>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-row" style="padding-bottom: 15px;">
+                  <div class="col-lg-4 offset-lg-4">
+                    <label for="validationUserPass_rep">Repeat NEW Password*</label>
+                    <div class="input-group">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text" id="inputGroupPrepend2"><i class="fa fa-lock"></i></span>
+                      </div>
+                      <input type="password" class="form-control" id="validationUserPass_rep" name="UserPass_rep" aria-describedby="inputGroupPrepend2" required>
+                    </div>
+                  </div>
+                </div>
+            
+                <input type="hidden" value="'.$_GET['strUsSign'].'" class="form-control" id="validationUserSign" name="UserSign" aria-describedby="inputGroupPrepend4" required>
+            
+                  <!-- кнопки -->
+                  <div class="container">
+                    <div class="row" style = "color:white;" >
+                      <div class="col-sm-3 offset-sm-3 col-lg-2 offset-lg-4">
+                        <button type="reset" class="btn btn-info btn-sm"><i class="fa fa-times"></i> Clear</button>
+                      </div>
+                      <div class="col-sm-3 col-lg-2">
+                        <button name="strInnFromForm" value="ChanPassword" id="" type="submit" class="btn btn-success btn-sm "><i class="fa fa-lock"></i> Save</button>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- кнопки конец-->
+              </form>
+              <!-- форма конец-->';
+        }elseif($_GET['ChangeMod']=="Email"){//смена мейла 
+          echo "<div class='myShapka'>Change email for ".$_GET['strUsSign']."</div>";
+          echo '<!-- форма -->
+            <form action="" method="post" autocomplete="off">
+              <div class="form-row" style="padding-bottom: 15px;">
+                <div class="col-lg-4 offset-lg-4">
+                  <label for="validationUserEmail">NEW Email*</label>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text" id="inputGroupPrepend1"><i class="fa fa-at"></i></span>
+                    </div>
+                    <input type="email" class="form-control" id="validationUserEmail" name="UserEmail" aria-describedby="inputGroupPrepend1" required>
+                  </div>
+                </div>
+              </div>
+          
+              <input type="hidden" value="'.$_GET['strUsSign'].'" class="form-control" id="validationUserSign" name="UserSign" aria-describedby="inputGroupPrepend4" required>
+          
+                <!-- кнопки -->
+                <div class="container">
+                  <div class="row" style = "color:white;" >
+                    <div class="col-sm-3 offset-sm-3 col-lg-2 offset-lg-4">
+                      <button type="reset" class="btn btn-info btn-sm"><i class="fa fa-times"></i> Clear</button>
+                    </div>
+                    <div class="col-sm-3 col-lg-2">
+                      <button name="strInnFromForm" value="ChanEmail" id="" type="submit" class="btn btn-success btn-sm "><i class="fa fa-at"></i> Save</button>
+                    </div>
+                  </div>
+                </div>
+                <!-- кнопки конец-->
+            </form>
+           <!-- форма конец-->';
+        }elseif($_GET['ChangeMod']=="Name"){//смена имени 
+          echo "<div class='myShapka'>Change name for ".$_GET['strUsSign']."</div>";
+          echo '<!-- форма -->
+            <form action="" method="post" autocomplete="off">
+              <div class="form-row" style="padding-bottom: 15px;">
+                <div class="col-lg-4 offset-lg-4">
+                  <label for="validationUserName">NEW Name*</label>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text" id="inputGroupPrepend1"><i class="fa fa-lock"></i></span>
+                    </div>
+                    <input type="text" class="form-control" id="validationUserName" name="UserName" aria-describedby="inputGroupPrepend1" required>
+                  </div>
+                </div>
+              </div>
+          
+              <input type="hidden" value="'.$_GET['strUsSign'].'" class="form-control" id="validationUserSign" name="UserSign" aria-describedby="inputGroupPrepend4" required>
+          
+                <!-- кнопки -->
+                <div class="container">
+                  <div class="row" style = "color:white;" >
+                    <div class="col-sm-3 offset-sm-3 col-lg-2 offset-lg-4">
+                      <button type="reset" class="btn btn-info btn-sm"><i class="fa fa-times"></i> Clear</button>
+                    </div>
+                    <div class="col-sm-3 col-lg-2">
+                      <button name="strInnFromForm" value="ChanName" id="" type="submit" class="btn btn-success btn-sm "><i class="fa fa-address-book-o"></i> Save</button>
+                    </div>
+                  </div>
+                </div>
+                <!-- кнопки конец-->
+            </form>
+          <!-- форма конец-->';
+        }else{   
+            echo "<div class='myShapka'>Choose option</div>";
+            echo $strError;
+            echo '<!-- кнопки -->
+                  <div class="container">
+                    <div class="row" style = "color:white;" >
+                      <div class="col-sm-12 offset-sm-12 col-lg-12 offset-lg-12">
+                        <a id="" class="btn btn-info btn-sm btnModal" href="'.$config['sitelink'].'admin/index.php"><i class="fa fa-reply"></i> Back</a>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- кнопки конец-->'; 
+          }
+      }else{
+        echo "<div class='container-fluid' style='margin-top:5px; text-align:center;'>Viewing is disabled (for your permission level)</div>";
+      }
+    break;
+    /*---------------------------------------------------------------------------------*/
+    /*--работа в раздете изменить телефон----------------------------------------------------*/
+    /*---------------------------------------------------------------------------------*/
+    case 'Telephone': //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+      echo "<div class='myShapka'>{$menu['Telephone']}</div>";
+      $arrData = selectFromTable('sl_users', array('login','email','accesslevel','edited'), true, 'signature', $_SESSION['new']['signature'])[0];
+      if(CheckContact('contact_for', 'Telephone')){ //tel. number есть
+        $ArrayData=CheckContact('Telephone', TRUE);
+        $data=date("d.m.y",$ArrayData['time']);
+        $Contact=$ArrayData['contact'];
+        $Edit=$ArrayData['edit_by'];
+        echo "<div style='text-align:center;'>Last editing $data, user: $Edit</div>";    
+          
+        echo "<form action='' method='post' autocomplete='off'>
+                <div class='form-group'>
+                  <label for='telephone' class='col-sm-3 control-label'>Contact tel. number</label>
+                  <div class='col-sm-3'> 
+                    <input type='text' class='form-control' name='telephone' id='telephone' autocomplete='off' placeholder='".$Contact."' required=''>
+                  </div>
+                </div>
+
+                <div class='form-group last'>
+                  <div class='col-sm-offset-3 col-sm-9'>
+                    <button type='submit' name='updateTelephone' class='btn btn-success btn-xs'>Change tel. number</button>
+                    <a class='btn btn-default btn-xs' href='{$config['sitelink']}admin/index.php'>Cancel</a>
+                  </div>
+                </div>
+              </form>";
+      }else{ //tel. numberа нету
+        echo "<form action='' method='post' autocomplete='off'>
+                <div class='form-row'>
+                  <label for='telephone' class=''>Contact tel. number</label>
+                  <div class='col-sm-3 input-group'> 
+                    <input type='text' class='form-control' autocomplete='off' name='telephone' id='telephone' placeholder='Введите tel. number' required=''>
+                  </div>
+                </div>
+          
+                <div class='form-group last'>
+                  <div class='col-sm-offset-3 col-sm-9'>
+                    <button type='submit' name='addTelephone' class='btn btn-success btn-xs'>Add tel. number</button>
+                    <a class='btn btn-default btn-xs' href='{$config['sitelink']}admin/index.php'>Cancel</a>
+                  </div>
+                </div>
+              </form>";
+      }
+    break;
 case 'Slider': //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   echo "<div class='myShapka'>{$menu['Slider']}</div>";
   if(CheckContent('Slider')){ //Text в слайдер есть
