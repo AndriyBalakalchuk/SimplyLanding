@@ -681,7 +681,9 @@ function Content($Stranitsa, $intUserPermis){
                             </div>
                           </div>
                         </div>
-                        <!-- кнопки конец-->'; 
+                        <!-- кнопки конец-->
+                        </form>
+                        <!-- форма конец-->'; 
           }
       }else{
         echo "<div class='container-fluid' style='margin-top:5px; text-align:center;'>Viewing is disabled (for your permission level)</div>";
@@ -736,11 +738,11 @@ function Content($Stranitsa, $intUserPermis){
             </div>";
         
 
-      if($intUserPermis==1 or $intUserPermis==2){ //добавление юзера по дефолту и формы редактирования как возможность
+      if($intUserPermis==1 or $intUserPermis==2){ //формы редактирования как возможность
         if($_GET['ChangeMod']=="Password"){//смена пароля
           echo "<div class='myShapka'>Change password for ".$_GET['strUsSign']."</div>";
           echo '<!-- форма -->
-                <form action="" method="post" autocomplete="off">
+              <form action="" method="post" autocomplete="off">
                 <div class="form-row" style="padding-bottom: 15px;">
                   <div class="col-lg-4 offset-lg-4">
                     <label for="validationUserPass">NEW Password*</label>
@@ -866,9 +868,8 @@ function Content($Stranitsa, $intUserPermis){
     /*---------------------------------------------------------------------------------*/
     case 'Telephone': //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
       echo "<div class='myShapka'>{$menu['Telephone']}</div>";
-      $arrData = selectFromTable('sl_users', array('login','email','accesslevel','edited'), true, 'signature', $_SESSION['new']['signature'])[0];
-      if(CheckContact('contact_for', 'Telephone')){ //tel. number есть
-        $ArrayData=CheckContact('Telephone', TRUE);
+      if(CheckData('sl_contacts', 'contact_for', 'Telephone')){ //tel. number есть
+        $ArrayData = selectFromTable('sl_contacts', array('id', 'contact_for','contact','time','edit_by'), true, 'contact_for', 'Telephone')[0];
         $data=date("d.m.y",$ArrayData['time']);
         $Contact=$ArrayData['contact'];
         $Edit=$ArrayData['edit_by'];
@@ -881,7 +882,7 @@ function Content($Stranitsa, $intUserPermis){
                     <input type='text' class='form-control' name='telephone' id='telephone' autocomplete='off' placeholder='".$Contact."' required=''>
                   </div>
                 </div>
-
+                
                 <div class='form-group last'>
                   <div class='col-sm-offset-3 col-sm-9'>
                     <button type='submit' name='updateTelephone' class='btn btn-success btn-xs'>Change tel. number</button>
@@ -890,21 +891,34 @@ function Content($Stranitsa, $intUserPermis){
                 </div>
               </form>";
       }else{ //tel. numberа нету
-        echo "<form action='' method='post' autocomplete='off'>
-                <div class='form-row'>
-                  <label for='telephone' class=''>Contact tel. number</label>
-                  <div class='col-sm-3 input-group'> 
-                    <input type='text' class='form-control' autocomplete='off' name='telephone' id='telephone' placeholder='Введите tel. number' required=''>
+        echo '<!-- форма -->
+              <form action="" method="post" autocomplete="off">
+                <div class="form-row" style="padding-bottom: 15px;">
+                  <div class="col-lg-4 offset-lg-4">
+                    <label for="telephone">Contact tel. number*</label>
+                    <div class="input-group">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text" id="inputGroupPrepend1"><i class="fa fa-phone"></i></span>
+                      </div>
+                      <input type="text" class="form-control" id="telephone" name="Telephone" aria-describedby="inputGroupPrepend1" required>
+                    </div>
                   </div>
                 </div>
-          
-                <div class='form-group last'>
-                  <div class='col-sm-offset-3 col-sm-9'>
-                    <button type='submit' name='addTelephone' class='btn btn-success btn-xs'>Add tel. number</button>
-                    <a class='btn btn-default btn-xs' href='{$config['sitelink']}admin/index.php'>Cancel</a>
+                <input type="hidden" value="Telephone" name="strContact_for" required>
+                <!-- кнопки -->
+                <div class="container">
+                  <div class="row" style = "color:white;" >
+                    <div class="col-sm-3 offset-sm-3 col-lg-2 offset-lg-4">
+                      <button type="reset" class="btn btn-info btn-sm"><i class="fa fa-times"></i> Clear</button>
+                    </div>
+                    <div class="col-sm-3 col-lg-2">
+                      <button name="strInnFromForm" value="addINTO" id="" type="submit" class="btn btn-success btn-sm "><i class="fa fa-lock"></i> Save</button>
+                    </div>
                   </div>
                 </div>
-              </form>";
+                <!-- кнопки конец-->
+              </form>
+              <!-- форма конец-->';
       }
     break;
 case 'Slider': //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

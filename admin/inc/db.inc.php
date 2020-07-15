@@ -346,17 +346,28 @@ function addIntoTable($strTable, $arrFields, $arrData){
 }
 
 //проверка есть ли значение в колонке контактов 
-function CheckContact($strColumnName, $strFindIt){
+function CheckData($strTableName, $strColumnName, $strFindIt){
   global $config, $objDB;
 
-  $create_table = $objDB->exec("CREATE TABLE IF NOT EXISTS
-    `sl_contacts` (
-      id MEDIUMINT(10) COLLATE utf8_general_ci NOT NULL AUTO_INCREMENT, PRIMARY KEY(id),
-      contact_for VARCHAR(50) COLLATE utf8_general_ci NOT NULL,
-      contact VARCHAR(50) COLLATE utf8_general_ci NOT NULL,
-      time VARCHAR(50) COLLATE utf8_general_ci NOT NULL,
-      edit_by VARCHAR(50) COLLATE utf8_general_ci) DEFAULT CHARSET utf8;"
-     ); /*создаем таблицу*/
+  //проверяем к какой таблице обращение, и создаем таблицу если ее нет (если такой таблици не планировалось, просто возвращаем фолс)
+  switch ($strTableName) {
+    case 'sl_contacts':
+      $create_table = $objDB->exec("CREATE TABLE IF NOT EXISTS
+        `sl_contacts` (
+          id MEDIUMINT(10) COLLATE utf8_general_ci NOT NULL AUTO_INCREMENT, PRIMARY KEY(id),
+          contact_for VARCHAR(50) COLLATE utf8_general_ci NOT NULL,
+          contact VARCHAR(50) COLLATE utf8_general_ci NOT NULL,
+          time VARCHAR(50) COLLATE utf8_general_ci NOT NULL,
+          edit_by VARCHAR(50) COLLATE utf8_general_ci) DEFAULT CHARSET utf8;"
+        ); /*создаем таблицу*/
+      break;
+    
+    default:
+      return false;
+      break;
+  }
+
+
 
    $stmt = $objDB->prepare("SELECT count(*) FROM sl_contacts WHERE $strColumnName=:searchme");
    $stmt->bindValue(':searchme', $strFindIt);

@@ -141,6 +141,30 @@ if($_POST['strInnFromForm'] == 'ChanPassword'){ //пришел запрос на
       header("Location: index.php?strPage=moders&strError=passOK");exit;
     }else{header("Location: index.php?strPage=moders&strError=BadAcces");exit;}
   }else{header("Location: index.php?strPage=moders&strError=BadAcces");exit;}
+  //------------------------------------------------------------------------------------------
+  //------------------------------------------------------------------------------------------
+}elseif($_POST['strInnFromForm'] == 'addINTO'){//пришел запрос на добавление в таблицу
+  //------------------------------------------------------------------------------------------
+  //------------------------------------------------------------------------------------------
+  //определяем таблицу для добавления
+  if(isset($_POST['strContact_for'])){//определена таблица Контактов
+    if(isset($_POST[$_POST['strContact_for']]) and $_POST[$_POST['strContact_for']] != ''){//проверка что данные пришли
+      if($intUserPermis == 1 or $intUserPermis == 2){ //проверяем что пользователь может менять данные
+        if(addIntoTable('sl_contacts', array('contact_for','contact','time','edit_by'), array($_POST['strContact_for'],$_POST[$_POST['strContact_for']],time(),$_SESSION['new']['signature']))){
+          header("Location: index.php?strError=passOK&".$strCurCuery);exit;
+        }else{
+          header("Location: index.php?strError=BadDBAcces&".$strCurCuery);exit;
+        }
+      }else{//пользователь не может менять данные
+        header("Location: index.php?strError=BadUserAcces&".$strCurCuery);exit;
+      }
+    }else{//данные не пришли
+      header("Location: index.php?strError=Empty&".$strCurCuery);exit;
+    }
+  }else{//не подобрали таблицу - отмена действий
+    header("Location: index.php?strError=wrongReq&".$strCurCuery);exit;
+  }
+  
 }
 
 
@@ -152,13 +176,34 @@ if($_GET['strError'] == 'BadPass'){
                    <span aria-hidden="true">&times;</span>
                  </button>
                </div>';
-}elseif($_GET['strError'] == 'BadAcces'){
+}elseif($_GET['strError'] == 'wrongReq'){
     $strError = '<div class="alert alert-danger alert-dismissible fade show" role="alert">
-                   <strong>Access denied</strong> Please try to edit only existing users and users with less than your permission.
+                   <strong>Wrong Request detected!</strong> Please try to edit only existing datasheets.
                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                      <span aria-hidden="true">&times;</span>
                    </button>
                  </div>';
+}elseif($_GET['strError'] == 'BadAcces'){
+  $strError = '<div class="alert alert-danger alert-dismissible fade show" role="alert">
+                 <strong>Access denied</strong> Please try to edit only existing users and users with less than your permission.
+                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                   <span aria-hidden="true">&times;</span>
+                 </button>
+               </div>';
+}elseif($_GET['strError'] == 'BadDBAcces'){
+  $strError = '<div class="alert alert-danger alert-dismissible fade show" role="alert">
+                 <strong>Databaze error</strong> Please try to edit this after time.
+                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                   <span aria-hidden="true">&times;</span>
+                 </button>
+               </div>';
+}elseif($_GET['strError'] == 'BadUserAcces'){
+  $strError = '<div class="alert alert-danger alert-dismissible fade show" role="alert">
+                 <strong>Access denied</strong> Please try to edit only allowed for your permission data.
+                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                   <span aria-hidden="true">&times;</span>
+                 </button>
+               </div>';
 }elseif($_GET['strError'] == 'Empty'){
   $strError = '<div class="alert alert-danger alert-dismissible fade show" role="alert">
                  <strong>Wrong data in required field!</strong> Please add information at all fields marked with * which you see below.
