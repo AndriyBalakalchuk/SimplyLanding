@@ -690,7 +690,7 @@ function Content($Stranitsa, $intUserPermis){
       }
     break;
     /*---------------------------------------------------------------------------------*/
-    /*--работа в раздете личные данные----------------------------------------------------*/
+    /*--работа в раздете личные данные-------------------------------------------------*/
     /*---------------------------------------------------------------------------------*/
     case 'MyData': 
       //получаем уровень доступа текущего пользователя
@@ -864,115 +864,129 @@ function Content($Stranitsa, $intUserPermis){
       }
     break;
     /*---------------------------------------------------------------------------------*/
-    /*--работа в раздете изменить телефон----------------------------------------------------*/
+    /*--работа в раздете изменить телефон----------------------------------------------*/
     /*---------------------------------------------------------------------------------*/
-    case 'Telephone': //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    case 'Telephone': 
       echo "<div class='myShapka'>{$menu['Telephone']}</div>";
       if(CheckData('sl_contacts', 'contact_for', 'Telephone')){ //tel. number есть
         $ArrayData = selectFromTable('sl_contacts', array('id', 'contact_for','contact','time','edit_by'), true, 'contact_for', 'Telephone')[0];
-        $data=date("d.m.y",$ArrayData['time']);
-        $Contact=$ArrayData['contact'];
-        $Edit=$ArrayData['edit_by'];
-        echo "<div style='text-align:center;'>Last editing $data, user: $Edit</div>";    
-          
-        echo "<form action='' method='post' autocomplete='off'>
-                <div class='form-group'>
-                  <label for='telephone' class='col-sm-3 control-label'>Contact tel. number</label>
-                  <div class='col-sm-3'> 
-                    <input type='text' class='form-control' name='telephone' id='telephone' autocomplete='off' placeholder='".$Contact."' required=''>
-                  </div>
-                </div>
-                
-                <div class='form-group last'>
-                  <div class='col-sm-offset-3 col-sm-9'>
-                    <button type='submit' name='updateTelephone' class='btn btn-success btn-xs'>Change tel. number</button>
-                    <a class='btn btn-default btn-xs' href='{$config['sitelink']}admin/index.php'>Cancel</a>
-                  </div>
-                </div>
-              </form>";
-      }else{ //tel. numberа нету
-        echo '<!-- форма -->
-              <form action="" method="post" autocomplete="off">
-                <div class="form-row" style="padding-bottom: 15px;">
-                  <div class="col-lg-4 offset-lg-4">
-                    <label for="telephone">Contact tel. number*</label>
-                    <div class="input-group">
-                      <div class="input-group-prepend">
-                        <span class="input-group-text" id="inputGroupPrepend1"><i class="fa fa-phone"></i></span>
-                      </div>
-                      <input type="text" class="form-control" id="telephone" name="Telephone" aria-describedby="inputGroupPrepend1" required>
+        $strData=date("d.m.Y",$ArrayData['time']);
+        $strEditorHTML = "<div style='text-align:center;'>Last editing $strData, user: {$ArrayData['edit_by']}</div>";
+        $strContact = $ArrayData['contact'];
+      }else{ //tel. number нету
+        $strEditorHTML = '';
+        $strContact = '';
+      }   
+
+      echo $strEditorHTML.'<!-- форма -->
+            <form action="" method="post" autocomplete="off">
+              <div class="form-row" style="padding-bottom: 15px;">
+                <div class="col-lg-4 offset-lg-4">
+                  <label for="telephone">Contact tel. number*</label>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text" id="inputGroupPrepend1"><i class="fa fa-phone"></i></span>
                     </div>
+                    <input type="text" class="form-control" id="telephone" name="Telephone" placeholder="'.$strContact.'" aria-describedby="inputGroupPrepend1" required>
                   </div>
                 </div>
-                <input type="hidden" value="Telephone" name="strContact_for" required>
-                <!-- кнопки -->
-                <div class="container">
-                  <div class="row" style = "color:white;" >
-                    <div class="col-sm-3 offset-sm-3 col-lg-2 offset-lg-4">
-                      <button type="reset" class="btn btn-info btn-sm"><i class="fa fa-times"></i> Clear</button>
-                    </div>
-                    <div class="col-sm-3 col-lg-2">
-                      <button name="strInnFromForm" value="addINTO" id="" type="submit" class="btn btn-success btn-sm "><i class="fa fa-lock"></i> Save</button>
-                    </div>
+              </div>
+              <input type="hidden" value="Telephone" name="strContact_for" required>
+              <!-- кнопки -->
+              <div class="container">
+                <div class="row" style = "color:white;" >
+                  <div class="col-sm-3 offset-sm-3 col-lg-2 offset-lg-4">
+                    <button type="reset" class="btn btn-info btn-sm"><i class="fa fa-times"></i> Clear</button>
+                  </div>
+                  <div class="col-sm-3 col-lg-2">
+                    <button name="strInnFromForm" value="addINTO" id="" type="submit" class="btn btn-success btn-sm "><i class="fa fa-lock"></i> Save</button>
                   </div>
                 </div>
-                <!-- кнопки конец-->
-              </form>
-              <!-- форма конец-->';
-      }
+              </div>
+              <!-- кнопки конец-->
+            </form>
+            <!-- форма конец-->';
     break;
-case 'Slider': //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  echo "<div class='myShapka'>{$menu['Slider']}</div>";
-  if(CheckContent('Slider')){ //Text в слайдер есть
-      $ArrayData=CheckContent('Slider', TRUE);
-      $data=date("d.m.y",$ArrayData['time']);
+    /*---------------------------------------------------------------------------------*/
+    /*--работа в раздете изменить шапку----------------------------------------------*/
+    /*---------------------------------------------------------------------------------*/
+  case 'Slider': 
+    echo "<div class='myShapka'>{$menu['Slider']}</div>";
+    if(CheckData('sl_content', 'content_for', 'Slider')){ //tel. number есть
+      $ArrayData = selectFromTable('sl_content', array('content_for', 'text_big', 'text_small', 'text_big_ua', 'text_small_ua', 'time','edit_by'), true, 'content_for', 'Slider')[0];
+      $strData=date("d.m.Y",$ArrayData['time']);
+      $strEditorHTML = "<div style='text-align:center;'>Last editing $strData, user: {$ArrayData['edit_by']}</div>";
       $text_big=$ArrayData['text_big'];
       $text_small=$ArrayData['text_small'];            
       $text_big_ua=$ArrayData['text_big_ua'];
       $text_small_ua=$ArrayData['text_small_ua'];
-      $Edit=$ArrayData['edit_by'];
-echo "<div style='text-align:center;'>Text block</div>";
-echo "<div style='text-align:center;'>Last editing $data, user: $Edit</div>";    
-      
-echo " <form class='form-horizontal' role='form' action='' method='post' style='margin-top:30px;'>
-  <div class='form-group'>
-  <label for='Zagolovok' class='col-sm-3 control-label'>Header Ru/En</label>
-  <div class='col-sm-3'> <input type='text' class='form-control' name='Zagolovok' placeholder='$text_big' value='$text_big' required=''></div>
-  <div class='col-sm-3'> <input type='text' class='form-control' name='Zagolovok_ua' placeholder='$text_big_ua' value='$text_big_ua' required=''></div>
-  </div>
-  
-  <div class='form-group'>
-  <label for='Text_sm' class='col-sm-3 control-label'>Text Ru/En</label>
-  <div class='col-sm-3'> <textarea rows='4' cols='50' type='text' class='form-control' name='Text_sm' placeholder='$text_small' required=''>$text_small</textarea></div>
-  <div class='col-sm-3'> <textarea rows='4' cols='50' type='text' class='form-control' name='Text_sm_ua' placeholder='$text_small_ua' required=''>$text_small_ua</textarea></div>
-  </div>    
-  
-  <div class='form-group last'>
-  <div class='col-sm-offset-3 col-sm-9'>
-  <button type='submit' name='updateSliderText' class='btn btn-success btn-xs'>Change</button>
-  <a class='btn btn-default btn-xs' href='{$config['sitelink']}admin/index.php'>Cancel</a>
-</div></div></form>";
-  }else{ //Textа для слайдера нету
-echo "<div style='text-align:center;'>Text block</div>";
-echo " <form class='form-horizontal' role='form' action='' method='post' style='margin-top:30px;'>
-  <div class='form-group'>
-  <label for='Zagolovok' class='col-sm-3 control-label'>Header Ru/En</label>
-  <div class='col-sm-3'> <input type='text' class='form-control' name='Zagolovok' placeholder='Enter the header' required=''></div>
-  <div class='col-sm-3'> <input type='text' class='form-control' name='Zagolovok_ua' placeholder='Enter the header_ua' required=''></div>
-  </div>
-  
-  <div class='form-group'>
-  <label for='Text_sm' class='col-sm-3 control-label'>Text Ru/En</label>
-  <div class='col-sm-3'> <textarea rows='4' cols='50' type='text' class='form-control' name='Text_sm' placeholder='Введите Text' required=''></textarea></div>
-  <div class='col-sm-3'> <textarea rows='4' cols='50' type='text' class='form-control' name='Text_sm_ua' placeholder='Введите Text_ua' required=''></textarea></div>
-  </div>        
-  
-  <div class='form-group last'>
-  <div class='col-sm-offset-3 col-sm-9'>
-  <button type='submit' name='addSliderText' class='btn btn-success btn-xs'>Add</button>
-  <a class='btn btn-default btn-xs' href='{$config['sitelink']}admin/index.php'>Cancel</a>
-</div></div></form>";
-  }
+    }else{ //tel. number нету
+      $strEditorHTML = '';
+      $strContact = '';
+    }   
+
+
+    echo $strEditorHTML.'<!-- форма -->
+    <form action="" method="post" autocomplete="off">
+      <div class="form-row" style="padding-bottom: 15px;">
+        <div class="col-lg-4 offset-lg-4">
+          <label for="header">Header Ru/En*</label>
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="inputGroupPrepend1"><i class="fa fa-header"></i></span>
+            </div>
+            <input type="text" class="form-control" id="header" name="header" placeholder="'.$text_big.'" aria-describedby="inputGroupPrepend1" required>
+          </div>
+        </div>
+      </div>
+      <div class="form-row" style="padding-bottom: 15px;">
+        <div class="col-lg-4 offset-lg-4">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="inputGroupPrepend2"><i class="fa fa-header"></i></span>
+            </div>
+            <input type="text" class="form-control" id="header_ru" name="header_ru" placeholder="'.$text_big_ua.'" aria-describedby="inputGroupPrepend2" required>
+          </div>
+        </div>
+      </div>
+      <div class="form-row" style="padding-bottom: 15px;">
+        <div class="col-lg-4 offset-lg-4">
+          <label for="text_block">Text Block Ru/En*</label>
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="inputGroupPrepend3"><i class="fa fa-font"></i></span>
+            </div>
+            <textarea rows="4" cols="50" type="text" class="form-control" id="text_block" name="text_block" placeholder="'.$text_small.'" aria-describedby="inputGroupPrepend3" required></textarea>
+          </div>
+        </div>
+      </div>
+      <div class="form-row" style="padding-bottom: 15px;">
+        <div class="col-lg-4 offset-lg-4">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="inputGroupPrepend4"><i class="fa fa-font"></i></span>
+            </div>
+            <textarea rows="4" cols="50" type="text" class="form-control" id="text_block" name="text_block" placeholder="'.$text_small_ua.'" aria-describedby="inputGroupPrepend4" required></textarea>
+          </div>
+        </div>
+      </div>
+      <input type="hidden" value="Slider" name="strContent_for" required>
+      <!-- кнопки -->
+      <div class="container">
+        <div class="row" style = "color:white;" >
+          <div class="col-sm-3 offset-sm-3 col-lg-2 offset-lg-4">
+            <button type="reset" class="btn btn-info btn-sm"><i class="fa fa-times"></i> Clear</button>
+          </div>
+          <div class="col-sm-3 col-lg-2">
+            <button name="strInnFromForm" value="addINTO" id="" type="submit" class="btn btn-success btn-sm "><i class="fa fa-lock"></i> Save</button>
+          </div>
+        </div>
+      </div>
+      <!-- кнопки конец-->
+    </form>
+    <!-- форма конец-->';
+break;
+
   
   echo "<div class='myShapka'>Images</div>";
   if(CheckImages('Slider')){ //картинки для слайдера в базе есть

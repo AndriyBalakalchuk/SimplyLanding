@@ -360,7 +360,20 @@ function CheckData($strTableName, $strColumnName, $strFindIt){
           time VARCHAR(50) COLLATE utf8_general_ci NOT NULL,
           edit_by VARCHAR(50) COLLATE utf8_general_ci) DEFAULT CHARSET utf8;"
         ); /*создаем таблицу*/
-      break;
+    break;
+    case 'sl_content':
+      $create_table = $objDB->exec("CREATE TABLE IF NOT EXISTS
+        `sl_content` (
+          id MEDIUMINT(10) COLLATE utf8_general_ci NOT NULL AUTO_INCREMENT, PRIMARY KEY(id),
+          content_for VARCHAR(50) COLLATE utf8_general_ci NOT NULL,
+          text_big VARCHAR(50) COLLATE utf8_general_ci NOT NULL,
+          text_small VARCHAR(2000) COLLATE utf8_general_ci NOT NULL,
+          text_big_ua VARCHAR(50) COLLATE utf8_general_ci NOT NULL,
+          text_small_ua VARCHAR(2000) COLLATE utf8_general_ci NOT NULL,
+          time VARCHAR(50) COLLATE utf8_general_ci NOT NULL,
+          edit_by VARCHAR(50) COLLATE utf8_general_ci) DEFAULT CHARSET utf8;"
+        ); /*создаем таблицу*/
+    break;
     
     default:
       return false;
@@ -369,7 +382,7 @@ function CheckData($strTableName, $strColumnName, $strFindIt){
 
 
 
-   $stmt = $objDB->prepare("SELECT count(*) FROM sl_contacts WHERE $strColumnName=:searchme");
+   $stmt = $objDB->prepare("SELECT count(*) FROM $strTableName WHERE $strColumnName=:searchme");
    $stmt->bindValue(':searchme', $strFindIt);
    $stmt->execute();
    if ($stmt->fetchColumn()>0) {
