@@ -37,4 +37,15 @@ Temporary Items
 admin/inc/config.inc.php
 
 # Игнорируем папки
-# admin/pdfTMP/*
+admin/images/ClientAvatar/*.jpg
+admin/images/ClientAvatar/mini/*.jpg
+admin/images/Portfolio/*.jpg
+admin/images/Portfolio/mini/*.jpg
+admin/images/Slider/*.jpg
+admin/images/Slider/mini/*.jpg
+admin/images/ClientAvatar/*.png
+admin/images/ClientAvatar/mini/*.png
+admin/images/Portfolio/*.png
+admin/images/Portfolio/mini/*.png
+admin/images/Slider/*.png
+admin/images/Slider/mini/*.png

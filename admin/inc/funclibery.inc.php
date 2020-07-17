@@ -391,14 +391,38 @@ function menu($Stranitsa){
   global $config, $menu;
 
 
-foreach ($menu as $link => $name){
-  if($Stranitsa==$link){
-  echo "<div class='myMenuListActiv'>$name</div>";
-  }else{
-  echo "<a class='myMenuList btnModal' href='{$config['sitelink']}admin/index.php?strPage=$link'>$name</a>"; 
+  foreach ($menu as $link => $name){
+    if($Stranitsa==$link){
+    echo "<div class='myMenuListActiv'>$name</div>";
+    }else{
+    echo "<a class='myMenuList btnModal' href='{$config['sitelink']}admin/index.php?strPage=$link'>$name</a>"; 
+    }
   }
 }
 
+function uploadImage($strFolder, $width=1980, $height=1080){ //заливает новые картинки
+  global $config, $path, $_FILES;
+ 
+  # Подключение редакторв изображений
+  include_once $path . '/lib/SimpleImage/SimpleImage.class.php';
+
+  if($_FILES['new_image']['error'] !=0){return false;} //ошибка загрузки
+
+  $FileRandName = explode('.', $_FILES['new_image']["name"]);
+  $FileRandName= time().rand(1,9).'.'.array_pop($FileRandName);  //имя для изображения
+  
+  //заливает картинку с подходящим размером   
+  $image = new SimpleImage();
+  $image->load($_FILES["new_image"]["tmp_name"]);
+  $image->resize($width, $height);
+  $image->save("images/$strFolder/".$FileRandName);
+  //заливает миниатюру для просмотра в админке
+  $image->load("images/$strFolder/".$FileRandName);
+  $image->resize(200, 112);
+  $image->save("images/$strFolder/mini/".$FileRandName);
+    
+
+  return $FileRandName;
 }
 
 //админ контент
@@ -870,12 +894,14 @@ function Content($Stranitsa, $intUserPermis){
       echo "<div class='myShapka'>{$menu['Telephone']}</div>";
       if(CheckData('sl_contacts', 'contact_for', 'Telephone')){ //tel. number есть
         $ArrayData = selectFromTable('sl_contacts', array('id', 'contact_for','contact','time','edit_by'), true, 'contact_for', 'Telephone')[0];
+        $strSubmitValue = 'updIN';
         $strData=date("d.m.Y",$ArrayData['time']);
         $strEditorHTML = "<div style='text-align:center;'>Last editing $strData, user: {$ArrayData['edit_by']}</div>";
         $strContact = $ArrayData['contact'];
       }else{ //tel. number нету
         $strEditorHTML = '';
         $strContact = '';
+        $strSubmitValue = 'addINTO';
       }   
 
       echo $strEditorHTML.'<!-- форма -->
@@ -887,7 +913,7 @@ function Content($Stranitsa, $intUserPermis){
                     <div class="input-group-prepend">
                       <span class="input-group-text" id="inputGroupPrepend1"><i class="fa fa-phone"></i></span>
                     </div>
-                    <input type="text" class="form-control" id="telephone" name="Telephone" placeholder="'.$strContact.'" aria-describedby="inputGroupPrepend1" required>
+                    <input type="text" class="form-control" id="telephone" name="Telephone" value="'.$strContact.'" aria-describedby="inputGroupPrepend1" required>
                   </div>
                 </div>
               </div>
@@ -899,7 +925,7 @@ function Content($Stranitsa, $intUserPermis){
                     <button type="reset" class="btn btn-info btn-sm"><i class="fa fa-times"></i> Clear</button>
                   </div>
                   <div class="col-sm-3 col-lg-2">
-                    <button name="strInnFromForm" value="addINTO" id="" type="submit" class="btn btn-success btn-sm "><i class="fa fa-lock"></i> Save</button>
+                    <button name="strInnFromForm" value="'.$strSubmitValue.'" id="" type="submit" class="btn btn-success btn-sm "><i class="fa fa-lock"></i> Save</button>
                   </div>
                 </div>
               </div>
@@ -911,138 +937,175 @@ function Content($Stranitsa, $intUserPermis){
     /*--работа в раздете изменить шапку----------------------------------------------*/
     /*---------------------------------------------------------------------------------*/
   case 'Slider': 
-    echo "<div class='myShapka'>{$menu['Slider']}</div>";
-    if(CheckData('sl_content', 'content_for', 'Slider')){ //tel. number есть
-      $ArrayData = selectFromTable('sl_content', array('content_for', 'text_big', 'text_small', 'text_big_ua', 'text_small_ua', 'time','edit_by'), true, 'content_for', 'Slider')[0];
-      $strData=date("d.m.Y",$ArrayData['time']);
-      $strEditorHTML = "<div style='text-align:center;'>Last editing $strData, user: {$ArrayData['edit_by']}</div>";
-      $text_big=$ArrayData['text_big'];
-      $text_small=$ArrayData['text_small'];            
-      $text_big_ua=$ArrayData['text_big_ua'];
-      $text_small_ua=$ArrayData['text_small_ua'];
-    }else{ //tel. number нету
-      $strEditorHTML = '';
-      $strContact = '';
-    }   
+    if(!isset($_GET['delWithName'])){//если запроса на удаление картинки нет, то отображаем страницу
+      echo "<div class='myShapka'>{$menu['Slider']}</div>";
+      if(CheckData('sl_content', 'content_for', 'Slider')){ //данные для слайдера есть
+        $ArrayData = selectFromTable('sl_content', array('content_for', 'text_big', 'text_small', 'text_big_en', 'text_small_en', 'time','edit_by'), true, 'content_for', 'Slider')[0];
+        $strSubmitValue = 'updIN';
+        $strData=date("d.m.Y",$ArrayData['time']);
+        $strEditorHTML = "<div style='text-align:center;'>Last editing $strData, user: {$ArrayData['edit_by']}</div>";
+        $text_big=$ArrayData['text_big'];
+        $text_small=$ArrayData['text_small'];            
+        $text_big_en=$ArrayData['text_big_en'];
+        $text_small_en=$ArrayData['text_small_en'];
+      }else{ //данные для слайдера  нету
+        $strSubmitValue = 'addINTO';
+        $strEditorHTML = '';
+        $text_big = '';
+        $text_small = '';            
+        $text_big_en = '';
+        $text_small_en = '';
+      }   
 
 
-    echo $strEditorHTML.'<!-- форма -->
-    <form action="" method="post" autocomplete="off">
-      <div class="form-row" style="padding-bottom: 15px;">
-        <div class="col-lg-4 offset-lg-4">
-          <label for="header">Header Ru/En*</label>
-          <div class="input-group">
-            <div class="input-group-prepend">
-              <span class="input-group-text" id="inputGroupPrepend1"><i class="fa fa-header"></i></span>
+      echo $strEditorHTML.'<!-- форма -->
+      <form action="" method="post" autocomplete="off">
+        <div class="form-row" style="padding-bottom: 15px;">
+          <div class="col-lg-4 offset-lg-4">
+            <label for="header">Header Ru/En*</label>
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="inputGroupPrepend1"><i class="fa fa-header"></i></span>
+              </div>
+              <input type="text" class="form-control" id="header" name="header" value="'.$text_big.'" aria-describedby="inputGroupPrepend1" required>
             </div>
-            <input type="text" class="form-control" id="header" name="header" placeholder="'.$text_big.'" aria-describedby="inputGroupPrepend1" required>
           </div>
         </div>
-      </div>
-      <div class="form-row" style="padding-bottom: 15px;">
-        <div class="col-lg-4 offset-lg-4">
-          <div class="input-group">
-            <div class="input-group-prepend">
-              <span class="input-group-text" id="inputGroupPrepend2"><i class="fa fa-header"></i></span>
+        <div class="form-row" style="padding-bottom: 15px;">
+          <div class="col-lg-4 offset-lg-4">
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="inputGroupPrepend2"><i class="fa fa-header"></i></span>
+              </div>
+              <input type="text" class="form-control" id="header_en" name="header_en" value="'.$text_big_en.'" aria-describedby="inputGroupPrepend2" required>
             </div>
-            <input type="text" class="form-control" id="header_ru" name="header_ru" placeholder="'.$text_big_ua.'" aria-describedby="inputGroupPrepend2" required>
           </div>
         </div>
-      </div>
-      <div class="form-row" style="padding-bottom: 15px;">
-        <div class="col-lg-4 offset-lg-4">
-          <label for="text_block">Text Block Ru/En*</label>
-          <div class="input-group">
-            <div class="input-group-prepend">
-              <span class="input-group-text" id="inputGroupPrepend3"><i class="fa fa-font"></i></span>
+        <div class="form-row" style="padding-bottom: 15px;">
+          <div class="col-lg-4 offset-lg-4">
+            <label for="text_block">Text Block Ru/En*</label>
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="inputGroupPrepend3"><i class="fa fa-font"></i></span>
+              </div>
+              <textarea rows="4" cols="50" type="text" class="form-control" id="text_block" name="text_block" aria-describedby="inputGroupPrepend3" required>'.$text_small.'</textarea>
             </div>
-            <textarea rows="4" cols="50" type="text" class="form-control" id="text_block" name="text_block" placeholder="'.$text_small.'" aria-describedby="inputGroupPrepend3" required></textarea>
           </div>
         </div>
-      </div>
-      <div class="form-row" style="padding-bottom: 15px;">
-        <div class="col-lg-4 offset-lg-4">
-          <div class="input-group">
-            <div class="input-group-prepend">
-              <span class="input-group-text" id="inputGroupPrepend4"><i class="fa fa-font"></i></span>
+        <div class="form-row" style="padding-bottom: 15px;">
+          <div class="col-lg-4 offset-lg-4">
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="inputGroupPrepend4"><i class="fa fa-font"></i></span>
+              </div>
+              <textarea rows="4" cols="50" type="text" class="form-control" id="text_block_en" name="text_block_en" aria-describedby="inputGroupPrepend4" required>'.$text_small_en.'</textarea>
             </div>
-            <textarea rows="4" cols="50" type="text" class="form-control" id="text_block" name="text_block" placeholder="'.$text_small_ua.'" aria-describedby="inputGroupPrepend4" required></textarea>
           </div>
         </div>
-      </div>
-      <input type="hidden" value="Slider" name="strContent_for" required>
-      <!-- кнопки -->
-      <div class="container">
-        <div class="row" style = "color:white;" >
-          <div class="col-sm-3 offset-sm-3 col-lg-2 offset-lg-4">
-            <button type="reset" class="btn btn-info btn-sm"><i class="fa fa-times"></i> Clear</button>
-          </div>
-          <div class="col-sm-3 col-lg-2">
-            <button name="strInnFromForm" value="addINTO" id="" type="submit" class="btn btn-success btn-sm "><i class="fa fa-lock"></i> Save</button>
+        <input type="hidden" value="Slider" name="strContent_for" required>
+        <!-- кнопки -->
+        <div class="container">
+          <div class="row" style = "color:white;" >
+            <div class="col-sm-3 offset-sm-3 col-lg-2 offset-lg-4">
+              <button type="reset" class="btn btn-info btn-sm"><i class="fa fa-times"></i> Clear</button>
+            </div>
+            <div class="col-sm-3 col-lg-2">
+              <button name="strInnFromForm" value="'.$strSubmitValue.'" id="" type="submit" class="btn btn-success btn-sm "><i class="fa fa-lock"></i> Save</button>
+            </div>
           </div>
         </div>
-      </div>
-      <!-- кнопки конец-->
-    </form>
-    <!-- форма конец-->';
-break;
+        <!-- кнопки конец-->
+      </form>
+      <!-- форма конец-->';
 
-  
-  echo "<div class='myShapka'>Images</div>";
-  if(CheckImages('Slider')){ //картинки для слайдера в базе есть
-      $ArrayData=CheckImages('Slider', TRUE);
-if(!isset($ArrayData[1]['image_name'])){ //если есть только один слайд
-      $data=date("d.m.y",$ArrayData[0]['time']);
-      $img_name=$ArrayData[0]['image_name'];
-      $Edit=$ArrayData[0]['edit_by'];
-echo "<div style='text-align:center;'>Last editing $data, user: $Edit</div>";    
-echo "<div class='container-fluid'>
-  <div class='col-sm-2'>
+      echo "<div class='myShapka'>Images</div>";
+      if(CheckData('sl_images', 'image_for', 'Slider')){ //фотки для слайдера есть
+        $ArrayData = selectFromTable('sl_images', array('image_for', 'image_name', 'time','edit_by'), true, 'image_for', 'Slider');
+        $htmlExistingImages = '<div class="row">';
+        foreach ($ArrayData as $ArrayRow) {
+          $strData=date("d.m.Y",$ArrayRow['time']);
+          $htmlExistingImages .= "
+            <div class='col-sm-2'>
+              <div style='text-align:center;'>Added: $strData, user: {$ArrayRow['edit_by']}</div>
+              <div class='col-xs-12'><img src='images/Slider/mini/{$ArrayRow['image_name']}' width='100%'></div>
+              <div class='col-xs-12' style='text-align:center;'>
+                <a href='".$config['sitelink']."admin/index.php?strPage=Slider&delWithName={$ArrayRow['image_name']}' class='btn btn-danger btn-sm'><i class='fa fa-lock'></i> Remove</a>
+              </div>
+            </div>";
+        }
+        $htmlExistingImages .= '</div>';
+      }else{ //фотки для слайдера  нету
+        $htmlExistingImages = '';
+      }   
     
-      <div class='col-xs-12'><img src='images/Slider/mini/$img_name' width='100%'></div>
-      <div class='col-xs-12' style='text-align:center;'>
-        <a href='".$config['sitelink']."admin/index.php?Page=Slider&delWithName=$img_name' class='btn btn-default btn-xs'>Remove</a>
+      echo $htmlExistingImages.'<!-- форма -->
+      <form action="" enctype="multipart/form-data" method="post" autocomplete="off">
+        <div class="form-row" style="padding-bottom: 15px;">
+          <div class="col-lg-4 offset-lg-4">
+            <label for="new_image">Add image (570*600px)*</label>
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="inputGroupPrepend1"><i class="fa fa-image"></i></span>
+              </div>
+              <input type="file" class="form-control" accept="image/jpeg,image/png,image/gif" id="new_image" name="new_image" aria-describedby="inputGroupPrepend1" required>
+            </div>
+          </div>
+        </div>
+        <input type="hidden" value="Slider" name="strImage_for" required>
+        <!-- кнопки -->
+        <div class="container">
+          <div class="row" style = "color:white;" >
+            <div class="col-sm-3 offset-sm-3 col-lg-2 offset-lg-4">
+              <button type="reset" class="btn btn-info btn-sm"><i class="fa fa-times"></i> Clear</button>
+            </div>
+            <div class="col-sm-3 col-lg-2">
+              <button name="strInnFromForm" value="addINTO" id="" type="submit" class="btn btn-success btn-sm "><i class="fa fa-image"></i> Add image</button>
+            </div>
+          </div>
+        </div>
+        <!-- кнопки конец-->
+      </form>
+      <!-- форма конец-->';
+  }else{ //если пришел запрос на удаление картинки то отобразить переспрашивание
+    $boolINDB = false;
+    $boolINFiles = false;
+    $boolINFilesMini = false;
+    //проверяем есть ли такая картинка в базе
+    if(CheckData('sl_images', 'image_name', $_GET['delWithName'])){$boolINDB = true;}
+    //проверяем есть ли такая картинка в файлах
+    if(file_exists($path.'images/'.$_GET['strPage'].'/'.$_GET['delWithName'])){$boolINFiles = true;}
+    //проверяем есть ли такая миниатюра в файлах
+    if(file_exists($path.'images/'.$_GET['strPage'].'/mini/'.$_GET['delWithName'])){$boolINFilesMini = true;}
+
+    if($boolINDB or $boolINFiles or $boolINFilesMini){
+      echo "<div class='myShapka'>Approve image removing</div>";
       
-</div></div>";
-}else{//если слайдов много
-foreach($ArrayData as $Array){
-      $data=date("d.m.y",$Array['time']);
-      $img_name=$Array['image_name'];
-      $Edit=$Array['edit_by'];
-echo "<div class='col-sm-2'>
-  <div style='text-align:center;'>Added: $data, user: $Edit</div>
-  <div class='col-xs-12'><img src='images/Slider/mini/{$Array['image_name']}' width='100%'></div>
-  <div class='col-xs-12' style='text-align:center;'>
-  <a href='".$config['sitelink']."admin/index.php?Page=Slider&delWithName={$Array['image_name']}' class='btn btn-default btn-xs'>Remove</a>
-  </div></div>";}
-}            
-      
-      
-echo " <form class='form-horizontal col-xs-12' enctype='multipart/form-data' role='form' action='' method='post' style='margin-top:30px;'>
-  <div class='form-group'>
-  <label for='SliImg' class='col-sm-3 control-label'>Add image (1980*1080)</label>
-  <div class='col-sm-3'> 
-  <input class='btn btn-default form-control' type='file' accept='image/jpeg,image/png,image/gif' required='required' name='newImage'>
-  </div></div>       
-  
-  <div class='form-group last'>
-  <div class='col-sm-offset-3 col-sm-9'>
-  <button type='submit' name='addSliderImage' class='btn btn-success btn-xs'>Add</button>
-  <a class='btn btn-default btn-xs' href='{$config['sitelink']}admin/index.php'>Cancel</a>
-</div></div></form>";
-  }else{ //картинки для слайдера в базе нету
-echo " <form class='form-horizontal' enctype='multipart/form-data' role='form' action='' method='post' style='margin-top:30px;'>
-  <div class='form-group'>
-  <label for='SliImg' class='col-sm-3 control-label'>Add image (1980*1080)</label>
-  <div class='col-sm-3'> 
-  <input class='btn btn-default form-control' type='file' accept='image/jpeg,image/png,image/gif' required='required' name='newImage'>
-  </div></div>       
-  
-  <div class='form-group last'>
-  <div class='col-sm-offset-3 col-sm-9'>
-  <button type='submit' name='addSliderImage' class='btn btn-success btn-xs'>Add</button>
-  <a class='btn btn-default btn-xs' href='{$config['sitelink']}admin/index.php'>Cancel</a>
-</div></div></form>";
+      echo '<!-- форма -->
+        <form action="" method="post" autocomplete="off">
+          <input type="hidden" value="Slider" name="strImage_for" required>
+          <input type="hidden" value="'.$_GET['delWithName'].'" name="image_name" required>
+          <input type="hidden" value="'.$boolINDB.'" name="boolINDB" required>
+          <input type="hidden" value="'.$boolINFiles.'" name="boolINFiles" required>
+          <input type="hidden" value="'.$boolINFilesMini.'" name="boolINFilesMini" required>
+          <!-- кнопки -->
+          <div class="container">
+            <a ><img src="images/Slider/mini/'.$_GET['delWithName'].'" width="250px"></a>
+            <div class="row" style = "color:white;" >
+              <div class="col-sm-3 offset-sm-3 col-lg-2 offset-lg-4">
+                <button name="strInnFromForm" value="RemoveIMG" id="" type="submit" class="btn btn-danger btn-sm "><i class="fa fa-lock"></i> Remove '.$_GET['delWithName'].'</button>
+              </div>
+              <div class="col-sm-3 col-lg-2">
+                <a id="" class="btn btn-info btn-sm btnModal" href="'.$config['sitelink'].'admin/index.php?strPage=Slider"><i class="fa fa-reply"></i> Back</a>
+              </div>
+            </div>
+          </div>
+          <!-- кнопки конец-->
+        </form>
+        <!-- форма конец-->';
+    }else{
+      echo "<div class='myShapka'>No data to removing</div>";
+      echo '<a id="" class="btn btn-info btn-sm btnModal" href="'.$config['sitelink'].'admin/index.php?strPage=Slider"><i class="fa fa-reply"></i> Back</a>';
+    }
   }
 break;
 case 'Skills': //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -122,7 +122,7 @@ function tryToEnter($strSignat, $strPass){
 }
 
 //обновление информации в любой из таблиц
-function updateTable($strTable, $arrFields, $strWhen, $strThis, $arrData, $boolUpdStatus=true){
+function updateTable($strTable, $arrFields, $strWhen, $strThis, $arrData){
   global $config, $objDB, $path;
 
   $strSet = '';
@@ -149,71 +149,6 @@ function updateTable($strTable, $arrFields, $strWhen, $strThis, $arrData, $boolU
     $stmt= $objDB->prepare("UPDATE $strTable SET $strSet WHERE $strWhen=:$strWhen");
     $stmt->execute($arrInsert);
   }catch(PDOException $e){return false;}
-  //--------------------------------------------------------------
-  // проверяем работали ли с большой общей таблице и если да -- проверяем и корректируем статус задачи
-  //--------------------------------------------------------------
-  if($strTable == 'big_task_log' and $boolUpdStatus){
-    //получаем нужные данные
-    $arrThisJobData = selectFromTable('big_task_log', array('canceled_in_date',
-                                                             'date_created',
-                                                             'work_spreadsheet',
-                                                             'work_was_started',
-                                                             'date_completed'), true, $strWhen, $strThis)[0];
-    $arrThisJobData['work_spreadsheet'] = unserialize($arrThisJobData['work_spreadsheet'])['submitEmpl'];
-
-    if($arrThisJobData['canceled_in_date'] == '' or $arrThisJobData['canceled_in_date'] == 0){//если дата нет даты закрытия  проверяем дальше
-      if($arrThisJobData['date_created'] == '' or $arrThisJobData['date_created'] == 0){//если нет даты создания ставим единицу
-        $intStatus = 1;
-      }else{//если дата создания есть проверяем дальше
-        if($arrThisJobData['work_was_started'] == '' or $arrThisJobData['work_was_started'] == 'false'){//если работник не начал работать ставим 2
-          $intStatus = 2;
-        }else{//если работник начал работать проверяем дальше
-          if($arrThisJobData['work_spreadsheet'] == '' or $arrThisJobData['work_spreadsheet'] == 'false'){//если работник не подтвердил работу как завершенную ставим 3
-            $intStatus = 3;
-          }else{//если работник подтвердил работу как завершенную проверяем дальше
-            if($arrThisJobData['date_completed'] == '' or $arrThisJobData['date_completed'] == 0){//если даты завершения нет то ставим статус 4
-              $intStatus = 4;
-            }else{//если дата завершения есть то ставим статус 5
-              $intStatus = 5;
-              //создаем пдф счет для клиента
-              try{
-               $strCliePDFname = getPdfClientCost($strThis, $path);
-              }catch (Throwable $e){
-                return false;
-              }
-              //создаем пдф счет для бухгалтерии
-              try{
-               $strFlatPDFname = getPdfFlaternCost($strThis, $path);
-              }catch (Throwable $e){
-                return false;
-              }
-              //проверяем создались ли файлы
-              if($strCliePDFname == false or $strFlatPDFname == false){
-                return false;
-              }
-              //отправляем счета письмом
-              if(!send_pdf_to_user($_SESSION['new']['email'], 'Job #'.$strThis, 'Job #'.$strThis."\n".'job name'.' - done', $path, array($strCliePDFname,$strFlatPDFname))){
-                return false;
-              }
-              //вносим данные в гугл таблици
-              if(!addToSpreadsheet($strThis, $path)){
-                return false;
-              }
-            }
-          }
-        }
-      }
-    }else{//если дата закрытия есть ставим статус 6
-      $intStatus = 6;
-    }
-
-    //обновляем статус
-    if(!updateTable('big_task_log', array('status'),$strWhen,$strThis,array($intStatus), false)){
-       return false;
-     }
-  }
-  //--------------------------------------------------------------
-
   return true;
 }
 
@@ -368,8 +303,18 @@ function CheckData($strTableName, $strColumnName, $strFindIt){
           content_for VARCHAR(50) COLLATE utf8_general_ci NOT NULL,
           text_big VARCHAR(50) COLLATE utf8_general_ci NOT NULL,
           text_small VARCHAR(2000) COLLATE utf8_general_ci NOT NULL,
-          text_big_ua VARCHAR(50) COLLATE utf8_general_ci NOT NULL,
-          text_small_ua VARCHAR(2000) COLLATE utf8_general_ci NOT NULL,
+          text_big_en VARCHAR(50) COLLATE utf8_general_ci NOT NULL,
+          text_small_en VARCHAR(2000) COLLATE utf8_general_ci NOT NULL,
+          time VARCHAR(50) COLLATE utf8_general_ci NOT NULL,
+          edit_by VARCHAR(50) COLLATE utf8_general_ci) DEFAULT CHARSET utf8;"
+        ); /*создаем таблицу*/
+    break;
+    case 'sl_images':
+      $create_table = $objDB->exec("CREATE TABLE IF NOT EXISTS
+        `sl_images` (
+          id MEDIUMINT(10) COLLATE utf8_general_ci NOT NULL AUTO_INCREMENT, PRIMARY KEY(id),
+          image_for VARCHAR(50) COLLATE utf8_general_ci NOT NULL,
+          image_name VARCHAR(50) COLLATE utf8_general_ci NOT NULL,
           time VARCHAR(50) COLLATE utf8_general_ci NOT NULL,
           edit_by VARCHAR(50) COLLATE utf8_general_ci) DEFAULT CHARSET utf8;"
         ); /*создаем таблицу*/
