@@ -281,7 +281,7 @@ function addIntoTable($strTable, $arrFields, $arrData){
 }
 
 //проверка есть ли значение в колонке контактов 
-function CheckData($strTableName, $strColumnName, $strFindIt){
+function CheckData($strTableName, $strColumnName, $strFindIt, $boolGetAll=false){
   global $config, $objDB;
 
   //проверяем к какой таблице обращение, и создаем таблицу если ее нет (если такой таблици не планировалось, просто возвращаем фолс)
@@ -319,15 +319,33 @@ function CheckData($strTableName, $strColumnName, $strFindIt){
           edit_by VARCHAR(50) COLLATE utf8_general_ci) DEFAULT CHARSET utf8;"
         ); /*создаем таблицу*/
     break;
-    
+    case 'sl_portfolio':
+      $create_table = $objDB->exec("CREATE TABLE IF NOT EXISTS
+        `sl_portfolio` (
+          id MEDIUMINT(10) COLLATE utf8_general_ci NOT NULL AUTO_INCREMENT, PRIMARY KEY(id),
+          item_for VARCHAR(50) COLLATE utf8_general_ci NOT NULL,
+          images TEXT COLLATE utf8_general_ci NOT NULL,
+          text_big VARCHAR(100) COLLATE utf8_general_ci NOT NULL,
+          text_small TEXT COLLATE utf8_general_ci NOT NULL,
+          text_big_ua VARCHAR(100) COLLATE utf8_general_ci NOT NULL,
+          text_small_ua TEXT COLLATE utf8_general_ci NOT NULL,
+          time VARCHAR(50) COLLATE utf8_general_ci NOT NULL,
+          edit_by VARCHAR(50) COLLATE utf8_general_ci) DEFAULT CHARSET utf8;"
+        ); /*создаем таблицу*/
+    break;
+
     default:
       return false;
       break;
   }
 
+  //выбор SQL запроса - нужно отфильтровать данные или нет
+  if($boolGetAll){
+    $stmt = $objDB->prepare("SELECT count(*) FROM $strTableName");
+  }else{
+    $stmt = $objDB->prepare("SELECT count(*) FROM $strTableName WHERE $strColumnName=:searchme");
+  }
 
-
-   $stmt = $objDB->prepare("SELECT count(*) FROM $strTableName WHERE $strColumnName=:searchme");
    $stmt->bindValue(':searchme', $strFindIt);
    $stmt->execute();
    if ($stmt->fetchColumn()>0) {

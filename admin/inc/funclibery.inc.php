@@ -934,7 +934,7 @@ function Content($Stranitsa, $intUserPermis){
             <!-- форма конец-->';
     break;
     /*---------------------------------------------------------------------------------*/
-    /*--работа в раздете изменить шапку----------------------------------------------*/
+    /*--работа в раздете изменить шапку------------------------------------------------*/
     /*---------------------------------------------------------------------------------*/
     case 'Slider': 
       if(!isset($_GET['delWithName'])){//если запроса на удаление картинки нет, то отображаем страницу
@@ -1029,7 +1029,7 @@ function Content($Stranitsa, $intUserPermis){
                 <div style='text-align:center;'>Added: $strData, user: {$ArrayRow['edit_by']}</div>
                 <div class='col-xs-12'><img src='images/Slider/mini/{$ArrayRow['image_name']}' width='100%'></div>
                 <div class='col-xs-12' style='text-align:center;'>
-                  <a href='".$config['sitelink']."admin/index.php?strPage=Slider&delWithName={$ArrayRow['image_name']}' class='btn btn-danger btn-sm'><i class='fa fa-lock'></i> Remove</a>
+                  <a href='".$config['sitelink']."admin/index.php?strPage=Slider&delWithName={$ArrayRow['image_name']}' class='btn btn-danger btn-sm btnModal'><i class='fa fa-lock'></i> Remove</a>
                 </div>
               </div>";
           }
@@ -1109,185 +1109,57 @@ function Content($Stranitsa, $intUserPermis){
       }
     break;
     /*---------------------------------------------------------------------------------*/
-    /*--работа в раздете изменить шапку----------------------------------------------*/
+    /*--работа в раздете изменить шапку------------------------------------------------*/
     /*---------------------------------------------------------------------------------*/
     case 'Skills': 
-      echo "<div class='myShapka'>{$menu['Skills']}</div>";
-        switch($_GET['skill_for']){ //подбор контента для страницы скилы
-          case 'hardskill':
-            if(CheckData('sl_content', 'content_for', 'hardskill_header')){ //данные для заголовка хардскилов есть
-              $ArrayData = selectFromTable('sl_content', array('content_for', 'text_big', 'text_big_en', 'time','edit_by'), true, 'content_for', 'hardskill_header')[0];
-              $strSubmitValue = 'updIN';
-              $strData=date("d.m.Y",$ArrayData['time']);
-              $strEditorHTML = "<div style='text-align:center;'>Last editing $strData, user: {$ArrayData['edit_by']}</div>";
-              $text_big=$ArrayData['text_big'];          
-              $text_big_en=$ArrayData['text_big_en'];
-            }else{ //данные для заголовка хардскилов нету
-              $strSubmitValue = 'addINTO';
-              $strEditorHTML = '';
-              $text_big = '';         
-              $text_big_en = '';
-            }   
+      if(!isset($_GET['delWithId'])){//если запроса на удаление скила нет, то отображаем страницу
+        echo "<div class='myShapka'>{$menu['Skills']}</div>";
+          switch($_GET['skill_for']){ //подбор контента для страницы скилы
+            case 'hardskill':
+              if(CheckData('sl_content', 'content_for', 'hardskill_header')){ //данные для заголовка хардскилов есть
+                $ArrayData = selectFromTable('sl_content', array('content_for', 'text_big', 'text_big_en', 'time','edit_by'), true, 'content_for', 'hardskill_header')[0];
+                $strSubmitValue = 'updIN';
+                $strData=date("d.m.Y",$ArrayData['time']);
+                $strEditorHTML = "<div style='text-align:center;'>Last editing $strData, user: {$ArrayData['edit_by']}</div>";
+                $text_big=$ArrayData['text_big'];          
+                $text_big_en=$ArrayData['text_big_en'];
+              }else{ //данные для заголовка хардскилов нету
+                $strSubmitValue = 'addINTO';
+                $strEditorHTML = '';
+                $text_big = '';         
+                $text_big_en = '';
+              }   
 
-            echo "<button class='btn btn-primary btn-sm' href='{$config['sitelink']}admin/index.php?strPage=Skills&skill_for=hardskill' disabled>Hard skills</button> ";
-            echo "<a class='btn btn-info btn-sm' href='{$config['sitelink']}admin/index.php?strPage=Skills&skill_for=softskill'>Soft skills</a> ";
+              echo "<button class='btn btn-primary btn-sm' href='{$config['sitelink']}admin/index.php?strPage=Skills&skill_for=hardskill' disabled>Hard skills</button> ";
+              echo "<a class='btn btn-info btn-sm btnModal' href='{$config['sitelink']}admin/index.php?strPage=Skills&skill_for=softskill'>Soft skills</a> ";
 
 
-            echo $strEditorHTML.'<!-- форма -->
-            <form action="" method="post" autocomplete="off">
-              <div class="form-row" style="padding-bottom: 15px;">
-                <div class="col-lg-4 offset-lg-4">
-                  <label for="header">Header Ru/En*</label>
-                  <div class="input-group">
-                    <div class="input-group-prepend">
-                      <span class="input-group-text" id="inputGroupPrepend1"><i class="fa fa-header"></i></span>
-                    </div>
-                    <input type="text" class="form-control" id="header" name="header" value="'.$text_big.'" aria-describedby="inputGroupPrepend1" required>
-                  </div>
-                </div>
-              </div>
-              <div class="form-row" style="padding-bottom: 15px;">
-                <div class="col-lg-4 offset-lg-4">
-                  <div class="input-group">
-                    <div class="input-group-prepend">
-                      <span class="input-group-text" id="inputGroupPrepend2"><i class="fa fa-header"></i></span>
-                    </div>
-                    <input type="text" class="form-control" id="header_en" name="header_en" value="'.$text_big_en.'" aria-describedby="inputGroupPrepend2" required>
-                  </div>
-                </div>
-              </div>
-              <input type="hidden" value="" name="text_block" required>
-              <input type="hidden" value="" name="text_block_en" required>
-              <input type="hidden" value="hardskill_header" name="strContent_for" required>
-              <!-- кнопки -->
-              <div class="container">
-                <div class="row" style = "color:white;" >
-                  <div class="col-sm-3 offset-sm-3 col-lg-2 offset-lg-4">
-                    <button type="reset" class="btn btn-info btn-sm"><i class="fa fa-times"></i> Clear</button>
-                  </div>
-                  <div class="col-sm-3 col-lg-2">
-                    <button name="strInnFromForm" value="'.$strSubmitValue.'" id="" type="submit" class="btn btn-success btn-sm "><i class="fa fa-lock"></i> Save</button>
-                  </div>
-                </div>
-              </div>
-              <!-- кнопки конец-->
-            </form>
-            <!-- форма конец-->';
-            if(CheckData('sl_content', 'content_for', 'SkillHard')){ //данные для хардскилов есть
-              $ArrayData = selectFromTable('sl_content', array('id','content_for', 'text_big', 'text_small', 'text_big_en', 'text_small_en', 'time','edit_by'), true, 'content_for', 'SkillHard');
-              $strExistingHTML = '';
-              foreach ($ArrayData as $ArrayRow) {
-                $strData=date("d.m.Y",$ArrayRow['time']);
-                $strExistingHTML .= '<div style="text-align:center;">Added: '.$strData.', user: '.$ArrayRow['edit_by'].'</div>
-                    <!-- форма -->
-                    <form action="" method="post" autocomplete="off">
-                      <div class="formMarger">
-                        <div class="form-row" style="padding-bottom: 15px;">
-                          <div class="col-lg-4 offset-lg-3">
-                            <label for="header">The skill name Ru*</label>
-                            <div class="input-group">
-                              <div class="input-group-prepend">
-                                <span class="input-group-text" id="inputGroupPrepend1"><i class="fa fa-header"></i></span>
-                              </div>
-                              <input type="text" class="form-control" id="header" name="header" value="" aria-describedby="inputGroupPrepend1" required>
-                            </div>
-                          </div>
-                          <div class="col-lg-2">
-                            <label for="text_block">Skill level Ru*</label>
-                            <div class="input-group">
-                              <div class="input-group-prepend">
-                                <span class="input-group-text" id="inputGroupPrepend3"><i class="fa fa-font"></i></span>
-                              </div>
-                              <input type="number" class="form-control" id="text_block" name="text_block" value="" aria-describedby="inputGroupPrepend3" required>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="form-row" style="padding-bottom: 15px;">
-                          <div class="col-lg-4 offset-lg-3">
-                            <label for="header">The skill name En*</label>
-                            <div class="input-group">
-                              <div class="input-group-prepend">
-                                <span class="input-group-text" id="inputGroupPrepend2"><i class="fa fa-header"></i></span>
-                              </div>
-                              <input type="text" class="form-control" id="header_en" name="header_en" value="" aria-describedby="inputGroupPrepend2" required>
-                            </div>
-                          </div>
-                          <div class="col-lg-2">
-                            <label for="text_block">Skill level En*</label>
-                            <div class="input-group">
-                              <div class="input-group-prepend">
-                                <span class="input-group-text" id="inputGroupPrepend4"><i class="fa fa-font"></i></span>
-                              </div>
-                              <input type="number" class="form-control" id="text_block_en" name="text_block_en" value="" aria-describedby="inputGroupPrepend4" required>
-                            </div>
-                          </div>
-                        </div>
-
-                        <input type="hidden" value="SkillHard" name="strContent_for" required>
-                        <!-- кнопки -->
-                        <div class="container">
-                          <div class="row" style = "color:white;" >
-                            <div class="col-sm-3 offset-sm-3 col-lg-2 offset-lg-4">
-                              <button type="reset" class="btn btn-info btn-sm"><i class="fa fa-times"></i> Clear</button>
-                            </div>
-                            <div class="col-sm-3 col-lg-2">
-                              <button name="strInnFromForm" value="addINTO" id="" type="submit" class="btn btn-success btn-sm "><i class="fa fa-lock"></i> Save</button>
-                            </div>
-                          </div>
-                        </div>
-                        <!-- кнопки конец-->
-                      </div>
-                    </form>
-                    <!-- форма конец-->';
-              }
-            }else{ //данные для хардскилов нету
-              $strExistingHTML = '';
-            }  
-            echo $strExistingHTML.'<!-- форма -->
-            <form action="" method="post" autocomplete="off">
-              <div class="formMarger">
+              echo $strEditorHTML.'<!-- форма -->
+              <form action="" method="post" autocomplete="off">
                 <div class="form-row" style="padding-bottom: 15px;">
-                  <div class="col-lg-4 offset-lg-3">
-                    <label for="header">The skill name Ru*</label>
+                  <div class="col-lg-4 offset-lg-4">
+                    <label for="header">Header Ru/En*</label>
                     <div class="input-group">
                       <div class="input-group-prepend">
                         <span class="input-group-text" id="inputGroupPrepend1"><i class="fa fa-header"></i></span>
                       </div>
-                      <input type="text" class="form-control" id="header" name="header" value="" aria-describedby="inputGroupPrepend1" required>
-                    </div>
-                  </div>
-                  <div class="col-lg-2">
-                    <label for="text_block">Skill level Ru*</label>
-                    <div class="input-group">
-                      <div class="input-group-prepend">
-                        <span class="input-group-text" id="inputGroupPrepend3"><i class="fa fa-font"></i></span>
-                      </div>
-                      <input type="number" class="form-control" id="text_block" name="text_block" value="" aria-describedby="inputGroupPrepend3" required>
+                      <input type="text" class="form-control" id="header" name="header" value="'.$text_big.'" aria-describedby="inputGroupPrepend1" required>
                     </div>
                   </div>
                 </div>
                 <div class="form-row" style="padding-bottom: 15px;">
-                  <div class="col-lg-4 offset-lg-3">
-                    <label for="header">The skill name En*</label>
+                  <div class="col-lg-4 offset-lg-4">
                     <div class="input-group">
                       <div class="input-group-prepend">
                         <span class="input-group-text" id="inputGroupPrepend2"><i class="fa fa-header"></i></span>
                       </div>
-                      <input type="text" class="form-control" id="header_en" name="header_en" value="" aria-describedby="inputGroupPrepend2" required>
-                    </div>
-                  </div>
-                  <div class="col-lg-2">
-                    <label for="text_block">Skill level En*</label>
-                    <div class="input-group">
-                      <div class="input-group-prepend">
-                        <span class="input-group-text" id="inputGroupPrepend4"><i class="fa fa-font"></i></span>
-                      </div>
-                      <input type="number" class="form-control" id="text_block_en" name="text_block_en" value="" aria-describedby="inputGroupPrepend4" required>
+                      <input type="text" class="form-control" id="header_en" name="header_en" value="'.$text_big_en.'" aria-describedby="inputGroupPrepend2" required>
                     </div>
                   </div>
                 </div>
-
-                <input type="hidden" value="SkillHard" name="strContent_for" required>
+                <input type="hidden" value="" name="text_block" required>
+                <input type="hidden" value="" name="text_block_en" required>
+                <input type="hidden" value="hardskill_header" name="strContent_for" required>
                 <!-- кнопки -->
                 <div class="container">
                   <div class="row" style = "color:white;" >
@@ -1295,65 +1167,571 @@ function Content($Stranitsa, $intUserPermis){
                       <button type="reset" class="btn btn-info btn-sm"><i class="fa fa-times"></i> Clear</button>
                     </div>
                     <div class="col-sm-3 col-lg-2">
-                      <button name="strInnFromForm" value="addINTO" id="" type="submit" class="btn btn-success btn-sm "><i class="fa fa-lock"></i> Save</button>
+                      <button name="strInnFromForm" value="'.$strSubmitValue.'" id="" type="submit" class="btn btn-success btn-sm "><i class="fa fa-lock"></i> Save</button>
                     </div>
                   </div>
                 </div>
                 <!-- кнопки конец-->
+              </form>
+              <!-- форма конец-->';
+              if(CheckData('sl_content', 'content_for', 'SkillHard')){ //данные для хардскилов есть
+                $ArrayData = selectFromTable('sl_content', array('id','content_for', 'text_big', 'text_small', 'text_big_en', 'text_small_en', 'time','edit_by'), true, 'content_for', 'SkillHard');
+                $strExistingHTML = '';
+                $i = 1;
+                foreach ($ArrayData as $ArrayRow) {                
+                  $strData=date("d.m.Y",$ArrayRow['time']);
+                  $strExistingHTML .= '<div style="text-align:center;">Added: '.$strData.', user: '.$ArrayRow['edit_by'].'</div>
+                      <!-- форма -->
+                      <form action="" method="post" autocomplete="off">
+                        <div class="formMargerExist'.($i%2).'">
+                          <div class="form-row" style="padding-bottom: 15px;">
+                            <div class="col-lg-4 offset-lg-3">
+                              <label for="header">The skill name Ru*</label>
+                              <div class="input-group">
+                                <div class="input-group-prepend">
+                                  <span class="input-group-text" id="inputGroupPrepend1"><i class="fa fa-header"></i></span>
+                                </div>
+                                <input type="text" class="form-control" id="header" name="header" value="'.$ArrayRow['text_big'].'" aria-describedby="inputGroupPrepend1" required>
+                              </div>
+                            </div>
+                            <div class="col-lg-2">
+                              <label for="text_block">Skill level Ru*</label>
+                              <div class="input-group">
+                                <div class="input-group-prepend">
+                                  <span class="input-group-text" id="inputGroupPrepend3"><i class="fa fa-font"></i></span>
+                                </div>
+                                <input type="number" class="form-control" id="text_block" name="text_block" value="'.$ArrayRow['text_small'].'" aria-describedby="inputGroupPrepend3" required>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="form-row" style="padding-bottom: 15px;">
+                            <div class="col-lg-4 offset-lg-3">
+                              <label for="header">The skill name En*</label>
+                              <div class="input-group">
+                                <div class="input-group-prepend">
+                                  <span class="input-group-text" id="inputGroupPrepend2"><i class="fa fa-header"></i></span>
+                                </div>
+                                <input type="text" class="form-control" id="header_en" name="header_en" value="'.$ArrayRow['text_big_en'].'" aria-describedby="inputGroupPrepend2" required>
+                              </div>
+                            </div>
+                            <div class="col-lg-2">
+                              <label for="text_block">Skill level En*</label>
+                              <div class="input-group">
+                                <div class="input-group-prepend">
+                                  <span class="input-group-text" id="inputGroupPrepend4"><i class="fa fa-font"></i></span>
+                                </div>
+                                <input type="number" class="form-control" id="text_block_en" name="text_block_en" value="'.$ArrayRow['text_small_en'].'" aria-describedby="inputGroupPrepend4" required>
+                              </div>
+                            </div>
+                          </div>
+
+                          <input type="hidden" value="'.$ArrayRow['id'].'" name="intIDinCont" required>
+                          <!-- кнопки -->
+                          <div class="container">
+                            <div class="row" style = "color:white;" >
+                              <div class="col-sm-3 offset-sm-2 col-lg-2 offset-lg-3">
+                                <button type="reset" class="btn btn-info btn-sm"><i class="fa fa-times"></i> Clear</button>
+                              </div>
+                              <div class="col-sm-3 col-lg-2">
+                                <a href="'.$config['sitelink'].'admin/index.php?strPage=Skills&skill_for=hardskill&delWithId='.$ArrayRow['id'].'" class="btn btn-danger btn-sm btnModal"><i class="fa fa-trash"></i> Remove</a>
+                              </div>
+                              <div class="col-sm-3 col-lg-2">
+                                <button name="strInnFromForm" value="updIN" id="" type="submit" class="btn btn-success btn-sm "><i class="fa fa-lock"></i> Save</button>
+                              </div>
+                            </div>
+                          </div>
+                          <!-- кнопки конец-->
+                        </div>
+                      </form>
+                      <!-- форма конец-->';
+                  $i++;
+                }
+              }else{ //данные для хардскилов нету
+                $strExistingHTML = '';
+              }  
+              echo $strExistingHTML.'<!-- форма -->
+              <form action="" method="post" autocomplete="off">
+                <div class="formMarger">
+                  <div class="form-row" style="padding-bottom: 15px;">
+                    <div class="col-lg-4 offset-lg-3">
+                      <label for="header">The skill name Ru*</label>
+                      <div class="input-group">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text" id="inputGroupPrepend1"><i class="fa fa-header"></i></span>
+                        </div>
+                        <input type="text" class="form-control" id="header" name="header" value="" aria-describedby="inputGroupPrepend1" required>
+                      </div>
+                    </div>
+                    <div class="col-lg-2">
+                      <label for="text_block">Skill level Ru*</label>
+                      <div class="input-group">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text" id="inputGroupPrepend3"><i class="fa fa-font"></i></span>
+                        </div>
+                        <input type="number" class="form-control" id="text_block" name="text_block" value="" aria-describedby="inputGroupPrepend3" required>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-row" style="padding-bottom: 15px;">
+                    <div class="col-lg-4 offset-lg-3">
+                      <label for="header">The skill name En*</label>
+                      <div class="input-group">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text" id="inputGroupPrepend2"><i class="fa fa-header"></i></span>
+                        </div>
+                        <input type="text" class="form-control" id="header_en" name="header_en" value="" aria-describedby="inputGroupPrepend2" required>
+                      </div>
+                    </div>
+                    <div class="col-lg-2">
+                      <label for="text_block">Skill level En*</label>
+                      <div class="input-group">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text" id="inputGroupPrepend4"><i class="fa fa-font"></i></span>
+                        </div>
+                        <input type="number" class="form-control" id="text_block_en" name="text_block_en" value="" aria-describedby="inputGroupPrepend4" required>
+                      </div>
+                    </div>
+                  </div>
+
+                  <input type="hidden" value="SkillHard" name="strContent_for" required>
+                  <!-- кнопки -->
+                  <div class="container">
+                    <div class="row" style = "color:white;" >
+                      <div class="col-sm-3 offset-sm-3 col-lg-2 offset-lg-4">
+                        <button type="reset" class="btn btn-info btn-sm"><i class="fa fa-times"></i> Clear</button>
+                      </div>
+                      <div class="col-sm-3 col-lg-2">
+                        <button name="strInnFromForm" value="addINTO" id="" type="submit" class="btn btn-success btn-sm "><i class="fa fa-lock"></i> Save</button>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- кнопки конец-->
+                </div>
+              </form>
+              <!-- форма конец-->';
+
+              
+            break;
+            case 'softskill':
+              if(CheckData('sl_content', 'content_for', 'softskill_header')){ //данные для заголовка софтскилов есть
+                $ArrayData = selectFromTable('sl_content', array('content_for', 'text_big', 'text_big_en', 'time','edit_by'), true, 'content_for', 'softskill_header')[0];
+                $strSubmitValue = 'updIN';
+                $strData=date("d.m.Y",$ArrayData['time']);
+                $strEditorHTML = "<div style='text-align:center;'>Last editing $strData, user: {$ArrayData['edit_by']}</div>";
+                $text_big=$ArrayData['text_big'];          
+                $text_big_en=$ArrayData['text_big_en'];
+              }else{ //данные для заголовка софтскилов нету
+                $strSubmitValue = 'addINTO';
+                $strEditorHTML = '';
+                $text_big = '';          
+                $text_big_en = '';
+              }   
+
+              echo "<a class='btn btn-info btn-sm btnModal' href='{$config['sitelink']}admin/index.php?strPage=Skills&skill_for=hardskill' >Hard skills</a> ";
+              echo "<button class='btn btn-primary btn-sm' href='{$config['sitelink']}admin/index.php?strPage=Skills&skill_for=softskill' disabled>Soft skills</button> ";
+
+              echo $strEditorHTML.'<!-- форма -->
+              <form action="" method="post" autocomplete="off">
+                <div class="form-row" style="padding-bottom: 15px;">
+                  <div class="col-lg-4 offset-lg-4">
+                    <label for="header">Header Ru/En*</label>
+                    <div class="input-group">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text" id="inputGroupPrepend1"><i class="fa fa-header"></i></span>
+                      </div>
+                      <input type="text" class="form-control" id="header" name="header" value="'.$text_big.'" aria-describedby="inputGroupPrepend1" required>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-row" style="padding-bottom: 15px;">
+                  <div class="col-lg-4 offset-lg-4">
+                    <div class="input-group">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text" id="inputGroupPrepend2"><i class="fa fa-header"></i></span>
+                      </div>
+                      <input type="text" class="form-control" id="header_en" name="header_en" value="'.$text_big_en.'" aria-describedby="inputGroupPrepend2" required>
+                    </div>
+                  </div>
+                </div>
+                <input type="hidden" value="" name="text_block" required>
+                <input type="hidden" value="" name="text_block_en" required>
+                <input type="hidden" value="softskill_header" name="strContent_for" required>
+                <!-- кнопки -->
+                <div class="container">
+                  <div class="row" style = "color:white;" >
+                    <div class="col-sm-3 offset-sm-3 col-lg-2 offset-lg-4">
+                      <button type="reset" class="btn btn-info btn-sm"><i class="fa fa-times"></i> Clear</button>
+                    </div>
+                    <div class="col-sm-3 col-lg-2">
+                      <button name="strInnFromForm" value="'.$strSubmitValue.'" id="" type="submit" class="btn btn-success btn-sm "><i class="fa fa-lock"></i> Save</button>
+                    </div>
+                  </div>
+                </div>
+                <!-- кнопки конец-->
+              </form>
+              <!-- форма конец-->';
+              if(CheckData('sl_content', 'content_for', 'SkillSoft')){ //данные для софтскилов есть
+                $ArrayData = selectFromTable('sl_content', array('id','content_for', 'text_big', 'text_small', 'text_big_en', 'text_small_en', 'time','edit_by'), true, 'content_for', 'SkillSoft');
+                $strExistingHTML = '';
+                $i = 1;
+                foreach ($ArrayData as $ArrayRow) {                
+                  $strData=date("d.m.Y",$ArrayRow['time']);
+                  $strExistingHTML .= '<div style="text-align:center;">Added: '.$strData.', user: '.$ArrayRow['edit_by'].'</div>
+                      <!-- форма -->
+                      <form action="" method="post" autocomplete="off">
+                        <div class="formMargerExist'.($i%2).'">
+                          <div class="form-row" style="padding-bottom: 15px;">
+                            <div class="col-lg-4 offset-lg-3">
+                              <label for="header">The skill name Ru*</label>
+                              <div class="input-group">
+                                <div class="input-group-prepend">
+                                  <span class="input-group-text" id="inputGroupPrepend1"><i class="fa fa-header"></i></span>
+                                </div>
+                                <input type="text" class="form-control" id="header" name="header" value="'.$ArrayRow['text_big'].'" aria-describedby="inputGroupPrepend1" required>
+                              </div>
+                            </div>
+                            <div class="col-lg-2">
+                              <label for="text_block">Skill level Ru*</label>
+                              <div class="input-group">
+                                <div class="input-group-prepend">
+                                  <span class="input-group-text" id="inputGroupPrepend3"><i class="fa fa-font"></i></span>
+                                </div>
+                                <input type="number" class="form-control" id="text_block" name="text_block" value="'.$ArrayRow['text_small'].'" aria-describedby="inputGroupPrepend3" required>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="form-row" style="padding-bottom: 15px;">
+                            <div class="col-lg-4 offset-lg-3">
+                              <label for="header">The skill name En*</label>
+                              <div class="input-group">
+                                <div class="input-group-prepend">
+                                  <span class="input-group-text" id="inputGroupPrepend2"><i class="fa fa-header"></i></span>
+                                </div>
+                                <input type="text" class="form-control" id="header_en" name="header_en" value="'.$ArrayRow['text_big_en'].'" aria-describedby="inputGroupPrepend2" required>
+                              </div>
+                            </div>
+                            <div class="col-lg-2">
+                              <label for="text_block">Skill level En*</label>
+                              <div class="input-group">
+                                <div class="input-group-prepend">
+                                  <span class="input-group-text" id="inputGroupPrepend4"><i class="fa fa-font"></i></span>
+                                </div>
+                                <input type="number" class="form-control" id="text_block_en" name="text_block_en" value="'.$ArrayRow['text_small_en'].'" aria-describedby="inputGroupPrepend4" required>
+                              </div>
+                            </div>
+                          </div>
+
+                          <input type="hidden" value="'.$ArrayRow['id'].'" name="intIDinCont" required>
+                          <!-- кнопки -->
+                          <div class="container">
+                            <div class="row" style = "color:white;" >
+                              <div class="col-sm-3 offset-sm-2 col-lg-2 offset-lg-3">
+                                <button type="reset" class="btn btn-info btn-sm"><i class="fa fa-times"></i> Clear</button>
+                              </div>
+                              <div class="col-sm-3 col-lg-2">
+                                <a href="'.$config['sitelink'].'admin/index.php?strPage=Skills&skill_for=softskill&delWithId='.$ArrayRow['id'].'" class="btn btn-danger btn-sm btnModal"><i class="fa fa-trash"></i> Remove</a>
+                              </div>
+                              <div class="col-sm-3 col-lg-2">
+                                <button name="strInnFromForm" value="updIN" id="" type="submit" class="btn btn-success btn-sm "><i class="fa fa-lock"></i> Save</button>
+                              </div>
+                            </div>
+                          </div>
+                          <!-- кнопки конец-->
+                        </div>
+                      </form>
+                      <!-- форма конец-->';
+                  $i++;
+                }
+              }else{ //данные для софтскилов нету
+                $strExistingHTML = '';
+              }  
+              echo $strExistingHTML.'<!-- форма -->
+              <form action="" method="post" autocomplete="off">
+                <div class="formMarger">
+                  <div class="form-row" style="padding-bottom: 15px;">
+                    <div class="col-lg-4 offset-lg-3">
+                      <label for="header">The skill name Ru*</label>
+                      <div class="input-group">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text" id="inputGroupPrepend1"><i class="fa fa-header"></i></span>
+                        </div>
+                        <input type="text" class="form-control" id="header" name="header" value="" aria-describedby="inputGroupPrepend1" required>
+                      </div>
+                    </div>
+                    <div class="col-lg-2">
+                      <label for="text_block">Skill level Ru*</label>
+                      <div class="input-group">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text" id="inputGroupPrepend3"><i class="fa fa-font"></i></span>
+                        </div>
+                        <input type="number" class="form-control" id="text_block" name="text_block" value="" aria-describedby="inputGroupPrepend3" required>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-row" style="padding-bottom: 15px;">
+                    <div class="col-lg-4 offset-lg-3">
+                      <label for="header">The skill name En*</label>
+                      <div class="input-group">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text" id="inputGroupPrepend2"><i class="fa fa-header"></i></span>
+                        </div>
+                        <input type="text" class="form-control" id="header_en" name="header_en" value="" aria-describedby="inputGroupPrepend2" required>
+                      </div>
+                    </div>
+                    <div class="col-lg-2">
+                      <label for="text_block">Skill level En*</label>
+                      <div class="input-group">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text" id="inputGroupPrepend4"><i class="fa fa-font"></i></span>
+                        </div>
+                        <input type="number" class="form-control" id="text_block_en" name="text_block_en" value="" aria-describedby="inputGroupPrepend4" required>
+                      </div>
+                    </div>
+                  </div>
+
+                  <input type="hidden" value="SkillSoft" name="strContent_for" required>
+                  <!-- кнопки -->
+                  <div class="container">
+                    <div class="row" style = "color:white;" >
+                      <div class="col-sm-3 offset-sm-3 col-lg-2 offset-lg-4">
+                        <button type="reset" class="btn btn-info btn-sm"><i class="fa fa-times"></i> Clear</button>
+                      </div>
+                      <div class="col-sm-3 col-lg-2">
+                        <button name="strInnFromForm" value="addINTO" id="" type="submit" class="btn btn-success btn-sm "><i class="fa fa-lock"></i> Save</button>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- кнопки конец-->
+                </div>
+              </form>
+              <!-- форма конец-->';
+
+            break;
+
+            default: 
+              echo "<a class='btn btn-info btn-sm btnModal' href='{$config['sitelink']}admin/index.php?strPage=Skills&skill_for=hardskill'>Hard skills</a> ";
+              echo "<a class='btn btn-info btn-sm btnModal' href='{$config['sitelink']}admin/index.php?strPage=Skills&skill_for=softskill'>Soft skills</a> ";
+          }
+      }else{ //если пришел запрос на удаление скила то отобразить переспрашивание
+        $boolINDB = false;
+        $boolDeletebleSkill = false;
+        //проверяем есть ли такой скилл в базе
+        if(CheckData('sl_content', 'id', $_GET['delWithId'])){
+          $boolINDB = true;
+          $ArrayData = selectFromTable('sl_content', array('content_for', 'text_big', 'text_small', 'text_big_en', 'text_small_en'), true, 'id', $_GET['delWithId'])[0];
+        }
+        //Проверяем удаляемый ли скилл
+        if($ArrayData['content_for']=='SkillHard' or $ArrayData['content_for']=='SkillSoft'){$boolDeletebleSkill = true;}
+        
+
+        if($boolINDB and $boolDeletebleSkill){
+          echo "<div class='myShapka'>Approve Skill removing</div>";
+          echo '<!-- форма -->
+            <form action="" method="post" autocomplete="off">
+              <input type="hidden" value="Skill" name="strContent_for" required>
+              <input type="hidden" value="'.$_GET['strPage'].'&skill_for='.$_GET['skill_for'].'" name="strPage" required>
+              <input type="hidden" value="'.$_GET['delWithId'].'" name="id" required>
+              <!-- кнопки -->
+              <div class="container">
+                Skill <h3>"'.$ArrayData['text_big'].'/'.$ArrayData['text_big_en'].'"</h3> with atr <h3>"'.$ArrayData['text_small'].'/'.$ArrayData['text_small_en'].'"</h3>
+                <div class="row" style = "color:white;" >
+                  <div class="col-sm-3 offset-sm-3 col-lg-2 offset-lg-4">
+                    <button name="strInnFromForm" value="RemoveRow" id="" type="submit" class="btn btn-danger btn-sm "><i class="fa fa-lock"></i> Remove</button>
+                  </div>
+                  <div class="col-sm-3 col-lg-2">
+                    <a id="" class="btn btn-info btn-sm btnModal" href="'.$config['sitelink'].'admin/index.php?strPage=Skills&skill_for='.$_GET['skill_for'].'"><i class="fa fa-reply"></i> Back</a>
+                  </div>
+                </div>
               </div>
+              <!-- кнопки конец-->
             </form>
             <!-- форма конец-->';
+        }else{
+          echo "<div class='myShapka'>No data to removing</div>";
+          echo '<a id="" class="btn btn-info btn-sm btnModal" href="'.$config['sitelink'].'admin/index.php?strPage=Skills&skill_for='.$_GET['skill_for'].'"><i class="fa fa-reply"></i> Back</a>';
+        }
+      }
+    break;  
+    /*---------------------------------------------------------------------------------*/
+    /*--работа в раздете изменить шапку------------------------------------------------*/
+    /*---------------------------------------------------------------------------------*/     
+    case 'Portfolio': 
+          echo "<div class='myShapka'>{$menu['Portfolio']}</div>";
+          if(CheckData('sl_content', 'content_for', 'portfolio_header')){ //данные для заголовка портфолио есть
+            $ArrayData = selectFromTable('sl_content', array('content_for', 'text_big', 'text_big_en', 'time','edit_by'), true, 'content_for', 'portfolio_header')[0];
+            $strSubmitValue = 'updIN';
+            $strData=date("d.m.Y",$ArrayData['time']);
+            $strEditorHTML = "<div style='text-align:center;'>Last editing $strData, user: {$ArrayData['edit_by']}</div>";
+            $text_big=$ArrayData['text_big'];          
+            $text_big_en=$ArrayData['text_big_en'];
+          }else{ //данные для заголовка портфолио нету
+            $strSubmitValue = 'addINTO';
+            $strEditorHTML = '';
+            $text_big = '';         
+            $text_big_en = '';
+          }   
 
-            
-          break;
-          case 'softskill':
-            if(CheckData('sl_content', 'content_for', 'softskill_header')){ //данные для скилов есть
-              $ArrayData = selectFromTable('sl_content', array('content_for', 'text_big', 'text_big_en', 'time','edit_by'), true, 'content_for', 'softskill_header')[0];
-              $strSubmitValue = 'updIN';
-              $strData=date("d.m.Y",$ArrayData['time']);
-              $strEditorHTML = "<div style='text-align:center;'>Last editing $strData, user: {$ArrayData['edit_by']}</div>";
-              $text_big=$ArrayData['text_big'];
-              $text_small=$ArrayData['text_small'];            
-              $text_big_en=$ArrayData['text_big_en'];
-              $text_small_en=$ArrayData['text_small_en'];
-            }else{ //данные для скилов  нету
-              $strSubmitValue = 'addINTO';
-              $strEditorHTML = '';
-              $text_big = '';
-              $text_small = '';            
-              $text_big_en = '';
-              $text_small_en = '';
-            }   
+          echo $strEditorHTML.'<!-- форма -->
+          <form action="" method="post" autocomplete="off">
+            <div class="form-row" style="padding-bottom: 15px;">
+              <div class="col-lg-4 offset-lg-4">
+                <label for="header">Header Ru/En*</label>
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" id="inputGroupPrepend1"><i class="fa fa-header"></i></span>
+                  </div>
+                  <input type="text" class="form-control" id="header" name="header" value="'.$text_big.'" aria-describedby="inputGroupPrepend1" required>
+                </div>
+              </div>
+            </div>
+            <div class="form-row" style="padding-bottom: 15px;">
+              <div class="col-lg-4 offset-lg-4">
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" id="inputGroupPrepend2"><i class="fa fa-header"></i></span>
+                  </div>
+                  <input type="text" class="form-control" id="header_en" name="header_en" value="'.$text_big_en.'" aria-describedby="inputGroupPrepend2" required>
+                </div>
+              </div>
+            </div>
+            <input type="hidden" value="" name="text_block" required>
+            <input type="hidden" value="" name="text_block_en" required>
+            <input type="hidden" value="portfolio_header" name="strContent_for" required>
+            <!-- кнопки -->
+            <div class="container">
+              <div class="row" style = "color:white;" >
+                <div class="col-sm-3 offset-sm-3 col-lg-2 offset-lg-4">
+                  <button type="reset" class="btn btn-info btn-sm"><i class="fa fa-times"></i> Clear</button>
+                </div>
+                <div class="col-sm-3 col-lg-2">
+                  <button name="strInnFromForm" value="'.$strSubmitValue.'" id="" type="submit" class="btn btn-success btn-sm "><i class="fa fa-lock"></i> Save</button>
+                </div>
+              </div>
+            </div>
+            <!-- кнопки конец-->
+          </form>
+          <!-- форма конец-->';
 
-            echo "<a class='btn btn-info btn-sm' href='{$config['sitelink']}admin/index.php?strPage=Skills&skill_for=hardskill' >Hard skills</a> ";
-            echo "<button class='btn btn-primary btn-sm' href='{$config['sitelink']}admin/index.php?strPage=Skills&skill_for=softskill' disabled>Soft skills</button> ";
+          if(CheckData('sl_portfolio', 'item_for', '', true)){ //данные для портфолио есть
+            $ArrayData = selectFromTable('sl_content', array('id','content_for', 'text_big', 'text_small', 'text_big_en', 'text_small_en', 'time','edit_by'), true, 'content_for', 'SkillHard');
+            $strExistingHTML = '';
+            $i = 1;
+            foreach ($ArrayData as $ArrayRow) {                
+              $strData=date("d.m.Y",$ArrayRow['time']);
+              $strExistingHTML .= '<div style="text-align:center;">Added: '.$strData.', user: '.$ArrayRow['edit_by'].'</div>
+                  <!-- форма -->
+                  <form action="" method="post" autocomplete="off">
+                    <div class="formMargerExist'.($i%2).'">
+                      <div class="form-row" style="padding-bottom: 15px;">
+                        <div class="col-lg-4 offset-lg-3">
+                          <label for="header">The skill name Ru*</label>
+                          <div class="input-group">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text" id="inputGroupPrepend1"><i class="fa fa-header"></i></span>
+                            </div>
+                            <input type="text" class="form-control" id="header" name="header" value="'.$ArrayRow['text_big'].'" aria-describedby="inputGroupPrepend1" required>
+                          </div>
+                        </div>
+                        <div class="col-lg-2">
+                          <label for="text_block">Skill level Ru*</label>
+                          <div class="input-group">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text" id="inputGroupPrepend3"><i class="fa fa-font"></i></span>
+                            </div>
+                            <input type="number" class="form-control" id="text_block" name="text_block" value="'.$ArrayRow['text_small'].'" aria-describedby="inputGroupPrepend3" required>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="form-row" style="padding-bottom: 15px;">
+                        <div class="col-lg-4 offset-lg-3">
+                          <label for="header">The skill name En*</label>
+                          <div class="input-group">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text" id="inputGroupPrepend2"><i class="fa fa-header"></i></span>
+                            </div>
+                            <input type="text" class="form-control" id="header_en" name="header_en" value="'.$ArrayRow['text_big_en'].'" aria-describedby="inputGroupPrepend2" required>
+                          </div>
+                        </div>
+                        <div class="col-lg-2">
+                          <label for="text_block">Skill level En*</label>
+                          <div class="input-group">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text" id="inputGroupPrepend4"><i class="fa fa-font"></i></span>
+                            </div>
+                            <input type="number" class="form-control" id="text_block_en" name="text_block_en" value="'.$ArrayRow['text_small_en'].'" aria-describedby="inputGroupPrepend4" required>
+                          </div>
+                        </div>
+                      </div>
 
-            echo $strEditorHTML.'<!-- форма -->
-            <form action="" method="post" autocomplete="off">
+                      <input type="hidden" value="'.$ArrayRow['id'].'" name="intIDinCont" required>
+                      <!-- кнопки -->
+                      <div class="container">
+                        <div class="row" style = "color:white;" >
+                          <div class="col-sm-3 offset-sm-2 col-lg-2 offset-lg-3">
+                            <button type="reset" class="btn btn-info btn-sm"><i class="fa fa-times"></i> Clear</button>
+                          </div>
+                          <div class="col-sm-3 col-lg-2">
+                            <a href="'.$config['sitelink'].'admin/index.php?strPage=Skills&skill_for=hardskill&delWithId='.$ArrayRow['id'].'" class="btn btn-danger btn-sm btnModal"><i class="fa fa-trash"></i> Remove</a>
+                          </div>
+                          <div class="col-sm-3 col-lg-2">
+                            <button name="strInnFromForm" value="updIN" id="" type="submit" class="btn btn-success btn-sm "><i class="fa fa-lock"></i> Save</button>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- кнопки конец-->
+                    </div>
+                  </form>
+                  <!-- форма конец-->';
+              $i++;
+            }
+          }else{ //данные для портфолио нету
+            $strExistingHTML = '';
+          }
+          echo $strExistingHTML.'<!-- форма -->
+          <form action="" method="post" autocomplete="off">
+            <div class="formMarger">
               <div class="form-row" style="padding-bottom: 15px;">
-                <div class="col-lg-4 offset-lg-4">
-                  <label for="header">Header Ru/En*</label>
+                <div class="col-lg-4 offset-lg-3">
+                  <label for="header">The skill name Ru*</label>
                   <div class="input-group">
                     <div class="input-group-prepend">
                       <span class="input-group-text" id="inputGroupPrepend1"><i class="fa fa-header"></i></span>
                     </div>
-                    <input type="text" class="form-control" id="header" name="header" value="'.$text_big.'" aria-describedby="inputGroupPrepend1" required>
+                    <input type="text" class="form-control" id="header" name="header" value="" aria-describedby="inputGroupPrepend1" required>
+                  </div>
+                </div>
+                <div class="col-lg-2">
+                  <label for="text_block">Skill level Ru*</label>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text" id="inputGroupPrepend3"><i class="fa fa-font"></i></span>
+                    </div>
+                    <input type="number" class="form-control" id="text_block" name="text_block" value="" aria-describedby="inputGroupPrepend3" required>
                   </div>
                 </div>
               </div>
               <div class="form-row" style="padding-bottom: 15px;">
-                <div class="col-lg-4 offset-lg-4">
+                <div class="col-lg-4 offset-lg-3">
+                  <label for="header">The skill name En*</label>
                   <div class="input-group">
                     <div class="input-group-prepend">
                       <span class="input-group-text" id="inputGroupPrepend2"><i class="fa fa-header"></i></span>
                     </div>
-                    <input type="text" class="form-control" id="header_en" name="header_en" value="'.$text_big_en.'" aria-describedby="inputGroupPrepend2" required>
+                    <input type="text" class="form-control" id="header_en" name="header_en" value="" aria-describedby="inputGroupPrepend2" required>
+                  </div>
+                </div>
+                <div class="col-lg-2">
+                  <label for="text_block">Skill level En*</label>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text" id="inputGroupPrepend4"><i class="fa fa-font"></i></span>
+                    </div>
+                    <input type="number" class="form-control" id="text_block_en" name="text_block_en" value="" aria-describedby="inputGroupPrepend4" required>
                   </div>
                 </div>
               </div>
-              <input type="hidden" value="" name="text_block" required>
-              <input type="hidden" value="" name="text_block_en" required>
-              <input type="hidden" value="softskill_header" name="strContent_for" required>
+
+              <input type="hidden" value="SkillHard" name="strContent_for" required>
               <!-- кнопки -->
               <div class="container">
                 <div class="row" style = "color:white;" >
@@ -1361,600 +1739,228 @@ function Content($Stranitsa, $intUserPermis){
                     <button type="reset" class="btn btn-info btn-sm"><i class="fa fa-times"></i> Clear</button>
                   </div>
                   <div class="col-sm-3 col-lg-2">
-                    <button name="strInnFromForm" value="'.$strSubmitValue.'" id="" type="submit" class="btn btn-success btn-sm "><i class="fa fa-lock"></i> Save</button>
+                    <button name="strInnFromForm" value="addINTO" id="" type="submit" class="btn btn-success btn-sm "><i class="fa fa-lock"></i> Save</button>
                   </div>
                 </div>
               </div>
               <!-- кнопки конец-->
-            </form>
-            <!-- форма конец-->';
+            </div>
+          </form>
+          <!-- форма конец-->';
 
 
-          break;
+        // if(CheckPortfolio('Portfolio')){ //Text в блоке портфолио   (есть)
+        //       $ArrayData=CheckPortfolio('Portfolio', TRUE); 
+        // if(!isset($ArrayData[1]['text_big'])){ //только один елемент в портфолио       
+        //       $data=date("d.m.y",$ArrayData[0]['time']);
+        //       $Edit=$ArrayData[0]['edit_by'];
+        // echo "<div style='text-align:center;'>Last editing $data, user: $Edit</div>";   
+        // echo "<label class='col-sm-offset-3 '>Portfolio photo (1000*1000px)</label><div class='row'>
+        //   <div class='col-sm-offset-3 col-sm-3 style='text-align:center;'><img src='images/portfolio/mini/{$ArrayData[0]['image1']}' width='200px'></div>";
+        // if($ArrayData[0]['image2'] !=''){echo "<div class='col-sm-3 style='text-align:center;'><img src='images/portfolio/mini/{$ArrayData[0]['image2']}' width='200px'></div>";}
+        // echo "</div><div class='row'>
+        // <form class='col-sm-3 col-sm-offset-3' role='form' action='' enctype='multipart/form-data' method='post' style='margin-top:30px;'>
+        //   <div class='form-group'>
+        //   <div class='col-sm-12'> 
+        //   <input class='btn btn-default form-control' type='file' accept='image/jpeg,image/png,image/gif' required='required' name='newImage1'>
+        //   </div></div>
 
-          default: 
-            echo "<a class='btn btn-info btn-sm' href='{$config['sitelink']}admin/index.php?strPage=Skills&skill_for=hardskill'>Hard skills</a> ";
-            echo "<a class='btn btn-info btn-sm' href='{$config['sitelink']}admin/index.php?strPage=Skills&skill_for=softskill'>Soft skills</a> ";
-        }  
+        // <input type='hidden'  name='id' value='{$ArrayData[0]['id']}'>
 
+        //   <div class='form-group last'>
+        //   <div class=' col-sm-3'>
+        //   <button type='submit' name='updatePortfolioImg' class='btn btn-success btn-xs' style='margin-top:10px;'>Change</button>
+        // </div></div></form>
+        // <form class='col-sm-3' role='form' action='' enctype='multipart/form-data' method='post' style='margin-top:30px;'>
+        //   <div class='form-group'>
+        //   <div class='col-sm-12'> 
+        //   <input class='btn btn-default form-control' type='file' accept='image/jpeg,image/png,image/gif' required='required' name='newImage2'>
+        //   </div></div>
 
+        // <input type='hidden'  name='id' value='{$ArrayData[0]['id']}'>
 
-         
+        //   <div class='form-group last'>
+        //   <div class='col-sm-3'>
+        //   <button type='submit' name='updatePortfolioImg' class='btn btn-success btn-xs' style='margin-top:10px;'>Change</button>
+        // </div></div></form></div>
 
-    // switch ($_GET['skill_for']) { //подбор контента для страницы скилы      
-    // case 'hardskill': /////////************************************//////////////////////////********************************************/***************
-    //   if(CheckContent('SkillHard')){ //Text - Header хардскилы
-    //           $ArrayData=CheckContent('SkillHard', TRUE);
-    //           $data=date("d.m.y",$ArrayData['time']);
-    //           $text_big=$ArrayData['text_big'];
-    //           $text_small=$ArrayData['text_small'];
-    //           $text_big_ua=$ArrayData['text_big_ua'];
-    //           $text_small_ua=$ArrayData['text_small_ua'];
-    //           $Edit=$ArrayData['edit_by'];
-    //   echo "<div style='text-align:center;'>Last editing $data, user: $Edit</div>";    
+        // <form class='form-horizontal' role='form' action='' method='post' style='margin-top:30px;'>
+        //   <div class='form-group'>
+        //   <label for='Zagolovok' class='col-sm-3 control-label'>Header Ru/En</label>
+        // <div class='col-sm-3'> 
+        // <input type='text' class='form-control' name='Zagolovok' placeholder='{$ArrayData[0]['text_big']}' value='{$ArrayData[0]['text_big']}' required=''></div>
+        // <div class='col-sm-3'> 
+        // <input type='text' class='form-control' name='Zagolovok_ua' placeholder='{$ArrayData[0]['text_big_ua']}' value='{$ArrayData[0]['text_big_ua']}' required=''></div>
+        // </div>
+          
+        //   <div class='form-group'>
+        //   <label for='Text_sm' class='col-sm-3 control-label'>Description Ru/En</label>
+        //   <div class='col-sm-3'> 
+        // <textarea rows='4' cols='50' type='text' class='form-control' name='Text_sm' placeholder='{$ArrayData[0]['text_small']}' required=''>
+        // {$ArrayData[0]['text_small']}
+        // </textarea></div>        
+        // <div class='col-sm-3'> 
+        // <textarea rows='4' cols='50' type='text' class='form-control' name='Text_sm_ua' placeholder='{$ArrayData[0]['text_small_ua']}' required=''>
+        // {$ArrayData[0]['text_small_ua']}
+        // </textarea></div>
+        // </div>    
 
-    //   echo " <form class='form-horizontal' role='form' action='' method='post' style='margin-top:30px;'>
-    //           <div class='form-group'>
-    //           <label for='Zagolovok' class='col-sm-3 control-label'>Header Ru/En</label>
-    //           <div class='col-sm-3'> <input type='text' class='form-control' name='Zagolovok' placeholder='$text_big' value='$text_big' required=''></div>
-    //           <div class='col-sm-3'> <input type='text' class='form-control' name='Zagolovok_ua' placeholder='$text_big_ua' value='$text_big_ua' required=''></div>
-    //           </div>   
+        // <input type='hidden'  name='id' value='{$ArrayData[0]['id']}'>
 
-    //           <div class='form-group last'>
-    //           <div class='col-sm-offset-3 col-sm-9' style='text-align: left;'>
-    //           <button type='submit' name='updateHardSkillHeader' class='btn btn-success btn-xs'>Change</button>
-    //           <a class='btn btn-default btn-xs' href='{$config['sitelink']}admin/index.php'>Cancel</a>
-    //   </div></div></form><hr>";
-    // }else{ //Textа заголовка  нету
-    //   echo " <form class='form-horizontal' role='form' action='' method='post' style='margin-top:30px;'>
-    //           <div class='form-group'>
-    //           <label for='Zagolovok' class='col-sm-3 control-label'>Header Ru/En</label>
-    //           <div class='col-sm-3'> <input type='text' class='form-control' name='Zagolovok' placeholder='Enter the header' required=''></div>
-    //           <div class='col-sm-3'> <input type='text' class='form-control' name='Zagolovok_ua' placeholder='Enter the header_en' required=''></div>
-    //           </div>       
+        //   <div class='form-group last'>
+        //   <div class='col-sm-offset-3 col-sm-9'>
+        //   <button type='submit' name='updatePortfolio' class='btn btn-success btn-xs'>Change</button>
+        //   <a class='btn btn-default btn-xs' href='{$config['sitelink']}admin/index.php?Page=Portfolio&delPortfolioID={$ArrayData[0]['id']}'>Remove</a>
+        // </div></div></form>";
 
-    //           <div class='form-group last'>
-    //           <div class='col-sm-offset-3 col-sm-9' style='text-align: left;'>
-    //           <button type='submit' name='addHardSkillHeader' class='btn btn-success btn-xs'>Add</button>
-    //           <a class='btn btn-default btn-xs' href='{$config['sitelink']}admin/index.php'>Cancel</a>
-    //   </div></div></form><hr>";
-    // }
-    // if(CheckSkill('hardskill')){ //Text в блок хардскилы есть
-    //       $ArrayData=CheckSkill('hardskill', TRUE); 
-    // if(!isset($ArrayData[1]['text_big'])){ //один только хардскил   
-    //       $data=date("d.m.y",$ArrayData[0]['time']);
-    //       $Edit=$ArrayData[0]['edit_by'];
-    // echo "<div style='text-align:center;'>Last editing $data, user: $Edit</div>";   
-    // echo " 
-    // <form class='form-horizontal' role='form' action='' method='post' style='margin-top:30px;'>
-    //   <div class='form-group'>
-    //   <label for='Zagolovok' class='col-sm-3 control-label'>The skill name Ru/En</label>
-    // <div class='col-sm-3'> 
-    // <input type='text' class='form-control' name='Zagolovok' placeholder='{$ArrayData[0]['text_big']}' value='{$ArrayData[0]['text_big']}' required=''></div>
-    // <div class='col-sm-3'> 
-    // <input type='text' class='form-control' name='Zagolovok_ua' placeholder='{$ArrayData[0]['text_big_ua']}' value='{$ArrayData[0]['text_big_ua']}' required=''></div>
-    // </div>
-      
-    //   <div class='form-group'>
-    //   <label for='Text_sm' class='col-sm-3 control-label'>Skill level  Ru/En</label>
-    //   <div class='col-sm-3'> 
-    // <input type='number' class='form-control' name='Text_sm' placeholder='{$ArrayData[0]['text_small']}' value='{$ArrayData[0]['text_small']}' required=''></div>
-    // <div class='col-sm-3'> 
-    // <input type='number' class='form-control' name='Text_sm_ua' placeholder='{$ArrayData[0]['text_small_ua']}' value='{$ArrayData[0]['text_small_ua']}' required=''></div>
-    // </div>    
+        // echo "<hr><form class='form-horizontal' role='form' action='' enctype='multipart/form-data' method='post' style='margin-top:30px;'>
+        //   <div class='form-group'>
+        //   <label for='SliImg' class='col-sm-3 control-label'>Portfolio photo (1000*1000px)</label>
+        //   <div class='col-sm-3'> 
+        //   <input class='btn btn-default form-control' type='file' accept='image/jpeg,image/png,image/gif' required='required' name='newImage1'>
+        //   </div>
+        //   <div class='col-sm-3'> 
+        //   <input class='btn btn-default form-control' type='file' accept='image/jpeg,image/png,image/gif' name='newImage2'>
+        //   </div></div> 
+          
+        //   <div class='form-group'>
+        //   <label for='Zagolovok' class='col-sm-3 control-label'>Header Ru/En</label>
+        //   <div class='col-sm-3'> <input type='text' class='form-control' name='Zagolovok' placeholder='Header' required=''></div>
+        //   <div class='col-sm-3'> <input type='text' class='form-control' name='Zagolovok_ua' placeholder='Header_en' required=''></div>
+        //   </div>
+          
+        //   <div class='form-group'>
+        //   <label for='Text_sm' class='col-sm-3 control-label'>Description Ru/En</label>
+        //   <div class='col-sm-3'> <textarea rows='4' cols='50' type='text' class='form-control' name='Text_sm' placeholder='Description' required=''></textarea></div>
+        //   <div class='col-sm-3'> <textarea rows='4' cols='50' type='text' class='form-control' name='Text_sm_ua' placeholder='Description_en' required=''></textarea></div>
+        //   </div>    
+          
+        //   <div class='form-group last'>
+        //   <div class='col-sm-offset-3 col-sm-9'>
+        //   <button type='submit' name='addPortfolio' class='btn btn-success btn-xs'>Add</button>
+        //   <a class='btn btn-default btn-xs' href='{$config['sitelink']}admin/index.php'>Cancel</a>
+        // </div></div></form>";
+        // }else{ //больше одного элемента в портфолио
+        // foreach($ArrayData as $SomeArr){
+        //       $data=date("d.m.y",$SomeArr['time']);
+        //       $Edit=$SomeArr['edit_by'];
+        // echo "<div style='text-align:center;'>Last editing $data, user: $Edit</div>";   
+        // echo "<label class='col-sm-offset-3 '>Portfolio photo (1000*1000px)</label><div class='row'>
+        //   <div class='col-sm-offset-3 col-sm-3 style='text-align:center;'><img src='images/portfolio/mini/{$SomeArr['image1']}' width='200px'></div>";
+        // if($SomeArr['image2'] !=''){echo "<div class='col-sm-3 style='text-align:center;'><img src='images/portfolio/mini/{$SomeArr['image2']}' width='200px'></div>";}
+        // echo "</div><div class='row'>
+        // <form class='col-sm-3 col-sm-offset-3' role='form' action='' enctype='multipart/form-data' method='post' style='margin-top:30px;'>
+        //   <div class='form-group'>
+        //   <div class='col-sm-12'> 
+        //   <input class='btn btn-default form-control' type='file' accept='image/jpeg,image/png,image/gif' required='required' name='newImage1'>
+        //   </div></div>
 
-    // <input type='hidden'  name='id' value='{$ArrayData[0]['id']}'>
+        // <input type='hidden'  name='id' value='{$SomeArr['id']}'>
 
-    //   <div class='form-group last'>
-    //   <div class='col-sm-offset-3 col-sm-9'>
-    //   <button type='submit' name='updateHardSoftSkill' class='btn btn-success btn-xs'>Change</button>
-    //   <a class='btn btn-default btn-xs' href='{$config['sitelink']}admin/index.php?Page=Skills&skill_for=hardskill&delSkillID={$ArrayData[0]['id']}'>Remove</a>
-    // </div></div></form>";
+        //   <div class='form-group last'>
+        //   <div class=' col-sm-3'>
+        //   <button type='submit' name='updatePortfolioImg' class='btn btn-success btn-xs' style='margin-top:10px;'>Change</button>
+        // </div></div></form>
+        // <form class='col-sm-3' role='form' action='' enctype='multipart/form-data' method='post' style='margin-top:30px;'>
+        //   <div class='form-group'>
+        //   <div class='col-sm-12'> 
+        //   <input class='btn btn-default form-control' type='file' accept='image/jpeg,image/png,image/gif' required='required' name='newImage2'>
+        //   </div></div>
 
-    // echo " <hr><form class='form-horizontal' role='form' action='' enctype='multipart/form-data' method='post' style='margin-top:30px;'>        
-    //   <div class='form-group'>
-    //   <label for='Zagolovok' class='col-sm-3 control-label'>The skill name Ru/En</label>
-    //   <div class='col-sm-3'> <input type='text' class='form-control' name='Zagolovok' placeholder='The skill name' required=''></div>
-    //   <div class='col-sm-3'> <input type='text' class='form-control' name='Zagolovok_ua' placeholder='The skill name_en' required=''></div>
-    //   </div>
-      
-    //   <div class='form-group'>
-    //   <label for='Text_sm' class='col-sm-3 control-label'>Skill level Ru/En</label>
-    //   <div class='col-sm-3'> <input type='number' class='form-control' name='Text_sm' placeholder='0-100%' required=''></div>
-    //   <div class='col-sm-3'> <input type='number' class='form-control' name='Text_sm_ua' placeholder='0-100%_en' required=''></div>
-    //   </div>    
-      
-    //   <div class='form-group last'>
-    //   <div class='col-sm-offset-3 col-sm-9'>
-    //   <button type='submit' name='addHardSkill' class='btn btn-success btn-xs'>Add</button>
-    //   <a class='btn btn-default btn-xs' href='{$config['sitelink']}admin/index.php'>Cancel</a>
-    // </div></div></form>";
-    // }else{ //больше одного Textа в хардскилах
-    // foreach($ArrayData as $SomeArr){
-    //       $data=date("d.m.y",$SomeArr['time']);
-    //       $Edit=$SomeArr['edit_by'];
-    // echo "<div style='text-align:center;'>Last editing $data, user: $Edit</div>";   
-    // echo " 
-    // <form class='form-horizontal' role='form' action='' method='post' style='margin-top:30px;'>
-    //   <div class='form-group'>
-    //   <label for='Zagolovok' class='col-sm-3 control-label'>The skill name Ru/En</label>
-    //   <div class='col-sm-3'> 
-    // <input type='text' class='form-control' name='Zagolovok' placeholder='{$SomeArr['text_big']}' value='{$SomeArr['text_big']}' required=''></div>
-    //   <div class='col-sm-3'> 
-    // <input type='text' class='form-control' name='Zagolovok_ua' placeholder='{$SomeArr['text_big_ua']}' value='{$SomeArr['text_big_ua']}' required=''></div>
-    // </div>
-      
-    //   <div class='form-group'>
-    //   <label for='Text_sm' class='col-sm-3 control-label'>Skill level  Ru/En</label>
-    //   <div class='col-sm-3'> 
-    // <input type='number' class='form-control' name='Text_sm' placeholder='{$SomeArr['text_small']}' value='{$SomeArr['text_small']}' required=''></div>
-    // <div class='col-sm-3'> 
-    // <input type='number' class='form-control' name='Text_sm_ua' placeholder='{$SomeArr['text_small_ua']}' value='{$SomeArr['text_small_ua']}' required=''></div>
-    // </div>    
+        // <input type='hidden'  name='id' value='{$SomeArr['id']}'>
 
-    // <input type='hidden'  name='id' value='{$SomeArr['id']}'>
+        //   <div class='form-group last'>
+        //   <div class='col-sm-3'>
+        //   <button type='submit' name='updatePortfolioImg' class='btn btn-success btn-xs' style='margin-top:10px;'>Change</button>
+        // </div></div></form></div>
 
-    //   <div class='form-group last'>
-    //   <div class='col-sm-offset-3 col-sm-9'>
-    //   <button type='submit' name='updateHardSoftSkill' class='btn btn-success btn-xs'>Change</button>
-    //   <a class='btn btn-default btn-xs' href='{$config['sitelink']}admin/index.php?Page=Skills&skill_for=hardskill&delSkillID={$SomeArr['id']}'>Remove</a>
-    // </div></div></form><hr>";} 
+        // <form class='form-horizontal' role='form' action='' method='post' style='margin-top:30px;'>
+        //   <div class='form-group'>
+        //   <label for='Zagolovok' class='col-sm-3 control-label'>Header Ru/En</label>
+        // <div class='col-sm-3'> 
+        // <input type='text' class='form-control' name='Zagolovok' placeholder='{$SomeArr['text_big']}' value='{$SomeArr['text_big']}' required=''></div>
+        // <div class='col-sm-3'> 
+        // <input type='text' class='form-control' name='Zagolovok_ua' placeholder='{$SomeArr['text_big_ua']}' value='{$SomeArr['text_big_ua']}' required=''></div>
+        // </div>
+          
+        //   <div class='form-group'>
+        //   <label for='Text_sm' class='col-sm-3 control-label'>Description Ru/En</label>
+        //   <div class='col-sm-3'> 
+        // <textarea rows='4' cols='50' type='text' class='form-control' name='Text_sm' placeholder='{$SomeArr['text_small']}' required=''>
+        // {$SomeArr['text_small']}
+        // </textarea></div>        
+        // <div class='col-sm-3'> 
+        // <textarea rows='4' cols='50' type='text' class='form-control' name='Text_sm_ua' placeholder='{$SomeArr['text_small_ua']}' required=''>
+        // {$SomeArr['text_small_ua']}
+        // </textarea></div>
+        // </div>    
 
-    // echo " <hr><form class='form-horizontal' role='form' action='' enctype='multipart/form-data' method='post' style='margin-top:30px;'>        
-    //   <div class='form-group'>
-    //   <label for='Zagolovok' class='col-sm-3 control-label'>The skill name Ru/En</label>
-    //   <div class='col-sm-3'> <input type='text' class='form-control' name='Zagolovok' placeholder='The skill name' required=''></div>
-    //   <div class='col-sm-3'> <input type='text' class='form-control' name='Zagolovok_ua' placeholder='The skill name_en' required=''></div>
-    //   </div>
-      
-    //   <div class='form-group'>
-    //   <label for='Text_sm' class='col-sm-3 control-label'>Skill level Ru/En</label>
-    //   <div class='col-sm-3'> <input type='number' class='form-control' name='Text_sm' placeholder='0-100%' required=''></div>
-    //   <div class='col-sm-3'> <input type='number' class='form-control' name='Text_sm_ua' placeholder='0-100%_en' required=''></div>
-    //   </div>    
-      
-    //   <div class='form-group last'>
-    //   <div class='col-sm-offset-3 col-sm-9'>
-    //   <button type='submit' name='addHardSkill' class='btn btn-success btn-xs'>Add</button>
-    //   <a class='btn btn-default btn-xs' href='{$config['sitelink']}admin/index.php'>Cancel</a>
-    // </div></div></form>";
-    // }
-    //   }else{ //Text в блок хардскилов нету
-    // echo " <hr><form class='form-horizontal' role='form' action='' enctype='multipart/form-data' method='post' style='margin-top:30px;'>        
-    //   <div class='form-group'>
-    //   <label for='Zagolovok' class='col-sm-3 control-label'>The skill name Ru/En</label>
-    //   <div class='col-sm-3'> <input type='text' class='form-control' name='Zagolovok' placeholder='The skill name' required=''></div>
-    //   <div class='col-sm-3'> <input type='text' class='form-control' name='Zagolovok_ua' placeholder='The skill name_en' required=''></div>
-    //   </div>
-      
-    //   <div class='form-group'>
-    //   <label for='Text_sm' class='col-sm-3 control-label'>Skill level Ru/En</label>
-    //   <div class='col-sm-3'> <input type='number' class='form-control' name='Text_sm' placeholder='0-100%' required=''></div>
-    //   <div class='col-sm-3'> <input type='number' class='form-control' name='Text_sm_ua' placeholder='0-100%_en' required=''></div>
-    //   </div>    
-      
-    //   <div class='form-group last'>
-    //   <div class='col-sm-offset-3 col-sm-9'>
-    //   <button type='submit' name='addHardSkill' class='btn btn-success btn-xs'>Add</button>
-    //   <a class='btn btn-default btn-xs' href='{$config['sitelink']}admin/index.php'>Cancel</a>
-    // </div></div></form>";
-    //   }
-      
-    //   break;
-    // case 'softskill': /////////************************************//////////////////////////********************************************/***************
-    // if(CheckContent('SkillSoft')){ //Text - Header хардскилы
-    //           $ArrayData=CheckContent('SkillSoft', TRUE);
-    //           $data=date("d.m.y",$ArrayData['time']);
-    //           $text_big=$ArrayData['text_big'];
-    //           $text_small=$ArrayData['text_small'];
-    //           $text_big_ua=$ArrayData['text_big_ua'];
-    //           $text_small_ua=$ArrayData['text_small_ua'];
-    //           $Edit=$ArrayData['edit_by'];
-    //   echo "<div style='text-align:center;'>Last editing $data, user: $Edit</div>";    
+        // <input type='hidden'  name='id' value='{$SomeArr['id']}'>
 
-    //   echo " <form class='form-horizontal' role='form' action='' method='post' style='margin-top:30px;'>
-    //           <div class='form-group'>
-    //           <label for='Zagolovok' class='col-sm-3 control-label'>Header Ru/En</label>
-    //           <div class='col-sm-3'> <input type='text' class='form-control' name='Zagolovok' placeholder='$text_big' value='$text_big' required=''></div>
-    //           <div class='col-sm-3'> <input type='text' class='form-control' name='Zagolovok_ua' placeholder='$text_big_ua' value='$text_big_ua' required=''></div>
-    //           </div>   
+        //   <div class='form-group last'>
+        //   <div class='col-sm-offset-3 col-sm-9'>
+        //   <button type='submit' name='updatePortfolio' class='btn btn-success btn-xs'>Change</button>
+        //   <a class='btn btn-default btn-xs' href='{$config['sitelink']}admin/index.php?Page=Portfolio&delPortfolioID={$SomeArr['id']}'>Remove</a>
+        // </div></div></form><hr>";} 
 
-    //           <div class='form-group last'>
-    //           <div class='col-sm-offset-3 col-sm-9' style='text-align: left;'>
-    //           <button type='submit' name='updateSoftSkillHeader' class='btn btn-success btn-xs'>Change</button>
-    //           <a class='btn btn-default btn-xs' href='{$config['sitelink']}admin/index.php'>Cancel</a>
-    //   </div></div></form><hr>";
-    // }else{ //Textа заголовка  нету
-    //   echo " <form class='form-horizontal' role='form' action='' method='post' style='margin-top:30px;'>
-    //           <div class='form-group'>
-    //           <label for='Zagolovok' class='col-sm-3 control-label'>Header Ru/En</label>
-    //           <div class='col-sm-3'> <input type='text' class='form-control' name='Zagolovok' placeholder='Enter the header' required=''></div>
-    //           <div class='col-sm-3'> <input type='text' class='form-control' name='Zagolovok_ua' placeholder='Enter the header_en' required=''></div>
-    //           </div>       
-
-    //           <div class='form-group last'>
-    //           <div class='col-sm-offset-3 col-sm-9' style='text-align: left;'>
-    //           <button type='submit' name='addSoftSkillHeader' class='btn btn-success btn-xs'>Add</button>
-    //           <a class='btn btn-default btn-xs' href='{$config['sitelink']}admin/index.php'>Cancel</a>
-    //   </div></div></form><hr>";
-    // }        
-    // if(CheckSkill('softskill')){ //Text в блок софтскилы есть
-    //       $ArrayData=CheckSkill('softskill', TRUE); 
-    // if(!isset($ArrayData[1]['text_big'])){ //один только софтскилл   
-    //       $data=date("d.m.y",$ArrayData[0]['time']);
-    //       $Edit=$ArrayData[0]['edit_by'];
-    // echo "<div style='text-align:center;'>Last editing $data, user: $Edit</div>";   
-    // echo " 
-    // <form class='form-horizontal' role='form' action='' method='post' style='margin-top:30px;'>
-    //   <div class='form-group'>
-    //   <label for='Zagolovok' class='col-sm-3 control-label'>The skill name Ru/En</label>
-    // <div class='col-sm-3'> 
-    // <input type='text' class='form-control' name='Zagolovok' placeholder='{$ArrayData[0]['text_big']}' value='{$ArrayData[0]['text_big']}' required=''></div>
-    // <div class='col-sm-3'> 
-    // <input type='text' class='form-control' name='Zagolovok_ua' placeholder='{$ArrayData[0]['text_big_ua']}' value='{$ArrayData[0]['text_big_ua']}' required=''></div>
-    // </div>
-      
-    //   <div class='form-group'>
-    //   <label for='Text_sm' class='col-sm-3 control-label'>Skill level  Ru/En</label>
-    //   <div class='col-sm-3'> 
-    // <input type='number' class='form-control' name='Text_sm' placeholder='{$ArrayData[0]['text_small']}' value='{$ArrayData[0]['text_small']}' required=''></div>
-    // <div class='col-sm-3'> 
-    // <input type='number' class='form-control' name='Text_sm_ua' placeholder='{$ArrayData[0]['text_small_ua']}' value='{$ArrayData[0]['text_small_ua']}' required=''></div>
-    // </div>    
-
-    // <input type='hidden'  name='id' value='{$ArrayData[0]['id']}'>
-
-    //   <div class='form-group last'>
-    //   <div class='col-sm-offset-3 col-sm-9'>
-    //   <button type='submit' name='updateHardSoftSkill' class='btn btn-success btn-xs'>Change</button>
-    //   <a class='btn btn-default btn-xs' href='{$config['sitelink']}admin/index.php?Page=Skills&skill_for=hardskill&delSkillID={$ArrayData[0]['id']}'>Remove</a>
-    // </div></div></form>";
-
-    // echo " <hr><form class='form-horizontal' role='form' action='' enctype='multipart/form-data' method='post' style='margin-top:30px;'>        
-    //   <div class='form-group'>
-    //   <label for='Zagolovok' class='col-sm-3 control-label'>The skill name Ru/En</label>
-    //   <div class='col-sm-3'> <input type='text' class='form-control' name='Zagolovok' placeholder='The skill name' required=''></div>
-    //   <div class='col-sm-3'> <input type='text' class='form-control' name='Zagolovok_ua' placeholder='The skill name_en' required=''></div>
-    //   </div>
-      
-    //   <div class='form-group'>
-    //   <label for='Text_sm' class='col-sm-3 control-label'>Skill level Ru/En</label>
-    //   <div class='col-sm-3'> <input type='number' class='form-control' name='Text_sm' placeholder='0-100%' required=''></div>
-    //   <div class='col-sm-3'> <input type='number' class='form-control' name='Text_sm_ua' placeholder='0-100%_en' required=''></div>
-    //   </div>    
-      
-    //   <div class='form-group last'>
-    //   <div class='col-sm-offset-3 col-sm-9'>
-    //   <button type='submit' name='addSoftSkill' class='btn btn-success btn-xs'>Add</button>
-    //   <a class='btn btn-default btn-xs' href='{$config['sitelink']}admin/index.php'>Cancel</a>
-    // </div></div></form>";
-    // }else{ //больше одного Textа в софтскилах
-    // foreach($ArrayData as $SomeArr){
-    //       $data=date("d.m.y",$SomeArr['time']);
-    //       $Edit=$SomeArr['edit_by'];
-    // echo "<div style='text-align:center;'>Last editing $data, user: $Edit</div>";   
-    // echo " 
-    // <form class='form-horizontal' role='form' action='' method='post' style='margin-top:30px;'>
-    //   <div class='form-group'>
-    //   <label for='Zagolovok' class='col-sm-3 control-label'>The skill name Ru/En</label>
-    //   <div class='col-sm-3'> 
-    // <input type='text' class='form-control' name='Zagolovok' placeholder='{$SomeArr['text_big']}' value='{$SomeArr['text_big']}' required=''></div>
-    //   <div class='col-sm-3'> 
-    // <input type='text' class='form-control' name='Zagolovok_ua' placeholder='{$SomeArr['text_big_ua']}' value='{$SomeArr['text_big_ua']}' required=''></div>
-    // </div>
-      
-    //   <div class='form-group'>
-    //   <label for='Text_sm' class='col-sm-3 control-label'>Skill level  Ru/En</label>
-    //   <div class='col-sm-3'> 
-    // <input type='number' class='form-control' name='Text_sm' placeholder='{$SomeArr['text_small']}' value='{$SomeArr['text_small']}' required=''></div>
-    // <div class='col-sm-3'> 
-    // <input type='number' class='form-control' name='Text_sm_ua' placeholder='{$SomeArr['text_small_ua']}' value='{$SomeArr['text_small_ua']}' required=''></div>
-    // </div>    
-
-    // <input type='hidden'  name='id' value='{$SomeArr['id']}'>
-
-    //   <div class='form-group last'>
-    //   <div class='col-sm-offset-3 col-sm-9'>
-    //   <button type='submit' name='updateHardSoftSkill' class='btn btn-success btn-xs'>Change</button>
-    //   <a class='btn btn-default btn-xs' href='{$config['sitelink']}admin/index.php?Page=Skills&skill_for=hardskill&delSkillID={$SomeArr['id']}'>Remove</a>
-    // </div></div></form><hr>";} 
-
-    // echo " <hr><form class='form-horizontal' role='form' action='' enctype='multipart/form-data' method='post' style='margin-top:30px;'>        
-    //   <div class='form-group'>
-    //   <label for='Zagolovok' class='col-sm-3 control-label'>The skill name Ru/En</label>
-    //   <div class='col-sm-3'> <input type='text' class='form-control' name='Zagolovok' placeholder='The skill name' required=''></div>
-    //   <div class='col-sm-3'> <input type='text' class='form-control' name='Zagolovok_ua' placeholder='The skill name_en' required=''></div>
-    //   </div>
-      
-    //   <div class='form-group'>
-    //   <label for='Text_sm' class='col-sm-3 control-label'>Skill level Ru/En</label>
-    //   <div class='col-sm-3'> <input type='number' class='form-control' name='Text_sm' placeholder='0-100%' required=''></div>
-    //   <div class='col-sm-3'> <input type='number' class='form-control' name='Text_sm_ua' placeholder='0-100%_en' required=''></div>
-    //   </div>    
-      
-    //   <div class='form-group last'>
-    //   <div class='col-sm-offset-3 col-sm-9'>
-    //   <button type='submit' name='addSoftSkill' class='btn btn-success btn-xs'>Add</button>
-    //   <a class='btn btn-default btn-xs' href='{$config['sitelink']}admin/index.php'>Cancel</a>
-    // </div></div></form>";
-    // }
-    //   }else{ //Text в блок софтскилов нету
-    // echo " <hr><form class='form-horizontal' role='form' action='' enctype='multipart/form-data' method='post' style='margin-top:30px;'>        
-    //   <div class='form-group'>
-    //   <label for='Zagolovok' class='col-sm-3 control-label'>The skill name Ru/En</label>
-    //   <div class='col-sm-3'> <input type='text' class='form-control' name='Zagolovok' placeholder='The skill name' required=''></div>
-    //   <div class='col-sm-3'> <input type='text' class='form-control' name='Zagolovok_ua' placeholder='The skill name_en' required=''></div>
-    //   </div>
-      
-    //   <div class='form-group'>
-    //   <label for='Text_sm' class='col-sm-3 control-label'>Skill level Ru/En</label>
-    //   <div class='col-sm-3'> <input type='number' class='form-control' name='Text_sm' placeholder='0-100%' required=''></div>
-    //   <div class='col-sm-3'> <input type='number' class='form-control' name='Text_sm_ua' placeholder='0-100%_en' required=''></div>
-    //   </div>    
-      
-    //   <div class='form-group last'>
-    //   <div class='col-sm-offset-3 col-sm-9'>
-    //   <button type='submit' name='addSoftSkill' class='btn btn-success btn-xs'>Add</button>
-    //   <a class='btn btn-default btn-xs' href='{$config['sitelink']}admin/index.php'>Cancel</a>
-    // </div></div></form>";
-    //   }
-      
-    //   break;
-    // default: echo "";
-    // }        
-    break;       
-case 'Portfolio': //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  echo "<div class='myShapka'>{$menu['Portfolio']}</div>";
-if(CheckContent('Portfolio')){ //Text - Header блока скилы
-          $ArrayData=CheckContent('Portfolio', TRUE);
-          $data=date("d.m.y",$ArrayData['time']);
-          $text_big=$ArrayData['text_big'];
-          $text_small=$ArrayData['text_small'];
-          $text_big_ua=$ArrayData['text_big_ua'];
-          $text_small_ua=$ArrayData['text_small_ua'];
-          $Edit=$ArrayData['edit_by'];
-  echo "<div style='text-align:center;'>Last editing $data, user: $Edit</div>";    
-
-  echo " <form class='form-horizontal' role='form' action='' method='post' style='margin-top:30px;'>
-          <div class='form-group'>
-          <label for='Zagolovok' class='col-sm-3 control-label'>Header Ru/En</label>
-          <div class='col-sm-3'> <input type='text' class='form-control' name='Zagolovok' placeholder='$text_big' value='$text_big' required=''></div>
-          <div class='col-sm-3'> <input type='text' class='form-control' name='Zagolovok_ua' placeholder='$text_big_ua' value='$text_big_ua' required=''></div>
-          </div>   
-
-          <div class='form-group last'>
-          <div class='col-sm-offset-3 col-sm-9' style='text-align: left;'>
-          <button type='submit' name='updatePortfolioHeader' class='btn btn-success btn-xs'>Change</button>
-          <a class='btn btn-default btn-xs' href='{$config['sitelink']}admin/index.php'>Cancel</a>
-  </div></div></form><hr>";
-}else{ //заголовка нету
-  echo " <form class='form-horizontal' role='form' action='' method='post' style='margin-top:30px;'>
-          <div class='form-group'>
-          <label for='Zagolovok' class='col-sm-3 control-label'>Header Ru/En</label>
-          <div class='col-sm-3'> <input type='text' class='form-control' name='Zagolovok' placeholder='Enter the header' required=''></div>
-          <div class='col-sm-3'> <input type='text' class='form-control' name='Zagolovok_ua' placeholder='Enter the header_en' required=''></div>
-          </div>       
-
-          <div class='form-group last'>
-          <div class='col-sm-offset-3 col-sm-9' style='text-align: left;'>
-          <button type='submit' name='addPortfolioHeader' class='btn btn-success btn-xs'>Add</button>
-          <a class='btn btn-default btn-xs' href='{$config['sitelink']}admin/index.php'>Cancel</a>
-  </div></div></form><hr>";
-}
-
-
-if(CheckPortfolio('Portfolio')){ //Text в блоке портфолио   (есть)
-      $ArrayData=CheckPortfolio('Portfolio', TRUE); 
-if(!isset($ArrayData[1]['text_big'])){ //только один елемент в портфолио       
-      $data=date("d.m.y",$ArrayData[0]['time']);
-      $Edit=$ArrayData[0]['edit_by'];
-echo "<div style='text-align:center;'>Last editing $data, user: $Edit</div>";   
-echo "<label class='col-sm-offset-3 '>Portfolio photo (1000*1000px)</label><div class='row'>
-  <div class='col-sm-offset-3 col-sm-3 style='text-align:center;'><img src='images/portfolio/mini/{$ArrayData[0]['image1']}' width='200px'></div>";
-if($ArrayData[0]['image2'] !=''){echo "<div class='col-sm-3 style='text-align:center;'><img src='images/portfolio/mini/{$ArrayData[0]['image2']}' width='200px'></div>";}
-echo "</div><div class='row'>
-<form class='col-sm-3 col-sm-offset-3' role='form' action='' enctype='multipart/form-data' method='post' style='margin-top:30px;'>
-  <div class='form-group'>
-  <div class='col-sm-12'> 
-  <input class='btn btn-default form-control' type='file' accept='image/jpeg,image/png,image/gif' required='required' name='newImage1'>
-  </div></div>
-
-<input type='hidden'  name='id' value='{$ArrayData[0]['id']}'>
-
-  <div class='form-group last'>
-  <div class=' col-sm-3'>
-  <button type='submit' name='updatePortfolioImg' class='btn btn-success btn-xs' style='margin-top:10px;'>Change</button>
-</div></div></form>
-<form class='col-sm-3' role='form' action='' enctype='multipart/form-data' method='post' style='margin-top:30px;'>
-  <div class='form-group'>
-  <div class='col-sm-12'> 
-  <input class='btn btn-default form-control' type='file' accept='image/jpeg,image/png,image/gif' required='required' name='newImage2'>
-  </div></div>
-
-<input type='hidden'  name='id' value='{$ArrayData[0]['id']}'>
-
-  <div class='form-group last'>
-  <div class='col-sm-3'>
-  <button type='submit' name='updatePortfolioImg' class='btn btn-success btn-xs' style='margin-top:10px;'>Change</button>
-</div></div></form></div>
-
-<form class='form-horizontal' role='form' action='' method='post' style='margin-top:30px;'>
-  <div class='form-group'>
-  <label for='Zagolovok' class='col-sm-3 control-label'>Header Ru/En</label>
-<div class='col-sm-3'> 
-<input type='text' class='form-control' name='Zagolovok' placeholder='{$ArrayData[0]['text_big']}' value='{$ArrayData[0]['text_big']}' required=''></div>
-<div class='col-sm-3'> 
-<input type='text' class='form-control' name='Zagolovok_ua' placeholder='{$ArrayData[0]['text_big_ua']}' value='{$ArrayData[0]['text_big_ua']}' required=''></div>
-</div>
-  
-  <div class='form-group'>
-  <label for='Text_sm' class='col-sm-3 control-label'>Description Ru/En</label>
-  <div class='col-sm-3'> 
-<textarea rows='4' cols='50' type='text' class='form-control' name='Text_sm' placeholder='{$ArrayData[0]['text_small']}' required=''>
-{$ArrayData[0]['text_small']}
-</textarea></div>        
-<div class='col-sm-3'> 
-<textarea rows='4' cols='50' type='text' class='form-control' name='Text_sm_ua' placeholder='{$ArrayData[0]['text_small_ua']}' required=''>
-{$ArrayData[0]['text_small_ua']}
-</textarea></div>
-</div>    
-
-<input type='hidden'  name='id' value='{$ArrayData[0]['id']}'>
-
-  <div class='form-group last'>
-  <div class='col-sm-offset-3 col-sm-9'>
-  <button type='submit' name='updatePortfolio' class='btn btn-success btn-xs'>Change</button>
-  <a class='btn btn-default btn-xs' href='{$config['sitelink']}admin/index.php?Page=Portfolio&delPortfolioID={$ArrayData[0]['id']}'>Remove</a>
-</div></div></form>";
-
-echo "<hr><form class='form-horizontal' role='form' action='' enctype='multipart/form-data' method='post' style='margin-top:30px;'>
-  <div class='form-group'>
-  <label for='SliImg' class='col-sm-3 control-label'>Portfolio photo (1000*1000px)</label>
-  <div class='col-sm-3'> 
-  <input class='btn btn-default form-control' type='file' accept='image/jpeg,image/png,image/gif' required='required' name='newImage1'>
-  </div>
-  <div class='col-sm-3'> 
-  <input class='btn btn-default form-control' type='file' accept='image/jpeg,image/png,image/gif' name='newImage2'>
-  </div></div> 
-  
-  <div class='form-group'>
-  <label for='Zagolovok' class='col-sm-3 control-label'>Header Ru/En</label>
-  <div class='col-sm-3'> <input type='text' class='form-control' name='Zagolovok' placeholder='Header' required=''></div>
-  <div class='col-sm-3'> <input type='text' class='form-control' name='Zagolovok_ua' placeholder='Header_en' required=''></div>
-  </div>
-  
-  <div class='form-group'>
-  <label for='Text_sm' class='col-sm-3 control-label'>Description Ru/En</label>
-  <div class='col-sm-3'> <textarea rows='4' cols='50' type='text' class='form-control' name='Text_sm' placeholder='Description' required=''></textarea></div>
-  <div class='col-sm-3'> <textarea rows='4' cols='50' type='text' class='form-control' name='Text_sm_ua' placeholder='Description_en' required=''></textarea></div>
-  </div>    
-  
-  <div class='form-group last'>
-  <div class='col-sm-offset-3 col-sm-9'>
-  <button type='submit' name='addPortfolio' class='btn btn-success btn-xs'>Add</button>
-  <a class='btn btn-default btn-xs' href='{$config['sitelink']}admin/index.php'>Cancel</a>
-</div></div></form>";
-}else{ //больше одного элемента в портфолио
-foreach($ArrayData as $SomeArr){
-      $data=date("d.m.y",$SomeArr['time']);
-      $Edit=$SomeArr['edit_by'];
-echo "<div style='text-align:center;'>Last editing $data, user: $Edit</div>";   
-echo "<label class='col-sm-offset-3 '>Portfolio photo (1000*1000px)</label><div class='row'>
-  <div class='col-sm-offset-3 col-sm-3 style='text-align:center;'><img src='images/portfolio/mini/{$SomeArr['image1']}' width='200px'></div>";
-if($SomeArr['image2'] !=''){echo "<div class='col-sm-3 style='text-align:center;'><img src='images/portfolio/mini/{$SomeArr['image2']}' width='200px'></div>";}
-echo "</div><div class='row'>
-<form class='col-sm-3 col-sm-offset-3' role='form' action='' enctype='multipart/form-data' method='post' style='margin-top:30px;'>
-  <div class='form-group'>
-  <div class='col-sm-12'> 
-  <input class='btn btn-default form-control' type='file' accept='image/jpeg,image/png,image/gif' required='required' name='newImage1'>
-  </div></div>
-
-<input type='hidden'  name='id' value='{$SomeArr['id']}'>
-
-  <div class='form-group last'>
-  <div class=' col-sm-3'>
-  <button type='submit' name='updatePortfolioImg' class='btn btn-success btn-xs' style='margin-top:10px;'>Change</button>
-</div></div></form>
-<form class='col-sm-3' role='form' action='' enctype='multipart/form-data' method='post' style='margin-top:30px;'>
-  <div class='form-group'>
-  <div class='col-sm-12'> 
-  <input class='btn btn-default form-control' type='file' accept='image/jpeg,image/png,image/gif' required='required' name='newImage2'>
-  </div></div>
-
-<input type='hidden'  name='id' value='{$SomeArr['id']}'>
-
-  <div class='form-group last'>
-  <div class='col-sm-3'>
-  <button type='submit' name='updatePortfolioImg' class='btn btn-success btn-xs' style='margin-top:10px;'>Change</button>
-</div></div></form></div>
-
-<form class='form-horizontal' role='form' action='' method='post' style='margin-top:30px;'>
-  <div class='form-group'>
-  <label for='Zagolovok' class='col-sm-3 control-label'>Header Ru/En</label>
-<div class='col-sm-3'> 
-<input type='text' class='form-control' name='Zagolovok' placeholder='{$SomeArr['text_big']}' value='{$SomeArr['text_big']}' required=''></div>
-<div class='col-sm-3'> 
-<input type='text' class='form-control' name='Zagolovok_ua' placeholder='{$SomeArr['text_big_ua']}' value='{$SomeArr['text_big_ua']}' required=''></div>
-</div>
-  
-  <div class='form-group'>
-  <label for='Text_sm' class='col-sm-3 control-label'>Description Ru/En</label>
-  <div class='col-sm-3'> 
-<textarea rows='4' cols='50' type='text' class='form-control' name='Text_sm' placeholder='{$SomeArr['text_small']}' required=''>
-{$SomeArr['text_small']}
-</textarea></div>        
-<div class='col-sm-3'> 
-<textarea rows='4' cols='50' type='text' class='form-control' name='Text_sm_ua' placeholder='{$SomeArr['text_small_ua']}' required=''>
-{$SomeArr['text_small_ua']}
-</textarea></div>
-</div>    
-
-<input type='hidden'  name='id' value='{$SomeArr['id']}'>
-
-  <div class='form-group last'>
-  <div class='col-sm-offset-3 col-sm-9'>
-  <button type='submit' name='updatePortfolio' class='btn btn-success btn-xs'>Change</button>
-  <a class='btn btn-default btn-xs' href='{$config['sitelink']}admin/index.php?Page=Portfolio&delPortfolioID={$SomeArr['id']}'>Remove</a>
-</div></div></form><hr>";} 
-
-echo "<hr> <form class='form-horizontal' role='form' action='' enctype='multipart/form-data' method='post' style='margin-top:30px;'>
-  <div class='form-group'>
-  <label for='SliImg' class='col-sm-3 control-label'>Portfolio photo (1000*1000px)</label>
-  <div class='col-sm-3'> 
-  <input class='btn btn-default form-control' type='file' accept='image/jpeg,image/png,image/gif' required='required' name='newImage1'>
-  </div>
-  <div class='col-sm-3'> 
-  <input class='btn btn-default form-control' type='file' accept='image/jpeg,image/png,image/gif' name='newImage2'>
-  </div></div> 
-  
-  <div class='form-group'>
-  <label for='Zagolovok' class='col-sm-3 control-label'>Header Ru/En</label>
-  <div class='col-sm-3'> <input type='text' class='form-control' name='Zagolovok' placeholder='Header' required=''></div>
-  <div class='col-sm-3'> <input type='text' class='form-control' name='Zagolovok_ua' placeholder='Header_en' required=''></div>
-  </div>
-  
-  <div class='form-group'>
-  <label for='Text_sm' class='col-sm-3 control-label'>Description Ru/En</label>
-  <div class='col-sm-3'> <textarea rows='4' cols='50' type='text' class='form-control' name='Text_sm' placeholder='Description' required=''></textarea></div>
-  <div class='col-sm-3'> <textarea rows='4' cols='50' type='text' class='form-control' name='Text_sm_ua' placeholder='Description_en' required=''></textarea></div>
-  </div>    
-  
-  <div class='form-group last'>
-  <div class='col-sm-offset-3 col-sm-9'>
-  <button type='submit' name='addPortfolio' class='btn btn-success btn-xs'>Add</button>
-  <a class='btn btn-default btn-xs' href='{$config['sitelink']}admin/index.php'>Cancel</a>
-</div></div></form>";
-}
-  }else{ //Text в блок портфолио (нету)
-echo " <hr><form class='form-horizontal' role='form' action='' enctype='multipart/form-data' method='post' style='margin-top:30px;'>
-  <div class='form-group'>
-  <label for='SliImg' class='col-sm-3 control-label'>Portfolio photo (1000*1000px)</label>
-  <div class='col-sm-3'> 
-  <input class='btn btn-default form-control' type='file' accept='image/jpeg,image/png,image/gif' required='required' name='newImage1'>
-  </div>
-  <div class='col-sm-3'> 
-  <input class='btn btn-default form-control' type='file' accept='image/jpeg,image/png,image/gif' name='newImage2'>
-  </div></div> 
-  
-  <div class='form-group'>
-  <label for='Zagolovok' class='col-sm-3 control-label'>Header Ru/En</label>
-  <div class='col-sm-3'> <input type='text' class='form-control' name='Zagolovok' placeholder='Header' required=''></div>
-  <div class='col-sm-3'> <input type='text' class='form-control' name='Zagolovok_ua' placeholder='Header_en' required=''></div>
-  </div>
-  
-  <div class='form-group'>
-  <label for='Text_sm' class='col-sm-3 control-label'>Description Ru/En</label>
-  <div class='col-sm-3'> <textarea rows='4' cols='50' type='text' class='form-control' name='Text_sm' placeholder='Description' required=''></textarea></div>
-  <div class='col-sm-3'> <textarea rows='4' cols='50' type='text' class='form-control' name='Text_sm_ua' placeholder='Description_en' required=''></textarea></div>
-  </div>    
-  
-  <div class='form-group last'>
-  <div class='col-sm-offset-3 col-sm-9'>
-  <button type='submit' name='addPortfolio' class='btn btn-success btn-xs'>Add</button>
-  <a class='btn btn-default btn-xs' href='{$config['sitelink']}admin/index.php'>Cancel</a>
-</div></div></form>";
-  }
-break;
+        // echo "<hr> <form class='form-horizontal' role='form' action='' enctype='multipart/form-data' method='post' style='margin-top:30px;'>
+        //   <div class='form-group'>
+        //   <label for='SliImg' class='col-sm-3 control-label'>Portfolio photo (1000*1000px)</label>
+        //   <div class='col-sm-3'> 
+        //   <input class='btn btn-default form-control' type='file' accept='image/jpeg,image/png,image/gif' required='required' name='newImage1'>
+        //   </div>
+        //   <div class='col-sm-3'> 
+        //   <input class='btn btn-default form-control' type='file' accept='image/jpeg,image/png,image/gif' name='newImage2'>
+        //   </div></div> 
+          
+        //   <div class='form-group'>
+        //   <label for='Zagolovok' class='col-sm-3 control-label'>Header Ru/En</label>
+        //   <div class='col-sm-3'> <input type='text' class='form-control' name='Zagolovok' placeholder='Header' required=''></div>
+        //   <div class='col-sm-3'> <input type='text' class='form-control' name='Zagolovok_ua' placeholder='Header_en' required=''></div>
+        //   </div>
+          
+        //   <div class='form-group'>
+        //   <label for='Text_sm' class='col-sm-3 control-label'>Description Ru/En</label>
+        //   <div class='col-sm-3'> <textarea rows='4' cols='50' type='text' class='form-control' name='Text_sm' placeholder='Description' required=''></textarea></div>
+        //   <div class='col-sm-3'> <textarea rows='4' cols='50' type='text' class='form-control' name='Text_sm_ua' placeholder='Description_en' required=''></textarea></div>
+        //   </div>    
+          
+        //   <div class='form-group last'>
+        //   <div class='col-sm-offset-3 col-sm-9'>
+        //   <button type='submit' name='addPortfolio' class='btn btn-success btn-xs'>Add</button>
+        //   <a class='btn btn-default btn-xs' href='{$config['sitelink']}admin/index.php'>Cancel</a>
+        // </div></div></form>";
+        // }
+        //   }else{ //Text в блок портфолио (нету)
+        // echo " <hr><form class='form-horizontal' role='form' action='' enctype='multipart/form-data' method='post' style='margin-top:30px;'>
+        //   <div class='form-group'>
+        //   <label for='SliImg' class='col-sm-3 control-label'>Portfolio photo (1000*1000px)</label>
+        //   <div class='col-sm-3'> 
+        //   <input class='btn btn-default form-control' type='file' accept='image/jpeg,image/png,image/gif' required='required' name='newImage1'>
+        //   </div>
+        //   <div class='col-sm-3'> 
+        //   <input class='btn btn-default form-control' type='file' accept='image/jpeg,image/png,image/gif' name='newImage2'>
+        //   </div></div> 
+          
+        //   <div class='form-group'>
+        //   <label for='Zagolovok' class='col-sm-3 control-label'>Header Ru/En</label>
+        //   <div class='col-sm-3'> <input type='text' class='form-control' name='Zagolovok' placeholder='Header' required=''></div>
+        //   <div class='col-sm-3'> <input type='text' class='form-control' name='Zagolovok_ua' placeholder='Header_en' required=''></div>
+        //   </div>
+          
+        //   <div class='form-group'>
+        //   <label for='Text_sm' class='col-sm-3 control-label'>Description Ru/En</label>
+        //   <div class='col-sm-3'> <textarea rows='4' cols='50' type='text' class='form-control' name='Text_sm' placeholder='Description' required=''></textarea></div>
+        //   <div class='col-sm-3'> <textarea rows='4' cols='50' type='text' class='form-control' name='Text_sm_ua' placeholder='Description_en' required=''></textarea></div>
+        //   </div>    
+          
+        //   <div class='form-group last'>
+        //   <div class='col-sm-offset-3 col-sm-9'>
+        //   <button type='submit' name='addPortfolio' class='btn btn-success btn-xs'>Add</button>
+        //   <a class='btn btn-default btn-xs' href='{$config['sitelink']}admin/index.php'>Cancel</a>
+        // </div></div></form>";
+        //   }
+      break;
 case 'Feedback': //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////     
   echo "<div class='myShapka'>{$menu['Feedback']}</div>";
 if(CheckContent('Feedback')){ //Text - Header блока скилы

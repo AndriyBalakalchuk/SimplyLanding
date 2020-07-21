@@ -219,6 +219,16 @@ if($_POST['strInnFromForm'] == 'ChanPassword'){ //пришел запрос на
     }else{//пользователь не может менять данные
       header("Location: index.php?strError=BadUserAcces&".$strCurCuery);exit;
     }
+  }elseif(isset($_POST['intIDinCont'])){//определена таблица Контента и обновление строки по ИД
+    if($intUserPermis == 1 or $intUserPermis == 2){ //проверяем что пользователь может менять данные
+      if(updateTable('sl_content', array('text_big', 'text_small', 'text_big_en', 'text_small_en', 'time','edit_by'), 'id', $_POST['intIDinCont'], array($_POST['header'],$_POST['text_block'],$_POST['header_en'],$_POST['text_block_en'],time(),$_SESSION['new']['signature']))){
+        header("Location: index.php?strError=passOK&".$strCurCuery);exit;
+      }else{
+        header("Location: index.php?strError=BadDBAcces&".$strCurCuery);exit;
+      }
+    }else{//пользователь не может менять данные
+      header("Location: index.php?strError=BadUserAcces&".$strCurCuery);exit;
+    }
   }else{//не подобрали таблицу - отмена действий
     header("Location: index.php?strError=wrongReq&".$strCurCuery);exit;
   }
@@ -234,6 +244,16 @@ if($_POST['strInnFromForm'] == 'ChanPassword'){ //пришел запрос на
     if($_POST['boolINFiles'] == 1){unlink("images/{$_POST['strImage_for']}/{$_POST['image_name']}");}
     if($_POST['boolINFilesMini'] == 1){unlink("images/{$_POST['strImage_for']}/mini/{$_POST['image_name']}");}
     header("Location: index.php?strPage={$_POST['strImage_for']}&strError=passOK");exit;     
+  }
+}elseif($_POST['strInnFromForm'] == 'RemoveRow'){//пришел запрос на удаление строки в базе данных
+  //------------------------------------------------------------------------------------------
+  //------------------------------------------------------------------------------------------
+  //определяем таблицу для вноса обновений
+  if(isset($_POST['strContent_for'])){//определена таблица контента
+    if(!removeFromTable('sl_content', 'id', $_POST['id'])){
+      header("Location: index.php?strError=wrongReq&".$strCurCuery);exit;
+    }
+    header("Location: index.php?strPage={$_POST['strPage']}&strError=passOK");exit;     
   }
 }
 

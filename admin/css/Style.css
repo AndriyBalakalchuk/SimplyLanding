@@ -146,3 +146,17 @@
   background-color: #f5f5f5;
   border-radius: 15px;
 }
+
+.formMargerExist1{
+  margin: 7px 0px 7px 0px;
+  padding: 7px 0px 7px 0px;
+  background-color: #fbfbfb;
+  border-radius: 15px;
+}
+
+.formMargerExist0{
+  margin: 7px 0px 7px 0px;
+  padding: 7px 0px 7px 0px;
+  background-color: white;
+  border-radius: 15px;
+}
