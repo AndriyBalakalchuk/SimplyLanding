@@ -323,12 +323,13 @@ function CheckData($strTableName, $strColumnName, $strFindIt, $boolGetAll=false)
       $create_table = $objDB->exec("CREATE TABLE IF NOT EXISTS
         `sl_portfolio` (
           id MEDIUMINT(10) COLLATE utf8_general_ci NOT NULL AUTO_INCREMENT, PRIMARY KEY(id),
-          item_for VARCHAR(50) COLLATE utf8_general_ci NOT NULL,
+          item_category VARCHAR(50) COLLATE utf8_general_ci NOT NULL,
+          item_category_en VARCHAR(50) COLLATE utf8_general_ci NOT NULL,
           images TEXT COLLATE utf8_general_ci NOT NULL,
           text_big VARCHAR(100) COLLATE utf8_general_ci NOT NULL,
           text_small TEXT COLLATE utf8_general_ci NOT NULL,
-          text_big_ua VARCHAR(100) COLLATE utf8_general_ci NOT NULL,
-          text_small_ua TEXT COLLATE utf8_general_ci NOT NULL,
+          text_big_en VARCHAR(100) COLLATE utf8_general_ci NOT NULL,
+          text_small_en TEXT COLLATE utf8_general_ci NOT NULL,
           time VARCHAR(50) COLLATE utf8_general_ci NOT NULL,
           edit_by VARCHAR(50) COLLATE utf8_general_ci) DEFAULT CHARSET utf8;"
         ); /*создаем таблицу*/

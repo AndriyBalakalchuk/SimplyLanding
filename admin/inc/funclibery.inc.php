@@ -400,20 +400,79 @@ function menu($Stranitsa){
   }
 }
 
-function uploadImage($strFolder, $width=1980, $height=1080){ //заливает новые картинки
+//подставляет скрипт к странице если он ей нужен
+function getScript($strPage){
+  if($strPage == 'Portfolio'){
+
+    return '<script type="text/javascript">
+              var d = document;
+              var last_id = 0;
+              function add_imageInput() {
+              
+                  // находим нужную таблицу
+                  var div = d.getElementById(\'photos_row\');
+
+                  var row = d.createElement("div");
+                  row.className = "form-row";
+                  row.style.cssText = "padding-bottom: 15px";
+                  div.appendChild(row);
+              
+                  // создаем строку таблицы и добавляем ее
+                  var col = d.createElement("div");
+                  col.className = "col-lg-4 offset-lg-4";
+                  row.appendChild(col);
+
+                  var inpG = d.createElement("div");
+                  inpG.className = "input-group";
+                  col.appendChild(inpG);
+
+
+                  last_id = last_id + 1;
+              
+                  inpG.innerHTML= \'<div class="input-group-prepend"><span class="input-group-text" id="inputGroupPrepend\'+(last_id+5)+\'"><i class="fa fa-image"></i></span></div><input type="file" class="form-control" accept="image/jpeg,image/png,image/gif" id="new_image\'+last_id+\'" name="new_image[\'+last_id+\']" aria-describedby="inputGroupPrepend\'+(last_id+5)+\'">\';                  
+              }
+            </script>';
+  }else{
+    return '';
+  }
+}
+
+//получаем кликабельные категории для автопрописания
+function getCategoryButtons(){
+  $ArrayData = selectFromTable('sl_portfolio', array('item_category','item_category_en'));
+  //если категорий нету вернуть что их нету
+  if(!is_array($ArrayData)){return 'no categories yet';}
+  //массив категорий без дублей
+  $arrClear = array();
+  $arrClear_en = array();
+  foreach ($ArrayData as $arrRowData) {
+    if(!in_array($arrRowData['item_category'],$arrClear)){
+      array_push($arrClear,$arrRowData['item_category']);
+      array_push($arrClear_en,$arrRowData['item_category_en']);
+    }
+  }
+  //формируем кнопки из названий категорий
+  $htmlResult ='';
+  for ($i=0; $i < count($arrClear); $i++) { 
+    $htmlResult .= '<button class="btn btn-secondary btn-sm" onclick="add_CatToInput("'.$arrClear.'Ω'.$arrClear_en.'")" type="button">'.$arrClear.'/'.$arrClear_en.'</button>';
+  }
+  return $htmlResult;
+}
+
+function uploadImage($image, $strFolder, $width=1980, $height=1080){ //заливает новые картинки
   global $config, $path, $_FILES;
  
   # Подключение редакторв изображений
   include_once $path . '/lib/SimpleImage/SimpleImage.class.php';
 
-  if($_FILES['new_image']['error'] !=0){return false;} //ошибка загрузки
+  if($image['error'] !=0){return false;} //ошибка загрузки
 
-  $FileRandName = explode('.', $_FILES['new_image']["name"]);
+  $FileRandName = explode('.', $image["name"]);
   $FileRandName= time().rand(1,9).'.'.array_pop($FileRandName);  //имя для изображения
   
   //заливает картинку с подходящим размером   
   $image = new SimpleImage();
-  $image->load($_FILES["new_image"]["tmp_name"]);
+  $image->load($image["tmp_name"]);
   $image->resize($width, $height);
   $image->save("images/$strFolder/".$FileRandName);
   //заливает миниатюру для просмотра в админке
@@ -961,8 +1020,8 @@ function Content($Stranitsa, $intUserPermis){
         echo $strEditorHTML.'<!-- форма -->
         <form action="" method="post" autocomplete="off">
           <div class="form-row" style="padding-bottom: 15px;">
-            <div class="col-lg-4 offset-lg-4">
-              <label for="header">Header Ru/En*</label>
+            <div class="col-lg-2 offset-lg-4">
+              <label for="header">Header Ru*</label>
               <div class="input-group">
                 <div class="input-group-prepend">
                   <span class="input-group-text" id="inputGroupPrepend1"><i class="fa fa-header"></i></span>
@@ -970,9 +1029,8 @@ function Content($Stranitsa, $intUserPermis){
                 <input type="text" class="form-control" id="header" name="header" value="'.$text_big.'" aria-describedby="inputGroupPrepend1" required>
               </div>
             </div>
-          </div>
-          <div class="form-row" style="padding-bottom: 15px;">
-            <div class="col-lg-4 offset-lg-4">
+            <div class="col-lg-2">
+              <label for="header_en">Header En*</label>
               <div class="input-group">
                 <div class="input-group-prepend">
                   <span class="input-group-text" id="inputGroupPrepend2"><i class="fa fa-header"></i></span>
@@ -981,6 +1039,7 @@ function Content($Stranitsa, $intUserPermis){
               </div>
             </div>
           </div>
+
           <div class="form-row" style="padding-bottom: 15px;">
             <div class="col-lg-4 offset-lg-4">
               <label for="text_block">Text Block Ru/En*</label>
@@ -1109,7 +1168,7 @@ function Content($Stranitsa, $intUserPermis){
       }
     break;
     /*---------------------------------------------------------------------------------*/
-    /*--работа в раздете изменить шапку------------------------------------------------*/
+    /*--работа в раздете изменить Скилы------------------------------------------------*/
     /*---------------------------------------------------------------------------------*/
     case 'Skills': 
       if(!isset($_GET['delWithId'])){//если запроса на удаление скила нет, то отображаем страницу
@@ -1137,8 +1196,8 @@ function Content($Stranitsa, $intUserPermis){
               echo $strEditorHTML.'<!-- форма -->
               <form action="" method="post" autocomplete="off">
                 <div class="form-row" style="padding-bottom: 15px;">
-                  <div class="col-lg-4 offset-lg-4">
-                    <label for="header">Header Ru/En*</label>
+                  <div class="col-lg-2 offset-lg-4">
+                    <label for="header">Header Ru*</label>
                     <div class="input-group">
                       <div class="input-group-prepend">
                         <span class="input-group-text" id="inputGroupPrepend1"><i class="fa fa-header"></i></span>
@@ -1146,9 +1205,8 @@ function Content($Stranitsa, $intUserPermis){
                       <input type="text" class="form-control" id="header" name="header" value="'.$text_big.'" aria-describedby="inputGroupPrepend1" required>
                     </div>
                   </div>
-                </div>
-                <div class="form-row" style="padding-bottom: 15px;">
-                  <div class="col-lg-4 offset-lg-4">
+                  <div class="col-lg-2">
+                    <label for="header_en">Header En*</label>
                     <div class="input-group">
                       <div class="input-group-prepend">
                         <span class="input-group-text" id="inputGroupPrepend2"><i class="fa fa-header"></i></span>
@@ -1157,6 +1215,7 @@ function Content($Stranitsa, $intUserPermis){
                     </div>
                   </div>
                 </div>
+
                 <input type="hidden" value="" name="text_block" required>
                 <input type="hidden" value="" name="text_block_en" required>
                 <input type="hidden" value="hardskill_header" name="strContent_for" required>
@@ -1333,8 +1392,8 @@ function Content($Stranitsa, $intUserPermis){
               echo $strEditorHTML.'<!-- форма -->
               <form action="" method="post" autocomplete="off">
                 <div class="form-row" style="padding-bottom: 15px;">
-                  <div class="col-lg-4 offset-lg-4">
-                    <label for="header">Header Ru/En*</label>
+                  <div class="col-lg-2 offset-lg-4">
+                    <label for="header">Header Ru*</label>
                     <div class="input-group">
                       <div class="input-group-prepend">
                         <span class="input-group-text" id="inputGroupPrepend1"><i class="fa fa-header"></i></span>
@@ -1342,9 +1401,8 @@ function Content($Stranitsa, $intUserPermis){
                       <input type="text" class="form-control" id="header" name="header" value="'.$text_big.'" aria-describedby="inputGroupPrepend1" required>
                     </div>
                   </div>
-                </div>
-                <div class="form-row" style="padding-bottom: 15px;">
-                  <div class="col-lg-4 offset-lg-4">
+                  <div class="col-lg-2">
+                    <label for="header_en">Header En*</label>
                     <div class="input-group">
                       <div class="input-group-prepend">
                         <span class="input-group-text" id="inputGroupPrepend2"><i class="fa fa-header"></i></span>
@@ -1353,6 +1411,7 @@ function Content($Stranitsa, $intUserPermis){
                     </div>
                   </div>
                 </div>
+
                 <input type="hidden" value="" name="text_block" required>
                 <input type="hidden" value="" name="text_block_en" required>
                 <input type="hidden" value="softskill_header" name="strContent_for" required>
@@ -1553,7 +1612,7 @@ function Content($Stranitsa, $intUserPermis){
       }
     break;  
     /*---------------------------------------------------------------------------------*/
-    /*--работа в раздете изменить шапку------------------------------------------------*/
+    /*--работа в раздете изменить портфолио--------------------------------------------*/
     /*---------------------------------------------------------------------------------*/     
     case 'Portfolio': 
           echo "<div class='myShapka'>{$menu['Portfolio']}</div>";
@@ -1574,26 +1633,26 @@ function Content($Stranitsa, $intUserPermis){
           echo $strEditorHTML.'<!-- форма -->
           <form action="" method="post" autocomplete="off">
             <div class="form-row" style="padding-bottom: 15px;">
-              <div class="col-lg-4 offset-lg-4">
-                <label for="header">Header Ru/En*</label>
+              <div class="col-lg-2 offset-lg-4">
+                <label for="h_header">Header Ru*</label>
                 <div class="input-group">
                   <div class="input-group-prepend">
                     <span class="input-group-text" id="inputGroupPrepend1"><i class="fa fa-header"></i></span>
                   </div>
-                  <input type="text" class="form-control" id="header" name="header" value="'.$text_big.'" aria-describedby="inputGroupPrepend1" required>
+                  <input type="text" class="form-control" id="h_header" name="header" value="'.$text_big.'" aria-describedby="inputGroupPrepend1" required>
                 </div>
               </div>
-            </div>
-            <div class="form-row" style="padding-bottom: 15px;">
-              <div class="col-lg-4 offset-lg-4">
+              <div class="col-lg-2">
+                <label for="h_header_en">Header En*</label>
                 <div class="input-group">
                   <div class="input-group-prepend">
                     <span class="input-group-text" id="inputGroupPrepend2"><i class="fa fa-header"></i></span>
                   </div>
-                  <input type="text" class="form-control" id="header_en" name="header_en" value="'.$text_big_en.'" aria-describedby="inputGroupPrepend2" required>
+                  <input type="text" class="form-control" id="h_header_en" name="header_en" value="'.$text_big_en.'" aria-describedby="inputGroupPrepend2" required>
                 </div>
               </div>
             </div>
+
             <input type="hidden" value="" name="text_block" required>
             <input type="hidden" value="" name="text_block_en" required>
             <input type="hidden" value="portfolio_header" name="strContent_for" required>
@@ -1604,7 +1663,7 @@ function Content($Stranitsa, $intUserPermis){
                   <button type="reset" class="btn btn-info btn-sm"><i class="fa fa-times"></i> Clear</button>
                 </div>
                 <div class="col-sm-3 col-lg-2">
-                  <button name="strInnFromForm" value="'.$strSubmitValue.'" id="" type="submit" class="btn btn-success btn-sm "><i class="fa fa-lock"></i> Save</button>
+                  <button name="strInnFromForm" value="'.$strSubmitValue.'" type="submit" class="btn btn-success btn-sm "><i class="fa fa-lock"></i> Save</button>
                 </div>
               </div>
             </div>
@@ -1613,7 +1672,7 @@ function Content($Stranitsa, $intUserPermis){
           <!-- форма конец-->';
 
           if(CheckData('sl_portfolio', 'item_for', '', true)){ //данные для портфолио есть
-            $ArrayData = selectFromTable('sl_content', array('id','content_for', 'text_big', 'text_small', 'text_big_en', 'text_small_en', 'time','edit_by'), true, 'content_for', 'SkillHard');
+            $ArrayData = selectFromTable('sl_portfolio', array('id','item_category','item_category_en','images','text_big', 'text_small', 'text_big_en', 'text_small_en', 'time','edit_by'));
             $strExistingHTML = '';
             $i = 1;
             foreach ($ArrayData as $ArrayRow) {                
@@ -1674,7 +1733,7 @@ function Content($Stranitsa, $intUserPermis){
                             <a href="'.$config['sitelink'].'admin/index.php?strPage=Skills&skill_for=hardskill&delWithId='.$ArrayRow['id'].'" class="btn btn-danger btn-sm btnModal"><i class="fa fa-trash"></i> Remove</a>
                           </div>
                           <div class="col-sm-3 col-lg-2">
-                            <button name="strInnFromForm" value="updIN" id="" type="submit" class="btn btn-success btn-sm "><i class="fa fa-lock"></i> Save</button>
+                            <button name="strInnFromForm" value="updIN" type="submit" class="btn btn-success btn-sm "><i class="fa fa-lock"></i> Save</button>
                           </div>
                         </div>
                       </div>
@@ -1687,51 +1746,95 @@ function Content($Stranitsa, $intUserPermis){
           }else{ //данные для портфолио нету
             $strExistingHTML = '';
           }
-          echo $strExistingHTML.'<!-- форма -->
-          <form action="" method="post" autocomplete="off">
-            <div class="formMarger">
-              <div class="form-row" style="padding-bottom: 15px;">
-                <div class="col-lg-4 offset-lg-3">
-                  <label for="header">The skill name Ru*</label>
-                  <div class="input-group">
-                    <div class="input-group-prepend">
-                      <span class="input-group-text" id="inputGroupPrepend1"><i class="fa fa-header"></i></span>
-                    </div>
-                    <input type="text" class="form-control" id="header" name="header" value="" aria-describedby="inputGroupPrepend1" required>
-                  </div>
-                </div>
-                <div class="col-lg-2">
-                  <label for="text_block">Skill level Ru*</label>
-                  <div class="input-group">
-                    <div class="input-group-prepend">
-                      <span class="input-group-text" id="inputGroupPrepend3"><i class="fa fa-font"></i></span>
-                    </div>
-                    <input type="number" class="form-control" id="text_block" name="text_block" value="" aria-describedby="inputGroupPrepend3" required>
-                  </div>
-                </div>
-              </div>
-              <div class="form-row" style="padding-bottom: 15px;">
-                <div class="col-lg-4 offset-lg-3">
-                  <label for="header">The skill name En*</label>
-                  <div class="input-group">
-                    <div class="input-group-prepend">
-                      <span class="input-group-text" id="inputGroupPrepend2"><i class="fa fa-header"></i></span>
-                    </div>
-                    <input type="text" class="form-control" id="header_en" name="header_en" value="" aria-describedby="inputGroupPrepend2" required>
-                  </div>
-                </div>
-                <div class="col-lg-2">
-                  <label for="text_block">Skill level En*</label>
-                  <div class="input-group">
-                    <div class="input-group-prepend">
-                      <span class="input-group-text" id="inputGroupPrepend4"><i class="fa fa-font"></i></span>
-                    </div>
-                    <input type="number" class="form-control" id="text_block_en" name="text_block_en" value="" aria-describedby="inputGroupPrepend4" required>
-                  </div>
-                </div>
-              </div>
+          //получаем кнопки вставки категорий в инпуты
+          $htmlCatButtons = getCategoryButtons();
 
-              <input type="hidden" value="SkillHard" name="strContent_for" required>
+
+          echo $strExistingHTML.'<!-- форма -->
+          <form action="" enctype="multipart/form-data" method="post" autocomplete="off">
+            <div class="formMarger" id="newItem">
+              <div class="form-row" style="padding-bottom: 15px;">
+                <div class="col-lg-2 offset-lg-4">
+                  <label for="item_category">Category Ru*</label>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text" id="inputGroupPrepend1"><i class="fa fa-bars"></i></span>
+                    </div>
+                    <input type="text" class="form-control" id="item_category" name="item_category" value="" aria-describedby="inputGroupPrepend1" required>
+                  </div>
+                </div>
+                <div class="col-lg-2">
+                  <label for="item_category_en">Category En*</label>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text" id="inputGroupPrepend2"><i class="fa fa-bars"></i></span>
+                    </div>
+                    <input type="text" class="form-control" id="item_category_en" name="item_category_en" value="" aria-describedby="inputGroupPrepend2" required>
+                  </div>
+                </div>
+              </div>
+              <div class="form-row" style="padding-bottom: 15px;">
+                <div class="col-lg-4 offset-lg-4">
+                  '.$htmlCatButtons.'
+                </div>
+              </div>
+              <div class="form-row" style="padding-bottom: 15px;">
+                <div class="col-lg-2 offset-lg-4">
+                  <label for="header">Header Ru*</label>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text" id="inputGroupPrepend3"><i class="fa fa-header"></i></span>
+                    </div>
+                    <input type="text" class="form-control" id="header" name="header" value="" aria-describedby="inputGroupPrepend3" required>
+                  </div>
+                </div>
+                <div class="col-lg-2">
+                  <label for="header">Header En*</label>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text" id="inputGroupPrepend4"><i class="fa fa-header"></i></span>
+                    </div>
+                    <input type="text" class="form-control" id="header_en" name="header_en" value="" aria-describedby="inputGroupPrepend4" required>
+                  </div>
+                </div>
+              </div>
+              <div class="form-row" style="padding-bottom: 15px;">
+                <div class="col-lg-4 offset-lg-4">
+                  <label for="text_block">Text Block Ru/En*</label>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text" id="inputGroupPrepend5"><i class="fa fa-font"></i></span>
+                    </div>
+                    <textarea rows="4" cols="50" type="text" class="form-control" id="text_block" name="text_block" aria-describedby="inputGroupPrepend5" required></textarea>
+                  </div>
+                </div>
+              </div>
+              <div class="form-row" style="padding-bottom: 15px;">
+                <div class="col-lg-4 offset-lg-4">
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text" id="inputGroupPrepend6"><i class="fa fa-font"></i></span>
+                    </div>
+                    <textarea rows="4" cols="50" type="text" class="form-control" id="text_block_en" name="text_block_en" aria-describedby="inputGroupPrepend6" required></textarea>
+                  </div>
+                </div>
+              </div>
+              <div class="form-row" style="padding-bottom: 15px;">
+                <div class="col-lg-4 offset-lg-4">
+                  <label for="new_image0">Images*</label>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text" id="inputGroupPrepend7"><i class="fa fa-image"></i></span>
+                    </div>
+                    <input type="file" class="form-control" accept="image/jpeg,image/png,image/gif" id="new_image0" name="new_image[0]" aria-describedby="inputGroupPrepend7" required>
+                  </div>
+                </div>
+              </div>
+              <div id="photos_row">
+              <!--новые инпуты для изображений сюда-->
+              </div>
+              <button class="btn btn-secondary btn-sm" onclick="add_imageInput()" type="button">Add photo</button>
+
               <!-- кнопки -->
               <div class="container">
                 <div class="row" style = "color:white;" >
@@ -1739,7 +1842,7 @@ function Content($Stranitsa, $intUserPermis){
                     <button type="reset" class="btn btn-info btn-sm"><i class="fa fa-times"></i> Clear</button>
                   </div>
                   <div class="col-sm-3 col-lg-2">
-                    <button name="strInnFromForm" value="addINTO" id="" type="submit" class="btn btn-success btn-sm "><i class="fa fa-lock"></i> Save</button>
+                    <button name="strInnFromForm" value="addINTOPort" type="submit" class="btn btn-success btn-sm "><i class="fa fa-lock"></i> Save</button>
                   </div>
                 </div>
               </div>

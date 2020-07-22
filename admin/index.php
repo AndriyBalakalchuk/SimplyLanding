@@ -173,7 +173,7 @@ if($_POST['strInnFromForm'] == 'ChanPassword'){ //пришел запрос на
     }
   }elseif(isset($_POST['strImage_for'])){//определена таблица Изображений
     if($intUserPermis == 1 or $intUserPermis == 2){ //проверяем что пользователь может менять данные
-      $newImageName = uploadImage($_POST['strImage_for'], 570, 600);
+      $newImageName = uploadImage($_FILES['new_image'],$_POST['strImage_for'], 570, 600);
       if($newImageName!==false){ //загрузка изображения - ок
         if(addIntoTable('sl_images', array('image_for','image_name', 'time','edit_by'), array($_POST['strImage_for'],$newImageName,time(),$_SESSION['new']['signature']))){
           header("Location: index.php?strError=passOK&".$strCurCuery);exit;
@@ -255,6 +255,29 @@ if($_POST['strInnFromForm'] == 'ChanPassword'){ //пришел запрос на
     }
     header("Location: index.php?strPage={$_POST['strPage']}&strError=passOK");exit;     
   }
+}elseif($_POST['strInnFromForm'] == 'addINTOPort'){//пришел запрос на добавление в таблицу ПОРФОЛИО
+  //------------------------------------------------------------------------------------------
+  //------------------------------------------------------------------------------------------
+  if($intUserPermis == 1 or $intUserPermis == 2){ //проверяем что пользователь может менять данные
+    $newImageName = '';
+    foreach ($_FILES['new_image'] as $arrImage) {
+      $newImageName .= uploadImage($arrImage, 570, 600).'Ω';
+    }
+    
+    if($newImageName!==false and $newImageName!=''){ //загрузка изображения - ок
+      if(addIntoTable('sl_portfolio', array('item_category','item_category_en','images','text_big','text_small','text_big_en','text_small_en', 'time','edit_by'), array($_POST['item_category'],$_POST['item_category_en'],$newImageName,$_POST['header'],$_POST['text_block'],$_POST['header_en'],$_POST['text_block_en'],time(),$_SESSION['new']['signature']))){
+        header("Location: index.php?strError=passOK&".$strCurCuery);exit;
+      }else{
+        header("Location: index.php?strError=BadDBAcces&".$strCurCuery);exit;
+      }
+    }else{//загрузка изображения - ОШИБКА 
+      header("Location: index.php?strError=BadDBAcces&".$strCurCuery);exit;
+    }
+  }else{//пользователь не может менять данные
+    header("Location: index.php?strError=BadUserAcces&".$strCurCuery);exit;
+  }
+  //------------------------------------------------------------------------------------------
+  //------------------------------------------------------------------------------------------
 }
 
 
@@ -454,7 +477,8 @@ if($_GET['strDo'] == 'Remove'){ //запрос на отмену задачи
         $(".btnModal").click(function() {
           $("#LoadingModal").modal('show');
         });
-        <!-- #modalsScript - переменная для скриптов модальных окон -->
     </script>
+    <!-- скрипты по запросу страницы -->
+    <?=getScript($_GET['strPage'])?>
   </body>
 </html>
