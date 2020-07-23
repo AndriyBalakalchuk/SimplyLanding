@@ -260,19 +260,21 @@ if($_POST['strInnFromForm'] == 'ChanPassword'){ //пришел запрос на
   //------------------------------------------------------------------------------------------
   if($intUserPermis == 1 or $intUserPermis == 2){ //проверяем что пользователь может менять данные
     $newImageName = '';
-    foreach ($_FILES['new_image'] as $arrImage) {
-      $newImageName .= uploadImage($arrImage, 570, 600).'Ω';
+    $i=0;
+    $arrImage = normalize_files_array($_FILES);
+    while (isset($arrImage['new_image'][$i]) and $arrImage['new_image'][$i]['size'] > 0) {
+      $newImageName .= uploadImage($arrImage['new_image'][$i], 'Portfolio', 475, 525).'Ω';
+      $i++;
     }
-    
-    if($newImageName!==false and $newImageName!=''){ //загрузка изображения - ок
+
+    if($newImageName==false or $newImageName=='' or $newImageName=='Ω'){ //загрузка изображения - не ок
+      $newImageName = '';
+    }
       if(addIntoTable('sl_portfolio', array('item_category','item_category_en','images','text_big','text_small','text_big_en','text_small_en', 'time','edit_by'), array($_POST['item_category'],$_POST['item_category_en'],$newImageName,$_POST['header'],$_POST['text_block'],$_POST['header_en'],$_POST['text_block_en'],time(),$_SESSION['new']['signature']))){
         header("Location: index.php?strError=passOK&".$strCurCuery);exit;
       }else{
         header("Location: index.php?strError=BadDBAcces&".$strCurCuery);exit;
       }
-    }else{//загрузка изображения - ОШИБКА 
-      header("Location: index.php?strError=BadDBAcces&".$strCurCuery);exit;
-    }
   }else{//пользователь не может менять данные
     header("Location: index.php?strError=BadUserAcces&".$strCurCuery);exit;
   }
@@ -399,7 +401,7 @@ if($_GET['strDo'] == 'Remove'){ //запрос на отмену задачи
   <body style="background:#f5f5f5;font-family: <?=$config['font-family']?>, sans-serif;">
     <div style='background:#f5f5f5;padding: 1px 1px 1px 1px;text-align:center;'>
       <div style='margin: 30px 1% 50px 1%;padding: 24px 32px 24px 32px;background: #fff;border-right: 1px solid #eaeaea;border-left: 1px solid #eaeaea;'>
-        <table border='0'>
+        <!-- <table border='0'> -->
           <div>
             <div class="modal fade bd-example-modal-sm" id="LoadingModal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
               <div class="modal-dialog modal-sm modal-dialog-centered">
@@ -445,7 +447,7 @@ if($_GET['strDo'] == 'Remove'){ //запрос на отмену задачи
 
             
           </div>
-        </table>
+        <!-- </table> -->
       </div>
       <div style='padding: 0px 0px 0px 54px;'>
         <table border='0' style='width: 100%; margin-bottom: 20px;'>
@@ -474,9 +476,14 @@ if($_GET['strDo'] == 'Remove'){ //запрос на отмену задачи
     <script src="<?=$config['sitelink']?>admin/lib/bootstrap-4.5.0-dist/js/bootstrap.min.js"></script>
 
     <script>
-        $(".btnModal").click(function() {
-          $("#LoadingModal").modal('show');
-        });
+      $(".btnModal").click(function() {
+        $("#LoadingModal").modal('show');
+      });
+    </script>
+    <script>
+      function winWait(){
+        $("#LoadingModal").modal('show');
+      };
     </script>
     <!-- скрипты по запросу страницы -->
     <?=getScript($_GET['strPage'])?>

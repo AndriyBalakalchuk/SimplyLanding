@@ -160,3 +160,9 @@
   background-color: white;
   border-radius: 15px;
 }
+
+.smallText{
+  font-size:8pt;
+  text-align: left;
+  word-wrap: break-word;
+}

@@ -429,16 +429,49 @@ function getScript($strPage){
 
                   last_id = last_id + 1;
               
-                  inpG.innerHTML= \'<div class="input-group-prepend"><span class="input-group-text" id="inputGroupPrepend\'+(last_id+5)+\'"><i class="fa fa-image"></i></span></div><input type="file" class="form-control" accept="image/jpeg,image/png,image/gif" id="new_image\'+last_id+\'" name="new_image[\'+last_id+\']" aria-describedby="inputGroupPrepend\'+(last_id+5)+\'">\';                  
+                  inpG.innerHTML= \'<div class="input-group-prepend"><span class="input-group-text" id="inputGroupPrepend\'+(last_id+7)+\'"><i class="fa fa-image"></i></span></div><input type="file" class="form-control" accept="image/jpeg,image/png,image/gif" id="new_image\'+last_id+\'" name="new_image[\'+last_id+\']" aria-describedby="inputGroupPrepend\'+(last_id+7)+\'">\';                  
+              }
+            </script>
+            <script type="text/javascript">
+              function add_CatToInput(strCatName){
+                var strCatRu = strCatName.split("Ω")[0];
+                var strCatEn = strCatName.split("Ω")[1];
+              
+                // находим нужный инпут
+                var objCatRu = d.getElementById("item_category").value = strCatRu;
+                var objCatEn = d.getElementById("item_category_en").value = strCatEn;    
               }
             </script>';
+            
   }else{
     return '';
   }
 }
 
+//преобразуем переменную файлов в удобную для использывания
+function normalize_files_array($files = []) {
+  $normalized_array = [];
+  foreach($files as $index => $file) {
+      if (!is_array($file['name'])) {
+          $normalized_array[$index][] = $file;
+          continue;
+      }
+      foreach($file['name'] as $idx => $name) {
+          $normalized_array[$index][$idx] = [
+              'name' => $name,
+              'type' => $file['type'][$idx],
+              'tmp_name' => $file['tmp_name'][$idx],
+              'error' => $file['error'][$idx],
+              'size' => $file['size'][$idx]
+          ];
+      }
+
+  }
+  return $normalized_array;
+}
+
 //получаем кликабельные категории для автопрописания
-function getCategoryButtons(){
+function getCategorys($strNeed){
   $ArrayData = selectFromTable('sl_portfolio', array('item_category','item_category_en'));
   //если категорий нету вернуть что их нету
   if(!is_array($ArrayData)){return 'no categories yet';}
@@ -451,37 +484,59 @@ function getCategoryButtons(){
       array_push($arrClear_en,$arrRowData['item_category_en']);
     }
   }
+
   //формируем кнопки из названий категорий
-  $htmlResult ='';
-  for ($i=0; $i < count($arrClear); $i++) { 
-    $htmlResult .= '<button class="btn btn-secondary btn-sm" onclick="add_CatToInput("'.$arrClear.'Ω'.$arrClear_en.'")" type="button">'.$arrClear.'/'.$arrClear_en.'</button>';
+  if($strNeed=='Buttons'){
+    $htmlResult ='';
+    for ($i=0; $i < count($arrClear); $i++) { 
+      $htmlResult .= "<button class='btn btn-light btn-sm' style='margin:0px 2px 0px 2px;' onclick='add_CatToInput(\"{$arrClear[$i]}Ω{$arrClear_en[$i]}\")' type='button'>{$arrClear[$i]}/{$arrClear_en[$i]}</button>";
+    }
+    return $htmlResult;
+  }else{
+    return '';
   }
-  return $htmlResult;
 }
 
-function uploadImage($image, $strFolder, $width=1980, $height=1080){ //заливает новые картинки
+function uploadImage($newImage, $strFolder, $width=1980, $height=1080){ //заливает новые картинки
   global $config, $path, $_FILES;
  
   # Подключение редакторв изображений
   include_once $path . '/lib/SimpleImage/SimpleImage.class.php';
 
-  if($image['error'] !=0){return false;} //ошибка загрузки
+  if($newImage['error'] !=0){return false;} //ошибка загрузки
 
-  $FileRandName = explode('.', $image["name"]);
+  $FileRandName = explode('.', $newImage["name"]);
   $FileRandName= time().rand(1,9).'.'.array_pop($FileRandName);  //имя для изображения
   
   //заливает картинку с подходящим размером   
   $image = new SimpleImage();
-  $image->load($image["tmp_name"]);
+  $image->load($newImage["tmp_name"]);
   $image->resize($width, $height);
   $image->save("images/$strFolder/".$FileRandName);
   //заливает миниатюру для просмотра в админке
   $image->load("images/$strFolder/".$FileRandName);
-  $image->resize(200, 112);
+  $image->resizeToHeight(150);
   $image->save("images/$strFolder/mini/".$FileRandName);
     
 
   return $FileRandName;
+}
+
+//получить массив имен изображений
+function getImagesFromStr($strImages){
+  if($strImages =='' or !strrpos($strImages, "Ω")){
+    return '';
+  }
+
+  $arrImages = explode("Ω", $strImages);
+  $arrClear = array();
+  foreach ($arrImages as $strImage){
+    if($strImage!=''){
+      array_push($arrClear,$strImage);
+    }
+  }
+
+  return $arrClear;
 }
 
 //админ контент
@@ -504,7 +559,7 @@ function Content($Stranitsa, $intUserPermis){
         if($_GET['ChangeMod']=="Password"){//смена пароля
           echo "<div class='myShapka'>Change password for ".$_GET['strUsSign']."</div>";
           echo '<!-- форма -->
-                <form action="" method="post" autocomplete="off">
+                <form action="" method="post" autocomplete="off" onsubmit="winWait();">
                 <div class="form-row" style="padding-bottom: 15px;">
                   <div class="col-lg-4 offset-lg-4">
                     <label for="validationUserPass">NEW Password*</label>
@@ -547,7 +602,7 @@ function Content($Stranitsa, $intUserPermis){
         }elseif($_GET['ChangeMod']=="Email"){//смена мейла 
           echo "<div class='myShapka'>Change email for ".$_GET['strUsSign']."</div>";
           echo '<!-- форма -->
-            <form action="" method="post" autocomplete="off">
+            <form action="" method="post" autocomplete="off" onsubmit="winWait();">
               <div class="form-row" style="padding-bottom: 15px;">
                 <div class="col-lg-4 offset-lg-4">
                   <label for="validationUserEmail">NEW Email*</label>
@@ -579,7 +634,7 @@ function Content($Stranitsa, $intUserPermis){
         }elseif($_GET['ChangeMod']=="Name"){//смена имени 
           echo "<div class='myShapka'>Change name for ".$_GET['strUsSign']."</div>";
           echo '<!-- форма -->
-            <form action="" method="post" autocomplete="off">
+            <form action="" method="post" autocomplete="off" onsubmit="winWait();">
               <div class="form-row" style="padding-bottom: 15px;">
                 <div class="col-lg-4 offset-lg-4">
                   <label for="validationUserName">NEW Name*</label>
@@ -611,7 +666,7 @@ function Content($Stranitsa, $intUserPermis){
         }elseif($_GET['ChangeMod']=="accesslevel"){//смена уровня  
           echo "<div class='myShapka'>Change accesslevel for ".$_GET['strUsSign']."</div>";
           echo '<!-- форма -->
-                <form action="" method="post" autocomplete="off">
+                <form action="" method="post" autocomplete="off" onsubmit="winWait();">
                     <div class="form-row" style="padding-bottom: 15px;">
                           <div class="col-lg-4 offset-lg-4">
                             <label for="validationUserAccess">Choose access level*</label>
@@ -646,7 +701,7 @@ function Content($Stranitsa, $intUserPermis){
         }elseif($_GET['ChangeMod']=="remove"){//удаление юзера
           echo "<div class='myShapka'>Remove user - ".$_GET['strUsSign']."</div>";
           echo '<!-- форма -->
-                <form action="" method="post" autocomplete="off">
+                <form action="" method="post" autocomplete="off" onsubmit="winWait();">
                       <input type="hidden" value="'.$_GET['strUsSign'].'" class="form-control" id="validationUserSign" name="UserSign" aria-describedby="inputGroupPrepend4" required>
               
                     <!-- кнопки -->
@@ -667,7 +722,7 @@ function Content($Stranitsa, $intUserPermis){
             echo "<div class='myShapka'>Add moderator</div>";
             echo $strError.'
                     <!-- форма -->
-                    <form action="" method="post" autocomplete="off">
+                    <form action="" method="post" autocomplete="off" onsubmit="winWait();">
                         <div class="form-row" style="padding-bottom: 15px;">
                           <div class="col-lg-4 offset-lg-4">
                             <label for="validationSuperUser">User Login*</label>
@@ -825,7 +880,7 @@ function Content($Stranitsa, $intUserPermis){
         if($_GET['ChangeMod']=="Password"){//смена пароля
           echo "<div class='myShapka'>Change password for ".$_GET['strUsSign']."</div>";
           echo '<!-- форма -->
-              <form action="" method="post" autocomplete="off">
+              <form action="" method="post" autocomplete="off" onsubmit="winWait();">
                 <div class="form-row" style="padding-bottom: 15px;">
                   <div class="col-lg-4 offset-lg-4">
                     <label for="validationUserPass">NEW Password*</label>
@@ -868,7 +923,7 @@ function Content($Stranitsa, $intUserPermis){
         }elseif($_GET['ChangeMod']=="Email"){//смена мейла 
           echo "<div class='myShapka'>Change email for ".$_GET['strUsSign']."</div>";
           echo '<!-- форма -->
-            <form action="" method="post" autocomplete="off">
+            <form action="" method="post" autocomplete="off" onsubmit="winWait();">
               <div class="form-row" style="padding-bottom: 15px;">
                 <div class="col-lg-4 offset-lg-4">
                   <label for="validationUserEmail">NEW Email*</label>
@@ -900,7 +955,7 @@ function Content($Stranitsa, $intUserPermis){
         }elseif($_GET['ChangeMod']=="Name"){//смена имени 
           echo "<div class='myShapka'>Change name for ".$_GET['strUsSign']."</div>";
           echo '<!-- форма -->
-            <form action="" method="post" autocomplete="off">
+            <form action="" method="post" autocomplete="off" onsubmit="winWait();">
               <div class="form-row" style="padding-bottom: 15px;">
                 <div class="col-lg-4 offset-lg-4">
                   <label for="validationUserName">NEW Name*</label>
@@ -964,7 +1019,7 @@ function Content($Stranitsa, $intUserPermis){
       }   
 
       echo $strEditorHTML.'<!-- форма -->
-            <form action="" method="post" autocomplete="off">
+            <form action="" method="post" autocomplete="off" onsubmit="winWait();">
               <div class="form-row" style="padding-bottom: 15px;">
                 <div class="col-lg-4 offset-lg-4">
                   <label for="telephone">Contact tel. number*</label>
@@ -1018,7 +1073,7 @@ function Content($Stranitsa, $intUserPermis){
 
 
         echo $strEditorHTML.'<!-- форма -->
-        <form action="" method="post" autocomplete="off">
+        <form action="" method="post" autocomplete="off" onsubmit="winWait();">
           <div class="form-row" style="padding-bottom: 15px;">
             <div class="col-lg-2 offset-lg-4">
               <label for="header">Header Ru*</label>
@@ -1086,8 +1141,8 @@ function Content($Stranitsa, $intUserPermis){
             $htmlExistingImages .= "
               <div class='col-sm-2'>
                 <div style='text-align:center;'>Added: $strData, user: {$ArrayRow['edit_by']}</div>
-                <div class='col-xs-12'><img src='images/Slider/mini/{$ArrayRow['image_name']}' width='100%'></div>
-                <div class='col-xs-12' style='text-align:center;'>
+                <div class='col-sm-12'><img src='images/Slider/mini/{$ArrayRow['image_name']}' width='100%'></div>
+                <div class='col-sm-12' style='text-align:center;'>
                   <a href='".$config['sitelink']."admin/index.php?strPage=Slider&delWithName={$ArrayRow['image_name']}' class='btn btn-danger btn-sm btnModal'><i class='fa fa-lock'></i> Remove</a>
                 </div>
               </div>";
@@ -1098,7 +1153,7 @@ function Content($Stranitsa, $intUserPermis){
         }   
       
         echo $htmlExistingImages.'<!-- форма -->
-        <form action="" enctype="multipart/form-data" method="post" autocomplete="off">
+        <form action="" enctype="multipart/form-data" method="post" autocomplete="off" onsubmit="winWait();">
           <div class="form-row" style="padding-bottom: 15px;">
             <div class="col-lg-4 offset-lg-4">
               <label for="new_image">Add image (570*600px)*</label>
@@ -1140,7 +1195,7 @@ function Content($Stranitsa, $intUserPermis){
           echo "<div class='myShapka'>Approve image removing</div>";
           
           echo '<!-- форма -->
-            <form action="" method="post" autocomplete="off">
+            <form action="" method="post" autocomplete="off" onsubmit="winWait();">
               <input type="hidden" value="Slider" name="strImage_for" required>
               <input type="hidden" value="'.$_GET['delWithName'].'" name="image_name" required>
               <input type="hidden" value="'.$boolINDB.'" name="boolINDB" required>
@@ -1194,7 +1249,7 @@ function Content($Stranitsa, $intUserPermis){
 
 
               echo $strEditorHTML.'<!-- форма -->
-              <form action="" method="post" autocomplete="off">
+              <form action="" method="post" autocomplete="off" onsubmit="winWait();">
                 <div class="form-row" style="padding-bottom: 15px;">
                   <div class="col-lg-2 offset-lg-4">
                     <label for="header">Header Ru*</label>
@@ -1241,7 +1296,7 @@ function Content($Stranitsa, $intUserPermis){
                   $strData=date("d.m.Y",$ArrayRow['time']);
                   $strExistingHTML .= '<div style="text-align:center;">Added: '.$strData.', user: '.$ArrayRow['edit_by'].'</div>
                       <!-- форма -->
-                      <form action="" method="post" autocomplete="off">
+                      <form action="" method="post" autocomplete="off" onsubmit="winWait();">
                         <div class="formMargerExist'.($i%2).'">
                           <div class="form-row" style="padding-bottom: 15px;">
                             <div class="col-lg-4 offset-lg-3">
@@ -1309,7 +1364,7 @@ function Content($Stranitsa, $intUserPermis){
                 $strExistingHTML = '';
               }  
               echo $strExistingHTML.'<!-- форма -->
-              <form action="" method="post" autocomplete="off">
+              <form action="" method="post" autocomplete="off" onsubmit="winWait();">
                 <div class="formMarger">
                   <div class="form-row" style="padding-bottom: 15px;">
                     <div class="col-lg-4 offset-lg-3">
@@ -1390,7 +1445,7 @@ function Content($Stranitsa, $intUserPermis){
               echo "<button class='btn btn-primary btn-sm' href='{$config['sitelink']}admin/index.php?strPage=Skills&skill_for=softskill' disabled>Soft skills</button> ";
 
               echo $strEditorHTML.'<!-- форма -->
-              <form action="" method="post" autocomplete="off">
+              <form action="" method="post" autocomplete="off" onsubmit="winWait();">
                 <div class="form-row" style="padding-bottom: 15px;">
                   <div class="col-lg-2 offset-lg-4">
                     <label for="header">Header Ru*</label>
@@ -1437,7 +1492,7 @@ function Content($Stranitsa, $intUserPermis){
                   $strData=date("d.m.Y",$ArrayRow['time']);
                   $strExistingHTML .= '<div style="text-align:center;">Added: '.$strData.', user: '.$ArrayRow['edit_by'].'</div>
                       <!-- форма -->
-                      <form action="" method="post" autocomplete="off">
+                      <form action="" method="post" autocomplete="off" onsubmit="winWait();">
                         <div class="formMargerExist'.($i%2).'">
                           <div class="form-row" style="padding-bottom: 15px;">
                             <div class="col-lg-4 offset-lg-3">
@@ -1505,7 +1560,7 @@ function Content($Stranitsa, $intUserPermis){
                 $strExistingHTML = '';
               }  
               echo $strExistingHTML.'<!-- форма -->
-              <form action="" method="post" autocomplete="off">
+              <form action="" method="post" autocomplete="off" onsubmit="winWait();">
                 <div class="formMarger">
                   <div class="form-row" style="padding-bottom: 15px;">
                     <div class="col-lg-4 offset-lg-3">
@@ -1586,7 +1641,7 @@ function Content($Stranitsa, $intUserPermis){
         if($boolINDB and $boolDeletebleSkill){
           echo "<div class='myShapka'>Approve Skill removing</div>";
           echo '<!-- форма -->
-            <form action="" method="post" autocomplete="off">
+            <form action="" method="post" autocomplete="off" onsubmit="winWait();">
               <input type="hidden" value="Skill" name="strContent_for" required>
               <input type="hidden" value="'.$_GET['strPage'].'&skill_for='.$_GET['skill_for'].'" name="strPage" required>
               <input type="hidden" value="'.$_GET['delWithId'].'" name="id" required>
@@ -1615,226 +1670,145 @@ function Content($Stranitsa, $intUserPermis){
     /*--работа в раздете изменить портфолио--------------------------------------------*/
     /*---------------------------------------------------------------------------------*/     
     case 'Portfolio': 
-          echo "<div class='myShapka'>{$menu['Portfolio']}</div>";
-          if(CheckData('sl_content', 'content_for', 'portfolio_header')){ //данные для заголовка портфолио есть
-            $ArrayData = selectFromTable('sl_content', array('content_for', 'text_big', 'text_big_en', 'time','edit_by'), true, 'content_for', 'portfolio_header')[0];
-            $strSubmitValue = 'updIN';
-            $strData=date("d.m.Y",$ArrayData['time']);
-            $strEditorHTML = "<div style='text-align:center;'>Last editing $strData, user: {$ArrayData['edit_by']}</div>";
-            $text_big=$ArrayData['text_big'];          
-            $text_big_en=$ArrayData['text_big_en'];
-          }else{ //данные для заголовка портфолио нету
-            $strSubmitValue = 'addINTO';
-            $strEditorHTML = '';
-            $text_big = '';         
-            $text_big_en = '';
-          }   
-
-          echo $strEditorHTML.'<!-- форма -->
-          <form action="" method="post" autocomplete="off">
-            <div class="form-row" style="padding-bottom: 15px;">
-              <div class="col-lg-2 offset-lg-4">
-                <label for="h_header">Header Ru*</label>
-                <div class="input-group">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text" id="inputGroupPrepend1"><i class="fa fa-header"></i></span>
-                  </div>
-                  <input type="text" class="form-control" id="h_header" name="header" value="'.$text_big.'" aria-describedby="inputGroupPrepend1" required>
-                </div>
-              </div>
-              <div class="col-lg-2">
-                <label for="h_header_en">Header En*</label>
-                <div class="input-group">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text" id="inputGroupPrepend2"><i class="fa fa-header"></i></span>
-                  </div>
-                  <input type="text" class="form-control" id="h_header_en" name="header_en" value="'.$text_big_en.'" aria-describedby="inputGroupPrepend2" required>
-                </div>
-              </div>
-            </div>
-
-            <input type="hidden" value="" name="text_block" required>
-            <input type="hidden" value="" name="text_block_en" required>
-            <input type="hidden" value="portfolio_header" name="strContent_for" required>
-            <!-- кнопки -->
-            <div class="container">
-              <div class="row" style = "color:white;" >
-                <div class="col-sm-3 offset-sm-3 col-lg-2 offset-lg-4">
-                  <button type="reset" class="btn btn-info btn-sm"><i class="fa fa-times"></i> Clear</button>
-                </div>
-                <div class="col-sm-3 col-lg-2">
-                  <button name="strInnFromForm" value="'.$strSubmitValue.'" type="submit" class="btn btn-success btn-sm "><i class="fa fa-lock"></i> Save</button>
-                </div>
-              </div>
-            </div>
-            <!-- кнопки конец-->
-          </form>
-          <!-- форма конец-->';
-
           if(CheckData('sl_portfolio', 'item_for', '', true)){ //данные для портфолио есть
-            $ArrayData = selectFromTable('sl_portfolio', array('id','item_category','item_category_en','images','text_big', 'text_small', 'text_big_en', 'text_small_en', 'time','edit_by'));
+            $ArrayData = selectFromTable('sl_portfolio', array('id','item_category','item_category_en','images','text_big', 'text_big_en', 'time','edit_by'));
             $strExistingHTML = '';
             $i = 1;
+            $strExistingHTML .= "<div class='row'>";
             foreach ($ArrayData as $ArrayRow) {                
               $strData=date("d.m.Y",$ArrayRow['time']);
-              $strExistingHTML .= '<div style="text-align:center;">Added: '.$strData.', user: '.$ArrayRow['edit_by'].'</div>
-                  <!-- форма -->
-                  <form action="" method="post" autocomplete="off">
-                    <div class="formMargerExist'.($i%2).'">
-                      <div class="form-row" style="padding-bottom: 15px;">
-                        <div class="col-lg-4 offset-lg-3">
-                          <label for="header">The skill name Ru*</label>
-                          <div class="input-group">
-                            <div class="input-group-prepend">
-                              <span class="input-group-text" id="inputGroupPrepend1"><i class="fa fa-header"></i></span>
-                            </div>
-                            <input type="text" class="form-control" id="header" name="header" value="'.$ArrayRow['text_big'].'" aria-describedby="inputGroupPrepend1" required>
-                          </div>
-                        </div>
-                        <div class="col-lg-2">
-                          <label for="text_block">Skill level Ru*</label>
-                          <div class="input-group">
-                            <div class="input-group-prepend">
-                              <span class="input-group-text" id="inputGroupPrepend3"><i class="fa fa-font"></i></span>
-                            </div>
-                            <input type="number" class="form-control" id="text_block" name="text_block" value="'.$ArrayRow['text_small'].'" aria-describedby="inputGroupPrepend3" required>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="form-row" style="padding-bottom: 15px;">
-                        <div class="col-lg-4 offset-lg-3">
-                          <label for="header">The skill name En*</label>
-                          <div class="input-group">
-                            <div class="input-group-prepend">
-                              <span class="input-group-text" id="inputGroupPrepend2"><i class="fa fa-header"></i></span>
-                            </div>
-                            <input type="text" class="form-control" id="header_en" name="header_en" value="'.$ArrayRow['text_big_en'].'" aria-describedby="inputGroupPrepend2" required>
-                          </div>
-                        </div>
-                        <div class="col-lg-2">
-                          <label for="text_block">Skill level En*</label>
-                          <div class="input-group">
-                            <div class="input-group-prepend">
-                              <span class="input-group-text" id="inputGroupPrepend4"><i class="fa fa-font"></i></span>
-                            </div>
-                            <input type="number" class="form-control" id="text_block_en" name="text_block_en" value="'.$ArrayRow['text_small_en'].'" aria-describedby="inputGroupPrepend4" required>
-                          </div>
-                        </div>
-                      </div>
-
-                      <input type="hidden" value="'.$ArrayRow['id'].'" name="intIDinCont" required>
-                      <!-- кнопки -->
-                      <div class="container">
-                        <div class="row" style = "color:white;" >
-                          <div class="col-sm-3 offset-sm-2 col-lg-2 offset-lg-3">
-                            <button type="reset" class="btn btn-info btn-sm"><i class="fa fa-times"></i> Clear</button>
-                          </div>
-                          <div class="col-sm-3 col-lg-2">
-                            <a href="'.$config['sitelink'].'admin/index.php?strPage=Skills&skill_for=hardskill&delWithId='.$ArrayRow['id'].'" class="btn btn-danger btn-sm btnModal"><i class="fa fa-trash"></i> Remove</a>
-                          </div>
-                          <div class="col-sm-3 col-lg-2">
-                            <button name="strInnFromForm" value="updIN" type="submit" class="btn btn-success btn-sm "><i class="fa fa-lock"></i> Save</button>
-                          </div>
-                        </div>
-                      </div>
-                      <!-- кнопки конец-->
+              $arrImages = getImagesFromStr($ArrayRow['images']);
+              if($arrImages != ''){
+                $strImageName = $arrImages[array_rand($arrImages, 1)];
+              }else{ 
+                $strImageName = '';
+              }
+              $strExistingHTML .= "
+                <div class='col-lg-2 formMargerExist".($i%2)." row'>
+                  <div style='text-align:center;width:100%;'>{$ArrayRow['text_big']}/{$ArrayRow['text_big_en']}</div>
+                  <div class='container row'>
+                    <div class='col-sm-8 smallText'>
+                      <strong>Added:</strong> $strData<br>
+                      <strong>User:</strong> {$ArrayRow['edit_by']}<br>
+                      <strong>Category:</strong> {$ArrayRow['item_category']}/{$ArrayRow['item_category_en']}
                     </div>
-                  </form>
-                  <!-- форма конец-->';
+                    <div class='col-sm-4' style='text-align:center;'>";
+              if($strImageName!=''){
+                $strExistingHTML .= "<a href='images/Portfolio/$strImageName' target='_blank'><img src='images/Portfolio/mini/$strImageName' width='100%'>";
+              }else{
+                $strExistingHTML .= "no images";
+              }
+              $strExistingHTML .= "
+                </div>
+                  </div>
+                  <div style='margin-top:10px;width:100%;'>
+                    <div class='col-sm-12'>
+                      <a href='".$config['sitelink']."admin/index.php?strPage=Portfolio&delWithId={$ArrayRow['id']}' class='btn btn-danger btn-sm btnModal'><i class='fa fa-trash'></i> Remove</a>
+                      <a href='".$config['sitelink']."admin/index.php?strPage=Portfolio&updWithId={$ArrayRow['id']}' class='btn btn-warning btn-sm btnModal'><i class='fa fa-lock'></i> Edit</a>
+                    </div>
+                  </div>
+                </div>";
               $i++;
             }
+            $strExistingHTML .= "</div>";
           }else{ //данные для портфолио нету
             $strExistingHTML = '';
           }
           //получаем кнопки вставки категорий в инпуты
-          $htmlCatButtons = getCategoryButtons();
+          $htmlCatButtons = getCategorys('Buttons');
 
+          //если мы попали на страницу редактирования задачи, переопределяем переменные
+          if(isset($_GET['updWithId'])){
+            $boolINDB = false;
+            $strExistingHTML = '';
+            //проверяем есть ли такой элемент в базе
+            if(CheckData('sl_portfolio', 'id', $_GET['updWithId'])){$boolINDB = true;}
+            if($boolINDB){
+              $arrItem = selectFromTable('sl_portfolio', array('id','item_category','item_category_en','images','text_big', 'text_big_en','text_small','text_small_en'), true, 'id', $_GET['updWithId'])[0];
+              $arrImages = getImagesFromStr($arrItem['images']);
+              $strExistingHTML .= "<div class='myShapka'>Updating item - {$arrItem['text_big']}/{$arrItem['text_big_en']}</div><div class='row'>";
+              if($arrImages!=''){
+                foreach ($arrImages as $strImageName) {
+                  $strExistingHTML .= "
+                  <div class='col-lg-2 row'>
+                    <div class='col-sm-12 smallText'>
+                      <strong>Name:</strong> $strImageName<br>
+                      <strong>Path:</strong> {$config['sitelink']}admin/images/Portfolio/$strImageName
+                    </div>
+                    <div class='col-sm-12'>
+                      <a href='{$config['sitelink']}admin/images/Portfolio/$strImageName' target='_blank'><img src='images/Portfolio/mini/$strImageName' width='100%'></a>
+                    </div>
+                    <div class='col-sm-12'>
+                      <a href='".$config['sitelink']."admin/index.php?strPage=Portfolio&delWithName={$ArrayRow['image_name']}&inID={$ArrayRow['updWithId']}' class='btn btn-danger btn-sm btnModal'><i class='fa fa-trash'></i> Remove</a>
+                    </div>
+                  </div>";
+                }
+              }else{
+                $strExistingHTML .= "<div class='col-sm-12'>no images</div>";
+              }
+              $strExistingHTML .= "</div>";
 
-          echo $strExistingHTML.'<!-- форма -->
-          <form action="" enctype="multipart/form-data" method="post" autocomplete="off">
-            <div class="formMarger" id="newItem">
+              //переменные с данными итема, для подстановки в блок замены данных
+              $strCatRu = $arrItem['item_category'];
+              $strCatEn = $arrItem['item_category_en'];
+              $strHedRu = $arrItem['text_big'];
+              $strHedEn = $arrItem['text_big_en'];
+              $strTextRu = $arrItem['text_small'];
+              $strTextEn = $arrItem['text_small_en'];
+              $intTaskIdhtml = '<input type="hidden" value="'.$_GET['updWithId'].'" name="id">';
+              $strSubmitValue = 'updINPort';
+            }else{ //нету такого айдишника
+              echo '<div class="row">
+                      <div class="col-sm-12">
+                        Sorry but item with id-'.$_GET['updWithId'].' not exist<br> 
+                        <a id="" class="btn btn-info btn-sm btnModal" href="'.$config['sitelink'].'admin/index.php?strPage=Portfolio"><i class="fa fa-reply"></i> Back</a>
+                      </div>
+                    </div>';
+            }
+          //если обычная страница то переменные пустые
+          }else{
+            $boolINDB = true; //отображаем блок для нового итема
+            echo "<div class='myShapka'>{$menu['Portfolio']}</div>";
+            if(CheckData('sl_content', 'content_for', 'portfolio_header')){ //данные для заголовка портфолио есть
+              $ArrayData = selectFromTable('sl_content', array('content_for', 'text_big', 'text_big_en', 'time','edit_by'), true, 'content_for', 'portfolio_header')[0];
+              $strSubmitValue = 'updIN';
+              $strData=date("d.m.Y",$ArrayData['time']);
+              $strEditorHTML = "<div style='text-align:center;'>Last editing $strData, user: {$ArrayData['edit_by']}</div>";
+              $text_big=$ArrayData['text_big'];          
+              $text_big_en=$ArrayData['text_big_en'];
+            }else{ //данные для заголовка портфолио нету
+              $strSubmitValue = 'addINTO';
+              $strEditorHTML = '';
+              $text_big = '';         
+              $text_big_en = '';
+            }   
+
+            echo $strEditorHTML.'<!-- форма -->
+            <form action="" method="post" autocomplete="off" onsubmit="winWait();">
               <div class="form-row" style="padding-bottom: 15px;">
                 <div class="col-lg-2 offset-lg-4">
-                  <label for="item_category">Category Ru*</label>
+                  <label for="h_header">Header Ru*</label>
                   <div class="input-group">
                     <div class="input-group-prepend">
-                      <span class="input-group-text" id="inputGroupPrepend1"><i class="fa fa-bars"></i></span>
+                      <span class="input-group-text" id="inputGroupPrepend1"><i class="fa fa-header"></i></span>
                     </div>
-                    <input type="text" class="form-control" id="item_category" name="item_category" value="" aria-describedby="inputGroupPrepend1" required>
+                    <input type="text" class="form-control" id="h_header" name="header" value="'.$text_big.'" aria-describedby="inputGroupPrepend1" required>
                   </div>
                 </div>
                 <div class="col-lg-2">
-                  <label for="item_category_en">Category En*</label>
+                  <label for="h_header_en">Header En*</label>
                   <div class="input-group">
                     <div class="input-group-prepend">
-                      <span class="input-group-text" id="inputGroupPrepend2"><i class="fa fa-bars"></i></span>
+                      <span class="input-group-text" id="inputGroupPrepend2"><i class="fa fa-header"></i></span>
                     </div>
-                    <input type="text" class="form-control" id="item_category_en" name="item_category_en" value="" aria-describedby="inputGroupPrepend2" required>
+                    <input type="text" class="form-control" id="h_header_en" name="header_en" value="'.$text_big_en.'" aria-describedby="inputGroupPrepend2" required>
                   </div>
                 </div>
               </div>
-              <div class="form-row" style="padding-bottom: 15px;">
-                <div class="col-lg-4 offset-lg-4">
-                  '.$htmlCatButtons.'
-                </div>
-              </div>
-              <div class="form-row" style="padding-bottom: 15px;">
-                <div class="col-lg-2 offset-lg-4">
-                  <label for="header">Header Ru*</label>
-                  <div class="input-group">
-                    <div class="input-group-prepend">
-                      <span class="input-group-text" id="inputGroupPrepend3"><i class="fa fa-header"></i></span>
-                    </div>
-                    <input type="text" class="form-control" id="header" name="header" value="" aria-describedby="inputGroupPrepend3" required>
-                  </div>
-                </div>
-                <div class="col-lg-2">
-                  <label for="header">Header En*</label>
-                  <div class="input-group">
-                    <div class="input-group-prepend">
-                      <span class="input-group-text" id="inputGroupPrepend4"><i class="fa fa-header"></i></span>
-                    </div>
-                    <input type="text" class="form-control" id="header_en" name="header_en" value="" aria-describedby="inputGroupPrepend4" required>
-                  </div>
-                </div>
-              </div>
-              <div class="form-row" style="padding-bottom: 15px;">
-                <div class="col-lg-4 offset-lg-4">
-                  <label for="text_block">Text Block Ru/En*</label>
-                  <div class="input-group">
-                    <div class="input-group-prepend">
-                      <span class="input-group-text" id="inputGroupPrepend5"><i class="fa fa-font"></i></span>
-                    </div>
-                    <textarea rows="4" cols="50" type="text" class="form-control" id="text_block" name="text_block" aria-describedby="inputGroupPrepend5" required></textarea>
-                  </div>
-                </div>
-              </div>
-              <div class="form-row" style="padding-bottom: 15px;">
-                <div class="col-lg-4 offset-lg-4">
-                  <div class="input-group">
-                    <div class="input-group-prepend">
-                      <span class="input-group-text" id="inputGroupPrepend6"><i class="fa fa-font"></i></span>
-                    </div>
-                    <textarea rows="4" cols="50" type="text" class="form-control" id="text_block_en" name="text_block_en" aria-describedby="inputGroupPrepend6" required></textarea>
-                  </div>
-                </div>
-              </div>
-              <div class="form-row" style="padding-bottom: 15px;">
-                <div class="col-lg-4 offset-lg-4">
-                  <label for="new_image0">Images*</label>
-                  <div class="input-group">
-                    <div class="input-group-prepend">
-                      <span class="input-group-text" id="inputGroupPrepend7"><i class="fa fa-image"></i></span>
-                    </div>
-                    <input type="file" class="form-control" accept="image/jpeg,image/png,image/gif" id="new_image0" name="new_image[0]" aria-describedby="inputGroupPrepend7" required>
-                  </div>
-                </div>
-              </div>
-              <div id="photos_row">
-              <!--новые инпуты для изображений сюда-->
-              </div>
-              <button class="btn btn-secondary btn-sm" onclick="add_imageInput()" type="button">Add photo</button>
 
+              <input type="hidden" value="" name="text_block" required>
+              <input type="hidden" value="" name="text_block_en" required>
+              <input type="hidden" value="portfolio_header" name="strContent_for" required>
               <!-- кнопки -->
               <div class="container">
                 <div class="row" style = "color:white;" >
@@ -1842,14 +1816,130 @@ function Content($Stranitsa, $intUserPermis){
                     <button type="reset" class="btn btn-info btn-sm"><i class="fa fa-times"></i> Clear</button>
                   </div>
                   <div class="col-sm-3 col-lg-2">
-                    <button name="strInnFromForm" value="addINTOPort" type="submit" class="btn btn-success btn-sm "><i class="fa fa-lock"></i> Save</button>
+                    <button name="strInnFromForm" value="'.$strSubmitValue.'" type="submit" class="btn btn-success btn-sm "><i class="fa fa-lock"></i> Save</button>
                   </div>
                 </div>
               </div>
               <!-- кнопки конец-->
-            </div>
-          </form>
-          <!-- форма конец-->';
+            </form>
+            <!-- форма конец-->';
+            
+            //переменные с данными итема, для подстановки в блок замены данных
+            $strCatRu = '';
+            $strCatEn = '';
+            $strHedRu = '';
+            $strHedEn = '';
+            $strTextRu = '';
+            $strTextEn = '';
+            $intTaskIdhtml = '';
+            $strSubmitValue = 'addINTOPort';
+          }
+
+
+          
+          //показывать данный блок только если айди итема найден или открыта простая страница
+          if($boolINDB){
+            echo $strExistingHTML.'<!-- форма -->
+            <form action="" enctype="multipart/form-data" method="post" autocomplete="off" onsubmit="winWait();">
+              <div class="formMarger" id="newItem">
+                <div class="form-row" style="padding-bottom: 15px;">
+                  <div class="col-lg-2 offset-lg-4">
+                    <label for="item_category">Category Ru*</label>
+                    <div class="input-group">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text" id="inputGroupPrepend1"><i class="fa fa-bars"></i></span>
+                      </div>
+                      <input type="text" class="form-control" id="item_category" name="item_category" value="'.$strCatRu.'" aria-describedby="inputGroupPrepend1" required>
+                    </div>
+                  </div>
+                  <div class="col-lg-2">
+                    <label for="item_category_en">Category En*</label>
+                    <div class="input-group">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text" id="inputGroupPrepend2"><i class="fa fa-bars"></i></span>
+                      </div>
+                      <input type="text" class="form-control" id="item_category_en" name="item_category_en" value="'.$strCatEn.'" aria-describedby="inputGroupPrepend2" required>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-row" style="padding-bottom: 15px;">
+                  <div class="col-lg-4 offset-lg-4">
+                    '.$htmlCatButtons.'
+                  </div>
+                </div>
+                <div class="form-row" style="padding-bottom: 15px;">
+                  <div class="col-lg-2 offset-lg-4">
+                    <label for="header">Header Ru*</label>
+                    <div class="input-group">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text" id="inputGroupPrepend3"><i class="fa fa-header"></i></span>
+                      </div>
+                      <input type="text" class="form-control" id="header" name="header" value="'.$strHedRu.'" aria-describedby="inputGroupPrepend3" required>
+                    </div>
+                  </div>
+                  <div class="col-lg-2">
+                    <label for="header">Header En*</label>
+                    <div class="input-group">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text" id="inputGroupPrepend4"><i class="fa fa-header"></i></span>
+                      </div>
+                      <input type="text" class="form-control" id="header_en" name="header_en" value="'.$strHedEn.'" aria-describedby="inputGroupPrepend4" required>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-row" style="padding-bottom: 15px;">
+                  <div class="col-lg-4 offset-lg-4">
+                    <label for="text_block">Text Block Ru/En*</label>
+                    <div class="input-group">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text" id="inputGroupPrepend5"><i class="fa fa-font"></i></span>
+                      </div>
+                      <textarea rows="4" cols="50" type="text" class="form-control" id="text_block" name="text_block" aria-describedby="inputGroupPrepend5" required>'.$strTextRu.'</textarea>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-row" style="padding-bottom: 15px;">
+                  <div class="col-lg-4 offset-lg-4">
+                    <div class="input-group">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text" id="inputGroupPrepend6"><i class="fa fa-font"></i></span>
+                      </div>
+                      <textarea rows="4" cols="50" type="text" class="form-control" id="text_block_en" name="text_block_en" aria-describedby="inputGroupPrepend6" required>'.$strTextEn.'</textarea>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-row" style="padding-bottom: 15px;">
+                  <div class="col-lg-4 offset-lg-4">
+                    <label for="new_image0">Images*</label>
+                    <div class="input-group">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text" id="inputGroupPrepend7"><i class="fa fa-image"></i></span>
+                      </div>
+                      <input type="file" class="form-control" accept="image/jpeg,image/png,image/gif" id="new_image0" name="new_image[]" aria-describedby="inputGroupPrepend7">
+                    </div>
+                  </div>
+                </div>
+                <div id="photos_row">
+                <!--новые инпуты для изображений сюда-->
+                </div>
+                <button class="btn btn-secondary btn-sm" onclick="add_imageInput()" type="button">Add photo</button>
+                '.$intTaskIdhtml.'
+                <!-- кнопки -->
+                <div class="container">
+                  <div class="row" style = "color:white;" >
+                    <div class="col-sm-3 offset-sm-3 col-lg-2 offset-lg-4">
+                      <button type="reset" class="btn btn-info btn-sm"><i class="fa fa-times"></i> Clear</button>
+                    </div>
+                    <div class="col-sm-3 col-lg-2">
+                      <button name="strInnFromForm" value="'.$strSubmitValue.'" type="submit" class="btn btn-success btn-sm "><i class="fa fa-lock"></i> Save</button>
+                    </div>
+                  </div>
+                </div>
+                <!-- кнопки конец-->
+              </div>
+            </form>
+            <!-- форма конец-->';
+          }
 
 
         // if(CheckPortfolio('Portfolio')){ //Text в блоке портфолио   (есть)
@@ -2352,8 +2442,8 @@ $Edit=$ArrayData[0]['edit_by'];
 echo "<div style='text-align:center;'>Last editing $data, user: $Edit</div>";    
 echo "<div class='container-fluid'>
   <div class='col-sm-2'>
-  <div class='col-xs-12'><img src='images/Slider/mini/$img_name' width='100%'></div>
-  <div class='col-xs-12' style='text-align:center;'>
+  <div class='col-sm-12'><img src='images/Slider/mini/$img_name' width='100%'></div>
+  <div class='col-sm-12' style='text-align:center;'>
   <a href='".$config['sitelink']."admin/index.php?Page=Partners&delWithName=$img_name' class='btn btn-default btn-xs'>Remove</a>
   </div>
 </div></div>";
@@ -2364,15 +2454,15 @@ $img_name=$Array['image_name'];
 $Edit=$Array['edit_by'];
 
 echo "<div class='col-sm-2'>
-  <div style='col-xs-12'>Added: $data, user: $Edit</div>
-  <div class='col-xs-12'><img src='images/Slider/mini/$img_name' width='100%'></div>
-  <div class='col-xs-12' style='text-align:center;'>
+  <div style='col-sm-12'>Added: $data, user: $Edit</div>
+  <div class='col-sm-12'><img src='images/Slider/mini/$img_name' width='100%'></div>
+  <div class='col-sm-12' style='text-align:center;'>
   <a href='".$config['sitelink']."admin/index.php?Page=Partners&delWithName=$img_name' class='btn btn-default btn-xs'>Remove</a>
   </div></div>";}
 }            
       
       
-echo " <form class='form-horizontal col-xs-12' enctype='multipart/form-data' role='form' action='' method='post' style='margin-top:30px;'>
+echo " <form class='form-horizontal col-sm-12' enctype='multipart/form-data' role='form' action='' method='post' style='margin-top:30px;'>
   <div class='form-group'>
   <label for='SliImg' class='col-sm-3 control-label'>Add logo (180*80px)</label>
   <div class='col-sm-3'> 
