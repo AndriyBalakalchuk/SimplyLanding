@@ -244,6 +244,23 @@ if($_POST['strInnFromForm'] == 'ChanPassword'){ //пришел запрос на
     if($_POST['boolINFiles'] == 1){unlink("images/{$_POST['strImage_for']}/{$_POST['image_name']}");}
     if($_POST['boolINFilesMini'] == 1){unlink("images/{$_POST['strImage_for']}/mini/{$_POST['image_name']}");}
     header("Location: index.php?strPage={$_POST['strImage_for']}&strError=passOK");exit;     
+  }elseif(isset($_POST['id'])){//определена таблица портфолио
+    //проверяем есть ли переданный ID и получаем список его изображений
+    if(CheckData('sl_portfolio', 'id', $_POST['id'])){
+      $arrImages = getImagesFromStr(selectFromTable('sl_portfolio', array('images'), true, 'id', $_POST['id'])[0]['images']);
+      if($arrImages!=''){
+        $strNewImageNames = '';
+        foreach ($arrImages as $strImage) {
+          if($strImage != $_POST['image_name']){
+            $strNewImageNames .= $strImage.'Ω';
+          }
+        }
+      }
+    }else{header("Location: index.php?strError=BadDBAcces&".$strCurCuery);exit;}
+    if($_POST['boolINDB'] == 1){updateTable('sl_portfolio', array('images', 'time','edit_by'), 'id', $_POST['id'], array($strNewImageNames,time(),$_SESSION['new']['signature']));}
+    if($_POST['boolINFiles'] == 1){unlink("images/Portfolio/{$_POST['image_name']}");}
+    if($_POST['boolINFilesMini'] == 1){unlink("images/Portfolio/mini/{$_POST['image_name']}");}
+    header("Location: index.php?strPage=Portfolio&strError=passOK&updWithId=".$_POST['id']);exit;   
   }
 }elseif($_POST['strInnFromForm'] == 'RemoveRow'){//пришел запрос на удаление строки в базе данных
   //------------------------------------------------------------------------------------------
@@ -255,6 +272,8 @@ if($_POST['strInnFromForm'] == 'ChanPassword'){ //пришел запрос на
     }
     header("Location: index.php?strPage={$_POST['strPage']}&strError=passOK");exit;     
   }
+  //------------------------------------------------------------------------------------------
+  //------------------------------------------------------------------------------------------
 }elseif($_POST['strInnFromForm'] == 'addINTOPort'){//пришел запрос на добавление в таблицу ПОРФОЛИО
   //------------------------------------------------------------------------------------------
   //------------------------------------------------------------------------------------------
@@ -275,6 +294,78 @@ if($_POST['strInnFromForm'] == 'ChanPassword'){ //пришел запрос на
       }else{
         header("Location: index.php?strError=BadDBAcces&".$strCurCuery);exit;
       }
+  }else{//пользователь не может менять данные
+    header("Location: index.php?strError=BadUserAcces&".$strCurCuery);exit;
+  }
+  //------------------------------------------------------------------------------------------
+  //------------------------------------------------------------------------------------------
+}elseif($_POST['strInnFromForm'] == 'updINPort'){//пришел запрос на обновление данных в таблице ПОРФОЛИО
+  //------------------------------------------------------------------------------------------
+  //------------------------------------------------------------------------------------------
+  if($intUserPermis == 1 or $intUserPermis == 2){ //проверяем что пользователь может менять данные
+    //проверяем есть ли такой айди, если есть то получаем имеющиеся изображения данного итема
+    if(CheckData('sl_portfolio', 'id', $_POST['id'])){
+      $newImageName = selectFromTable('sl_portfolio', array('images'), true, 'id', $_POST['id'])[0]['images'];
+    }else{
+      header("Location: index.php?strError=BadDBAcces&".$strCurCuery);exit;
+    }
+    $i=0;
+    $arrImage = normalize_files_array($_FILES);
+    while (isset($arrImage['new_image'][$i]) and $arrImage['new_image'][$i]['size'] > 0) {
+      $newImageName .= uploadImage($arrImage['new_image'][$i], 'Portfolio', 475, 525).'Ω';
+      $i++;
+    }
+
+    if($newImageName==false or $newImageName=='' or $newImageName=='Ω'){ //загрузка изображения - не ок
+      $newImageName = '';
+    }
+      if(updateTable('sl_portfolio', array('item_category','item_category_en','images','text_big','text_small','text_big_en','text_small_en', 'time','edit_by'), 'id', $_POST['id'], array($_POST['item_category'],$_POST['item_category_en'],$newImageName,$_POST['header'],$_POST['text_block'],$_POST['header_en'],$_POST['text_block_en'],time(),$_SESSION['new']['signature']))){
+        header("Location: index.php?strError=passOK&".$strCurCuery);exit;
+      }else{
+        header("Location: index.php?strError=BadDBAcces&".$strCurCuery);exit;
+      }
+  }else{//пользователь не может менять данные
+    header("Location: index.php?strError=BadUserAcces&".$strCurCuery);exit;
+  }
+  //------------------------------------------------------------------------------------------
+  //------------------------------------------------------------------------------------------
+}elseif($_POST['strInnFromForm'] == 'RemovePOR'){//пришел запрос на удаление элемента портфолио
+  //------------------------------------------------------------------------------------------
+  //------------------------------------------------------------------------------------------
+  if($intUserPermis == 1 or $intUserPermis == 2){ //проверяем что пользователь может менять данные
+    //проверяем есть ли такой ай-ди
+    if(CheckData('sl_portfolio', 'id', $_POST['id'])){
+      $arrImages = getImagesFromStr(selectFromTable('sl_portfolio', array('images'), true, 'id', $_GET['delWithId'])[0]['images']);
+      //проверяем есть ли картинки в базе и возвращаем строки имен картинок которые есть в базе
+      if($arrImages != ''){
+        $arrImagesInFiles = array();
+        $arrMiniInFiles = array();
+        foreach ($arrImages as $strImage) {
+          if(file_exists($path.'images/'.$_GET['strPage'].'/'.$strImage)){
+            array_push($arrImagesInFiles, $strImage);
+          }
+          if(file_exists($path.'images/'.$_GET['strPage'].'/mini/'.$strImage)){
+            array_push($arrMiniInFiles, $strImage);
+          }
+        }
+      }
+    }else{
+      header("Location: index.php?strError=BadDBAcces&".$strCurCuery);exit;
+    } 
+    //удаляем фото запрошенные к удалению
+    foreach($arrImagesInFiles as $strImage){
+      unlink("images/Portfolio/$strImage");
+    }
+    //удаляем миниатюры к удалению
+    foreach($arrMiniInFiles as $strImage){
+      unlink("images/Portfolio/mini/$strImage");
+    }
+    
+    //удаляем строку из базы данных
+    if(!removeFromTable('sl_portfolio', 'id', $_POST['id'])){
+      header("Location: index.php?strError=wrongReq&".$strCurCuery);exit;
+    }
+    header("Location: index.php?strPage=Portfolio&strError=passOK");exit;     
   }else{//пользователь не может менять данные
     header("Location: index.php?strError=BadUserAcces&".$strCurCuery);exit;
   }
