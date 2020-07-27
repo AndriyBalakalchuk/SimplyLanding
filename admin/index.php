@@ -371,6 +371,95 @@ if($_POST['strInnFromForm'] == 'ChanPassword'){ //пришел запрос на
   }
   //------------------------------------------------------------------------------------------
   //------------------------------------------------------------------------------------------
+}elseif($_POST['strInnFromForm'] == 'addINTOFeed'){//пришел запрос на добавление в таблицу Отзывов 
+  //------------------------------------------------------------------------------------------
+  //------------------------------------------------------------------------------------------
+  if($intUserPermis == 1 or $intUserPermis == 2){ //проверяем что пользователь может менять данные
+
+    $newImageName = uploadImage($_FILES['new_image'], 'ClientAvatar', 200, 200);
+
+    if($newImageName==false or $newImageName=='' or $newImageName=='Ω'){ //загрузка изображения - не ок
+      $newImageName = '';
+    }
+      if(addIntoTable('sl_feedback', array('image','text_big', 'text_company','text_big_en', 'text_company_en', 'text_small', 'time','edit_by'), array($newImageName,$_POST['item_name'],$_POST['header'],$_POST['item_name_en'],$_POST['header_en'],$_POST['text_block'],time(),$_SESSION['new']['signature']))){
+        header("Location: index.php?strError=passOK&".$strCurCuery);exit;
+      }else{
+        header("Location: index.php?strError=BadDBAcces&".$strCurCuery);exit;
+      }
+  }else{//пользователь не может менять данные
+    header("Location: index.php?strError=BadUserAcces&".$strCurCuery);exit;
+  }
+  //------------------------------------------------------------------------------------------
+  //------------------------------------------------------------------------------------------
+}elseif($_POST['strInnFromForm'] == 'updINFeed'){//пришел запрос на обновление данных в таблице Отзывов 
+  //------------------------------------------------------------------------------------------
+  //------------------------------------------------------------------------------------------
+  if($intUserPermis == 1 or $intUserPermis == 2){ //проверяем что пользователь может менять данные
+    //проверяем есть ли такой айди и получаем его изображение
+    if(CheckData('sl_feedback', 'id', $_POST['id'])){
+      $strOldImageName = selectFromTable('sl_feedback', array('image'), true, 'id', $_POST['id'])[0]['image'];
+    }else{
+      header("Location: index.php?strError=BadDBAcces&".$strCurCuery);exit;
+    }
+
+    if(isset($_FILES['new_image']) and $_FILES['new_image']['size'] > 0) {
+      $newImageName = uploadImage($_FILES['new_image'], 'ClientAvatar', 200, 200);
+      if($strOldImageName != '' and file_exists($path.'images/ClientAvatar/mini/'.$strOldImageName)){
+        unlink("images/ClientAvatar/mini/$strOldImageName");
+      }
+      if($strOldImageName != '' and file_exists($path.'images/ClientAvatar/'.$strOldImageName)){
+        unlink("images/ClientAvatar/$strOldImageName");
+      }
+
+      if($newImageName==false or $newImageName=='' or $newImageName=='Ω'){ //загрузка изображения - не ок
+        $newImageName = '';
+      }
+    }
+
+    if(!isset($newImageName) or $newImageName==''){
+      $newImageName = $strOldImageName;
+    }
+
+      if(updateTable('sl_feedback',array('image','text_big', 'text_company','text_big_en', 'text_company_en', 'text_small', 'time','edit_by'), 'id', $_POST['id'], array($newImageName,$_POST['item_name'],$_POST['header'],$_POST['item_name_en'],$_POST['header_en'],$_POST['text_block'],time(),$_SESSION['new']['signature']))){
+        header("Location: index.php?strError=passOK&".$strCurCuery);exit;
+      }else{
+        header("Location: index.php?strError=BadDBAcces&".$strCurCuery);exit;
+      }
+  }else{//пользователь не может менять данные
+    header("Location: index.php?strError=BadUserAcces&".$strCurCuery);exit;
+  }
+  //------------------------------------------------------------------------------------------
+  //------------------------------------------------------------------------------------------
+}elseif($_POST['strInnFromForm'] == 'RemoveFeed'){//пришел запрос на удаление элемента в отзывах
+  //------------------------------------------------------------------------------------------
+  //------------------------------------------------------------------------------------------
+  if($intUserPermis == 1 or $intUserPermis == 2){ //проверяем что пользователь может менять данные
+    //проверяем есть ли такой ай-ди
+    if(CheckData('sl_feedback', 'id', $_POST['id'])){
+      $strImage = selectFromTable('sl_feedback', array('image'), true, 'id', $_GET['delWithId'])[0]['image'];
+      //проверяем есть ли картинки в базе и возвращаем строки имен картинок которые есть в базе
+      if($strImage != ''){
+        if(file_exists($path.'images/ClientAvatar/'.$strImage)){
+          unlink("images/ClientAvatar/$strImage");
+        }
+        if(file_exists($path.'images/ClientAvatar/mini/'.$strImage)){
+          unlink("images/ClientAvatar/mini/$strImage");
+        }
+      }
+    }else{
+      header("Location: index.php?strError=BadDBAcces&".$strCurCuery);exit;
+    } 
+    
+    //удаляем строку из базы данных
+    if(!removeFromTable('sl_feedback', 'id', $_POST['id'])){
+      header("Location: index.php?strError=wrongReq&".$strCurCuery);exit;
+    }
+    header("Location: index.php?strPage=Feedback&strError=passOK");exit;
+  }else{//пользователь не может менять данные
+    header("Location: index.php?strError=BadUserAcces&".$strCurCuery);exit;
+  }
+  //------------------------------------------------------------------------------------------
+  //------------------------------------------------------------------------------------------
 }
 
 

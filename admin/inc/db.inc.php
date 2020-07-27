@@ -334,6 +334,20 @@ function CheckData($strTableName, $strColumnName, $strFindIt, $boolGetAll=false)
           edit_by VARCHAR(50) COLLATE utf8_general_ci) DEFAULT CHARSET utf8;"
         ); /*создаем таблицу*/
     break;
+    case 'sl_feedback':
+      $create_table = $objDB->exec("CREATE TABLE IF NOT EXISTS
+    `sl_feedback` (
+        id MEDIUMINT(10) COLLATE utf8_general_ci NOT NULL AUTO_INCREMENT, PRIMARY KEY(id),
+          image VARCHAR(100) COLLATE utf8_general_ci NOT NULL,
+          text_big VARCHAR(100) COLLATE utf8_general_ci NOT NULL,
+          text_company VARCHAR(200) COLLATE utf8_general_ci NOT NULL,
+          text_big_en VARCHAR(100) COLLATE utf8_general_ci NOT NULL,
+          text_company_en VARCHAR(200) COLLATE utf8_general_ci NOT NULL,
+          text_small TEXT COLLATE utf8_general_ci NOT NULL,
+          time VARCHAR(50) COLLATE utf8_general_ci NOT NULL,
+          edit_by VARCHAR(50) COLLATE utf8_general_ci) DEFAULT CHARSET utf8;"
+          ); /*создаем таблицу*/
+    break;
 
     default:
       return false;

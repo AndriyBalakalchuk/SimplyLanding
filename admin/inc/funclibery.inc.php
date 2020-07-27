@@ -1712,7 +1712,7 @@ function Content($Stranitsa, $intUserPermis){
               </div>";
             $i++;
           }
-          $strExistingHTML .= "</div>";
+          $strExistingHTML .= '</div>';
         }else{ //данные для портфолио нету
           $strExistingHTML = '';
         }
@@ -1728,7 +1728,11 @@ function Content($Stranitsa, $intUserPermis){
           if($boolINDB){
             $arrItem = selectFromTable('sl_portfolio', array('id','item_category','item_category_en','images','text_big', 'text_big_en','text_small','text_small_en'), true, 'id', $_GET['updWithId'])[0];
             $arrImages = getImagesFromStr($arrItem['images']);
-            $strExistingHTML .= "<div class='myShapka'>Updating item - {$arrItem['text_big']}/{$arrItem['text_big_en']}</div><div class='row'>";
+            $strExistingHTML .= "<div class='myShapka'>
+                                    Updating item - {$arrItem['text_big']}/{$arrItem['text_big_en']}
+                                  </div>
+                                  <a id='' class='btn btn-info btn-sm btnModal' href='".$config['sitelink']."admin/index.php?strPage=Portfolio'><i class='fa fa-reply'></i> Back</a>
+                                  <div class='row'>";
             if($arrImages!=''){
               foreach ($arrImages as $strImageName) {
                 $strExistingHTML .= "
@@ -1748,7 +1752,7 @@ function Content($Stranitsa, $intUserPermis){
             }else{
               $strExistingHTML .= "<div class='col-sm-12'>no images</div>";
             }
-            $strExistingHTML .= "</div>";
+            $strExistingHTML .= '</div>';
 
             //переменные с данными итема, для подстановки в блок замены данных
             $strCatRu = $arrItem['item_category'];
@@ -1999,305 +2003,358 @@ function Content($Stranitsa, $intUserPermis){
                     </div>
                   </div>';
           }
-          //если нужно показать "подтвердите удаление итема" (запрос на удаление итема)
-        }elseif(isset($_GET['delWithId'])){
-          $boolExId = false;
-          //проверяем есть ли переданный ID и получаем список его изображений
-          if(CheckData('sl_portfolio', 'id', $_GET['delWithId'])){
-            $arrItemData = selectFromTable('sl_portfolio', array('images','text_big','text_big_en'), true, 'id', $_GET['delWithId'])[0];
-            $arrImages = getImagesFromStr($arrItemData['images']);
-            $boolExId = true;
-          } 
-          //все остальное смысла не имеет если нету айдишника
-          if($boolExId){
-            //проверяем есть ли картинки в базе и возвращаем строки имен картинок которые есть в базе
-            if($arrImages != ''){
-              $arrImagesInFiles = array();
-              $arrMiniInFiles = array();
-              foreach ($arrImages as $strImage) {
-                if(file_exists($path.'images/'.$_GET['strPage'].'/'.$strImage)){
-                  array_push($arrImagesInFiles, $strImage);
-                }
-                if(file_exists($path.'images/'.$_GET['strPage'].'/mini/'.$strImage)){
-                  array_push($arrMiniInFiles, $strImage);
-                }
+      //если нужно показать "подтвердите удаление итема" (запрос на удаление итема)
+      }elseif(isset($_GET['delWithId'])){
+        $boolExId = false;
+        //проверяем есть ли переданный ID и получаем список его изображений
+        if(CheckData('sl_portfolio', 'id', $_GET['delWithId'])){
+          $arrItemData = selectFromTable('sl_portfolio', array('images','text_big','text_big_en'), true, 'id', $_GET['delWithId'])[0];
+          $arrImages = getImagesFromStr($arrItemData['images']);
+          $boolExId = true;
+        } 
+        //все остальное смысла не имеет если нету айдишника
+        if($boolExId){
+          //проверяем есть ли картинки в базе и возвращаем строки имен картинок которые есть в базе
+          if($arrImages != ''){
+            $arrImagesInFiles = array();
+            $arrMiniInFiles = array();
+            foreach ($arrImages as $strImage) {
+              if(file_exists($path.'images/'.$_GET['strPage'].'/'.$strImage)){
+                array_push($arrImagesInFiles, $strImage);
+              }
+              if(file_exists($path.'images/'.$_GET['strPage'].'/mini/'.$strImage)){
+                array_push($arrMiniInFiles, $strImage);
               }
             }
+          }
 
 
-            echo "<div class='myShapka'>Approve Item removing</div>";
-            
-            echo '<!-- форма -->
-              <form action="" method="post" autocomplete="off" onsubmit="winWait();">
-                <input type="hidden" value="'.$_GET['delWithId'].'" name="id" required>
-                <input type="hidden" value="'.serialize($arrImagesInFiles).'" name="arrImages" required>
-                <input type="hidden" value="'.serialize($arrMiniInFiles).'" name="arrMini" required>
-                <!-- кнопки -->
-                <div class="container">
-                  <h4><strong>removing:</strong> '.$arrItemData['text_big'].'/'.$arrItemData['text_big_en'].'</h4>
-                  <p>Will be removed 1 row, '.count($arrImagesInFiles).' images, '.count($arrMiniInFiles).' miniaturs</p> 
-                  <div class="row" style = "color:white;" >
-                    <div class="col-sm-3 offset-sm-3 col-lg-2 offset-lg-4">
-                      <button name="strInnFromForm" value="RemovePOR" id="" type="submit" class="btn btn-danger btn-sm "><i class="fa fa-lock"></i> Remove</button>
-                    </div>
-                    <div class="col-sm-3 col-lg-2">
-                      <a id="" class="btn btn-info btn-sm btnModal" href="'.$config['sitelink'].'admin/index.php?strPage=Portfolio&updWithId='.$_GET['delWithId'].'"><i class="fa fa-reply"></i> Back</a>
-                    </div>
+          echo "<div class='myShapka'>Approve Item removing</div>";
+          
+          echo '<!-- форма -->
+            <form action="" method="post" autocomplete="off" onsubmit="winWait();">
+              <input type="hidden" value="'.$_GET['delWithId'].'" name="id" required>
+              <input type="hidden" value="'.serialize($arrImagesInFiles).'" name="arrImages" required>
+              <input type="hidden" value="'.serialize($arrMiniInFiles).'" name="arrMini" required>
+              <!-- кнопки -->
+              <div class="container">
+                <h4><strong>removing:</strong> '.$arrItemData['text_big'].'/'.$arrItemData['text_big_en'].'</h4>
+                <p>Will be removed 1 row, '.count($arrImagesInFiles).' images, '.count($arrMiniInFiles).' miniaturs</p> 
+                <div class="row" style = "color:white;" >
+                  <div class="col-sm-3 offset-sm-3 col-lg-2 offset-lg-4">
+                    <button name="strInnFromForm" value="RemovePOR" id="" type="submit" class="btn btn-danger btn-sm "><i class="fa fa-lock"></i> Remove</button>
+                  </div>
+                  <div class="col-sm-3 col-lg-2">
+                    <a id="" class="btn btn-info btn-sm btnModal" href="'.$config['sitelink'].'admin/index.php?strPage=Portfolio"><i class="fa fa-reply"></i> Back</a>
                   </div>
                 </div>
-                <!-- кнопки конец-->
-              </form>
-              <!-- форма конец-->';
-          //нету айдишника
-          }else{
+              </div>
+              <!-- кнопки конец-->
+            </form>
+            <!-- форма конец-->';
+        //нету айдишника
+        }else{
+          echo '<div class="row">
+                  <div class="col-sm-12">
+                    Sorry but item with id-'.$_GET['inID'].' not exist<br> 
+                    <a id="" class="btn btn-info btn-sm btnModal" href="'.$config['sitelink'].'admin/index.php?strPage=Portfolio"><i class="fa fa-reply"></i> Back</a>
+                  </div>
+                </div>';
+        }
+      }
+    break;
+    /*---------------------------------------------------------------------------------*/
+    /*--работа в раздете изменить отзывы-----------------------------------------------*/
+    /*---------------------------------------------------------------------------------*/    
+    case 'Feedback': 
+      //если нужно просто отображать страници (запроса на удаления нету)
+      if(!isset($_GET['delWithId'])){
+        if(CheckData('sl_feedback', 'text_big', '', true)){ //данные для отзывов есть
+          $ArrayData = selectFromTable('sl_feedback', array('id','image','text_big', 'text_company','text_big_en', 'text_company_en', 'text_small', 'time','edit_by'));
+          $strExistingHTML = '';
+          $i = 1;
+          $strExistingHTML .= "<div class='row'>";
+          foreach ($ArrayData as $ArrayRow) {                
+            $strData=date("d.m.Y",$ArrayRow['time']);
+            $strExistingHTML .= "
+              <div class='col-lg-2 formMargerExist".($i%2)." row'>
+                <div style='text-align:center;width:100%;'>{$ArrayRow['text_big']}/{$ArrayRow['text_big_en']}</div>
+                <div class='container row'>
+                  <div class='col-sm-8 smallText'>
+                    <strong>Added:</strong> $strData<br>
+                    <strong>User:</strong> {$ArrayRow['edit_by']}<br>
+                    <strong>Company:</strong> {$ArrayRow['text_company']}/{$ArrayRow['text_company_en']}
+                  </div>
+                  <div class='col-sm-4' style='text-align:center;'>";
+                  if($ArrayRow['image']!=''){
+                    $strExistingHTML .= "<a href='images/ClientAvatar/{$ArrayRow['image']}' target='_blank'><img src='images/ClientAvatar/mini/{$ArrayRow['image']}' width='100%'>";
+                  }else{
+                    $strExistingHTML .= "no images";
+                  }
+                  $strExistingHTML .= "
+                  </div>
+                </div>
+                <div style='margin-top:10px;width:100%;'>
+                  <div class='col-sm-12'>
+                    <a href='".$config['sitelink']."admin/index.php?strPage=Feedback&delWithId={$ArrayRow['id']}' class='btn btn-danger btn-sm btnModal'><i class='fa fa-trash'></i> Remove</a>
+                    <a href='".$config['sitelink']."admin/index.php?strPage=Feedback&updWithId={$ArrayRow['id']}' class='btn btn-warning btn-sm btnModal'><i class='fa fa-lock'></i> Edit</a>
+                  </div>
+                </div>
+              </div>";
+            $i++;
+          }
+          $strExistingHTML .= '</div>';
+        }else{ //данные для отзывов нету
+          $strExistingHTML = '';
+        }
+
+        //если мы попали на страницу редактирования задачи, переопределяем переменные
+        if(isset($_GET['updWithId'])){
+          $boolINDB = false;
+          $strExistingHTML = '';
+          //проверяем есть ли такой элемент в базе
+          if(CheckData('sl_feedback', 'id', $_GET['updWithId'])){$boolINDB = true;}
+          if($boolINDB){
+            $arrItem = selectFromTable('sl_feedback', array('id','image','text_big', 'text_company','text_big_en', 'text_company_en', 'text_small'), true, 'id', $_GET['updWithId'])[0];
+            $strExistingHTML .= "<div class='myShapka'>
+                                    Updating Feedback from - {$arrItem['text_big']}/{$arrItem['text_big_en']}
+                                  </div>
+                                  <a id='' class='btn btn-info btn-sm btnModal' href='".$config['sitelink']."admin/index.php?strPage=Feedback'><i class='fa fa-reply'></i> Back</a>
+                                  <div class='row'>";
+            if($arrItem['image']!=''){
+                $strExistingHTML .= "
+                <div class='container'>
+                  <div class='col-sm-12 formMargerExist0'>
+                    <a href='{$config['sitelink']}admin/images/ClientAvatar/{$arrItem['image']}' target='_blank'><img src='images/ClientAvatar/mini/{$arrItem['image']}' ></a>
+                  </div>
+                </div>";
+            }else{
+              $strExistingHTML .= "<div class='col-sm-12'>no images</div>";
+            }
+            $strExistingHTML .= '</div>';
+
+            //переменные с данными итема, для подстановки в блок замены данных
+            $strNameRu = $arrItem['text_big'];
+            $strNameEn = $arrItem['text_big_en'];
+            $strHedRu = $arrItem['text_company'];
+            $strHedEn = $arrItem['text_company_en'];
+            $strTextRu = $arrItem['text_small'];
+            $strTextEn = $arrItem['text_small_en'];
+            $intTaskIdhtml = '<input type="hidden" value="'.$_GET['updWithId'].'" name="id">';
+            $strSubmitValue = 'updINFeed';
+          }else{ //нету такого айдишника
             echo '<div class="row">
                     <div class="col-sm-12">
-                      Sorry but item with id-'.$_GET['inID'].' not exist<br> 
-                      <a id="" class="btn btn-info btn-sm btnModal" href="'.$config['sitelink'].'admin/index.php?strPage=Portfolio"><i class="fa fa-reply"></i> Back</a>
+                      Sorry but feedback with id-'.$_GET['updWithId'].' not exist<br> 
+                      <a id="" class="btn btn-info btn-sm btnModal" href="'.$config['sitelink'].'admin/index.php?strPage=Feedback"><i class="fa fa-reply"></i> Back</a>
                     </div>
                   </div>';
           }
+        //если обычная страница то переменные пустые
+        }else{
+          $boolINDB = true; //отображаем блок для нового итема
+          echo "<div class='myShapka'>{$menu['Feedback']}</div>";
+          if(CheckData('sl_content', 'content_for', 'Feedback')){ //данные для заголовка портфолио есть
+            $ArrayData = selectFromTable('sl_content', array('content_for', 'text_big', 'text_big_en', 'time','edit_by'), true, 'content_for', 'Feedback')[0];
+            $strSubmitValue = 'updIN';
+            $strData=date("d.m.Y",$ArrayData['time']);
+            $strEditorHTML = "<div style='text-align:center;'>Last editing $strData, user: {$ArrayData['edit_by']}</div>";
+            $text_big=$ArrayData['text_big'];          
+            $text_big_en=$ArrayData['text_big_en'];
+          }else{ //данные для заголовка портфолио нету
+            $strSubmitValue = 'addINTO';
+            $strEditorHTML = '';
+            $text_big = '';         
+            $text_big_en = '';
+          }   
+
+          echo $strEditorHTML.'<!-- форма -->
+          <form action="" method="post" autocomplete="off" onsubmit="winWait();">
+            <div class="form-row" style="padding-bottom: 15px;">
+              <div class="col-lg-2 offset-lg-4">
+                <label for="h_header">Header Ru*</label>
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" id="inputGroupPrepend1"><i class="fa fa-header"></i></span>
+                  </div>
+                  <input type="text" class="form-control" id="h_header" name="header" value="'.$text_big.'" aria-describedby="inputGroupPrepend1" required>
+                </div>
+              </div>
+              <div class="col-lg-2">
+                <label for="h_header_en">Header En*</label>
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" id="inputGroupPrepend2"><i class="fa fa-header"></i></span>
+                  </div>
+                  <input type="text" class="form-control" id="h_header_en" name="header_en" value="'.$text_big_en.'" aria-describedby="inputGroupPrepend2" required>
+                </div>
+              </div>
+            </div>
+
+            <input type="hidden" value="" name="text_block" required>
+            <input type="hidden" value="" name="text_block_en" required>
+            <input type="hidden" value="Feedback" name="strContent_for" required>
+            <!-- кнопки -->
+            <div class="container">
+              <div class="row" style = "color:white;" >
+                <div class="col-sm-3 offset-sm-3 col-lg-2 offset-lg-4">
+                  <button type="reset" class="btn btn-info btn-sm"><i class="fa fa-times"></i> Clear</button>
+                </div>
+                <div class="col-sm-3 col-lg-2">
+                  <button name="strInnFromForm" value="'.$strSubmitValue.'" type="submit" class="btn btn-success btn-sm "><i class="fa fa-lock"></i> Save</button>
+                </div>
+              </div>
+            </div>
+            <!-- кнопки конец-->
+          </form>
+          <!-- форма конец-->';
+          
+          //переменные с данными итема, для подстановки в блок замены данных
+          $strNameRu = '';
+          $strNameEn = '';
+          $strHedRu = '';
+          $strHedEn = '';
+          $strTextRu = '';
+          $strTextEn = '';
+          $intTaskIdhtml = '';
+          $strSubmitValue = 'addINTOFeed';
         }
-    break;
-case 'Feedback': //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////     
-  echo "<div class='myShapka'>{$menu['Feedback']}</div>";
-if(CheckContent('Feedback')){ //Text - Header блока скилы
-          $ArrayData=CheckContent('Feedback', TRUE);
-          $data=date("d.m.y",$ArrayData['time']);
-          $text_big=$ArrayData['text_big'];
-          $text_small=$ArrayData['text_small'];
-          $text_big_ua=$ArrayData['text_big_ua'];
-          $text_small_ua=$ArrayData['text_small_ua'];
-          $Edit=$ArrayData['edit_by'];
-  echo "<div style='text-align:center;'>Last editing $data, user: $Edit</div>";    
-
-  echo " <form class='form-horizontal' role='form' action='' method='post' style='margin-top:30px;'>
-          <div class='form-group'>
-          <label for='Zagolovok' class='col-sm-3 control-label'>Header Ru/En</label>
-          <div class='col-sm-3'> <input type='text' class='form-control' name='Zagolovok' placeholder='$text_big' value='$text_big' required=''></div>
-          <div class='col-sm-3'> <input type='text' class='form-control' name='Zagolovok_ua' placeholder='$text_big_ua' value='$text_big_ua' required=''></div>
-          </div>   
-
-          <div class='form-group last'>
-          <div class='col-sm-offset-3 col-sm-9' style='text-align: left;'>
-          <button type='submit' name='updateFeedbackHeader' class='btn btn-success btn-xs'>Change</button>
-          <a class='btn btn-default btn-xs' href='{$config['sitelink']}admin/index.php'>Cancel</a>
-  </div></div></form><hr>";
-}else{ //заголовка нету
-  echo " <form class='form-horizontal' role='form' action='' method='post' style='margin-top:30px;'>
-          <div class='form-group'>
-          <label for='Zagolovok' class='col-sm-3 control-label'>Header Ru/En</label>
-          <div class='col-sm-3'> <input type='text' class='form-control' name='Zagolovok' placeholder='Enter the header' required=''></div>
-          <div class='col-sm-3'> <input type='text' class='form-control' name='Zagolovok_ua' placeholder='Enter the header_en' required=''></div>
-          </div>       
-
-          <div class='form-group last'>
-          <div class='col-sm-offset-3 col-sm-9' style='text-align: left;'>
-          <button type='submit' name='addFeedbackHeader' class='btn btn-success btn-xs'>Add</button>
-          <a class='btn btn-default btn-xs' href='{$config['sitelink']}admin/index.php'>Cancel</a>
-  </div></div></form><hr>";
-}
-  
-if(CheckPartnerContent('Feedback')){ //Text в блок Descriptionы   (есть)
-      $ArrayData=CheckPartnerContent('Feedback', TRUE);   
-if(!isset($ArrayData[1]['text_big'])){ //один Description
-$data=date("d.m.y",$ArrayData[0]['time']);
-$Edit=$ArrayData[0]['edit_by']; 
-echo "<div style='text-align:center;'>Last editing $data, user: $Edit</div>";
-echo " <div style='text-align:center;'><img src='images/ClientAvatar/mini/{$ArrayData[0]['image']}' width='120px'></div>
-<form class='form-horizontal' role='form' action='' enctype='multipart/form-data' method='post' style='margin-top:30px;'>
-  <div class='form-group'>
-  <label for='SliImg' class='col-sm-3 control-label'>Customer photo (square)</label>
-  <div class='col-sm-3'> 
-  <input class='btn btn-default form-control' type='file' accept='image/jpeg,image/png,image/gif' required='required' name='newImage'>
-  </div></div>
-
-<input type='hidden'  name='id' value='{$ArrayData[0]['id']}'>
-
-  <div class='form-group last'>
-  <div class='col-sm-offset-3 col-sm-9'>
-  <button type='submit' name='updatePartnerContentFeedbackImage' class='btn btn-success btn-xs'>Change</button>
-</div></div></form>
-
-<form class='form-horizontal' role='form' action='' method='post' style='margin-top:30px;'>
-  <div class='form-group'>
-  <label for='Name' class='col-sm-3 control-label'>Customer Name Ru/En</label>
-  <div class='col-sm-3'> 
-<input type='text' class='form-control' name='Name' placeholder='{$ArrayData[0]['text_big']}' value='{$ArrayData[0]['text_big']}' required=''></div>
-      <div class='col-sm-3'> 
-<input type='text' class='form-control' name='Name_ua' placeholder='{$ArrayData[0]['text_big_ua']}' value='{$ArrayData[0]['text_big_ua']}' required=''></div>
-</div>
-
-  <div class='form-group'>
-  <label for='Company' class='col-sm-3 control-label'>Company/position Ru/En</label>
-  <div class='col-sm-3'> 
-<input type='text' class='form-control' name='Company' placeholder='{$ArrayData[0]['text_company']}' value='{$ArrayData[0]['text_company']}' required=''></div>
-      <div class='col-sm-3'> 
-<input type='text' class='form-control' name='Company_ua' placeholder='{$ArrayData[0]['text_company_ua']}' value='{$ArrayData[0]['text_company_ua']}' required=''></div>
-</div>
-  
-  <div class='form-group'>
-  <label for='Text_sm' class='col-sm-3 control-label'>Description</label>
-  <div class='col-sm-3'> 
-<textarea rows='4' cols='50' type='text' class='form-control' name='Text_sm' placeholder='{$ArrayData[0]['text_small']}' required=''>
-{$ArrayData[0]['text_small']}
-</textarea></div></div>    
 
 
-<input type='hidden'  name='id' value='{$ArrayData[0]['id']}'>
+        
+        //показывать данный блок только если айди итема найден или открыта простая страница
+        if($boolINDB){
+          echo $strExistingHTML.'<!-- форма -->
+          <form action="" enctype="multipart/form-data" method="post" autocomplete="off" onsubmit="winWait();">
+            <div class="formMarger" id="newItem">
+              <div class="form-row" style="padding-bottom: 15px;">
+                <div class="col-lg-2 offset-lg-4">
+                  <label for="item_name">Customer name Ru*</label>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text" id="inputGroupPrepend1"><i class="fa fa-user-circle"></i></span>
+                    </div>
+                    <input type="text" class="form-control" id="item_name" name="item_name" value="'.$strNameRu.'" aria-describedby="inputGroupPrepend1" required>
+                  </div>
+                </div>
+                <div class="col-lg-2">
+                  <label for="item_name_en">Customer name En*</label>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text" id="inputGroupPrepend2"><i class="fa fa-user-circle"></i></span>
+                    </div>
+                    <input type="text" class="form-control" id="item_name_en" name="item_name_en" value="'.$strNameEn.'" aria-describedby="inputGroupPrepend2" required>
+                  </div>
+                </div>
+              </div>
 
-  <div class='form-group last'>
-  <div class='col-sm-offset-3 col-sm-9'>
-  <button type='submit' name='updatePartnerContentText' class='btn btn-success btn-xs'>Change</button>
-  <a class='btn btn-default btn-xs' href='{$config['sitelink']}admin/index.php?Page=Feedback&delPartnerContentID={$ArrayData[0]['id']}'>Remove</a>
-</div></div></form>";
+              <div class="form-row" style="padding-bottom: 15px;">
+                <div class="col-lg-2 offset-lg-4">
+                  <label for="header">Сompany and position Ru*</label>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text" id="inputGroupPrepend3"><i class="fa fa-building"></i></span>
+                    </div>
+                    <input type="text" class="form-control" id="header" name="header" value="'.$strHedRu.'" aria-describedby="inputGroupPrepend3" required>
+                  </div>
+                </div>
+                <div class="col-lg-2">
+                  <label for="header">Сompany and position En*</label>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text" id="inputGroupPrepend4"><i class="fa fa-building"></i></span>
+                    </div>
+                    <input type="text" class="form-control" id="header_en" name="header_en" value="'.$strHedEn.'" aria-describedby="inputGroupPrepend4" required>
+                  </div>
+                </div>
+              </div>
+              <div class="form-row" style="padding-bottom: 15px;">
+                <div class="col-lg-4 offset-lg-4">
+                  <label for="text_block">Feedback message*</label>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text" id="inputGroupPrepend5"><i class="fa fa-font"></i></span>
+                    </div>
+                    <textarea rows="4" cols="50" type="text" class="form-control" id="text_block" name="text_block" aria-describedby="inputGroupPrepend5" required>'.$strTextRu.'</textarea>
+                  </div>
+                </div>
+              </div>
 
-echo " <form class='form-horizontal' role='form' action='' enctype='multipart/form-data' method='post' style='margin-top:30px;'>
-  <div class='form-group'>
-  <label for='SliImg' class='col-sm-3 control-label'>Customer photo (square)</label>
-  <div class='col-sm-3'> 
-  <input class='btn btn-default form-control' type='file' accept='image/jpeg,image/png,image/gif' required='required' name='newImage'>
-  </div></div> 
-  
-  <div class='form-group'>
-  <label for='Name' class='col-sm-3 control-label'>Customer Name Ru/En</label>
-  <div class='col-sm-3'> <input type='text' class='form-control' name='Name' placeholder='Customer Name' required=''></div>
-  <div class='col-sm-3'> <input type='text' class='form-control' name='Name_ua' placeholder='Customer Name_ua' required=''></div>
-  </div>
-  
-  <div class='form-group'>
-  <label for='Company' class='col-sm-3 control-label'>Company/position Ru/En</label>
-  <div class='col-sm-3'> <input type='text' class='form-control' name='Company' placeholder='Company/position' required=''></div>
-  <div class='col-sm-3'> <input type='text' class='form-control' name='Company_ua' placeholder='Company/position_ua' required=''></div>
-  </div>
-  
-  <div class='form-group'>
-  <label for='Text_sm' class='col-sm-3 control-label'>Description</label>
-  <div class='col-sm-3'> <textarea rows='4' cols='50' type='text' class='form-control' name='feedback' placeholder='Description' required=''></textarea></div></div>    
-  
-  <div class='form-group last'>
-  <div class='col-sm-offset-3 col-sm-9'>
-  <button type='submit' name='addPartnerContent' class='btn btn-success btn-xs'>Add</button>
-  <a class='btn btn-default btn-xs' href='{$config['sitelink']}admin/index.php'>Cancel</a>
-</div></div></form>";
-}else{ //больше одного Descriptionа
-foreach($ArrayData as $SomeArr){
-$data=date("d.m.y",$SomeArr['time']);
-$Edit=$SomeArr['edit_by']; 
-echo "<div style='text-align:center;'>Last editing $data, user: $Edit</div>";
-echo " <div style='text-align:center;'><img src='images/ClientAvatar/mini/{$SomeArr['image']}' width='120px'></div>
-<form class='form-horizontal' role='form' action='' enctype='multipart/form-data' method='post' style='margin-top:30px;'>
-  <div class='form-group'>
-  <label for='SliImg' class='col-sm-3 control-label'>Customer photo (square)</label>
-  <div class='col-sm-3'> 
-  <input class='btn btn-default form-control' type='file' accept='image/jpeg,image/png,image/gif' required='required' name='newImage'>
-  </div></div>
+              <div class="form-row" style="padding-bottom: 15px;">
+                <div class="col-lg-4 offset-lg-4">
+                  <label for="new_image">Customer photo (1:1)*</label>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text" id="inputGroupPrepend6"><i class="fa fa-image"></i></span>
+                    </div>
+                    <input type="file" class="form-control" accept="image/jpeg,image/png,image/gif" id="new_image" name="new_image" aria-describedby="inputGroupPrepend6">
+                  </div>
+                </div>
+              </div>
 
-<input type='hidden'  name='id' value='{$SomeArr['id']}'>
-
-  <div class='form-group last'>
-  <div class='col-sm-offset-3 col-sm-9'>
-  <button type='submit' name='updatePartnerContentFeedbackImage' class='btn btn-success btn-xs'>Change</button>
-</div></div></form>
-
-<form class='form-horizontal' role='form' action='' method='post' style='margin-top:30px;'>
-  <div class='form-group'>
-      <label for='Name' class='col-sm-3 control-label'>Customer Name Ru/En</label>
-      <div class='col-sm-3'> 
-          <input type='text' class='form-control' name='Name' placeholder='{$SomeArr['text_big']}' value='{$SomeArr['text_big']}' required=''>
-      </div>
-      <div class='col-sm-3'>
-          <input type='text' class='form-control' name='Name_ua' placeholder='{$SomeArr['text_big_ua']}' value='{$SomeArr['text_big_ua']}' required=''>
-      </div>
-  </div>
-  
-  <div class='form-group'>
-      <label for='Company' class='col-sm-3 control-label'>Company/position Ru/En</label>
-      <div class='col-sm-3'> 
-          <input type='text' class='form-control' name='Company' placeholder='{$SomeArr['text_company']}' value='{$SomeArr['text_company']}' required=''>
-      </div>
-      <div class='col-sm-3'> 
-          <input type='text' class='form-control' name='Company_ua' placeholder='{$SomeArr['text_company_ua']}' value='{$SomeArr['text_company_ua']}' required=''>
-      </div>
-  </div>
-  
-  <div class='form-group'>
-  <label for='Text_sm' class='col-sm-3 control-label'>Description</label>
-  <div class='col-sm-3'> 
-<textarea rows='4' cols='50' type='text' class='form-control' name='Text_sm' placeholder='{$SomeArr['text_small']}' required=''>
-{$SomeArr['text_small']}
-</textarea></div></div>    
-
-
-<input type='hidden'  name='id' value='{$SomeArr['id']}'>
-
-  <div class='form-group last'>
-  <div class='col-sm-offset-3 col-sm-9'>
-  <button type='submit' name='updatePartnerContentText' class='btn btn-success btn-xs'>Change</button>
-  <a class='btn btn-default btn-xs' href='{$config['sitelink']}admin/index.php?Page=Feedback&delPartnerContentID={$SomeArr['id']}'>Remove</a>
-</div></div></form>";} 
-
-echo " <form class='form-horizontal' role='form' action='' enctype='multipart/form-data' method='post' style='margin-top:30px;'>
-  <div class='form-group'>
-  <label for='SliImg' class='col-sm-3 control-label'>Customer photo (square)</label>
-  <div class='col-sm-3'> 
-  <input class='btn btn-default form-control' type='file' accept='image/jpeg,image/png,image/gif' required='required' name='newImage'>
-  </div></div> 
-  
-  <div class='form-group'>
-  <label for='Name' class='col-sm-3 control-label'>Customer Name Ru/En</label>
-  <div class='col-sm-3'> <input type='text' class='form-control' name='Name' placeholder='Customer Name' required=''></div>
-  <div class='col-sm-3'> <input type='text' class='form-control' name='Name_ua' placeholder='Customer Name_ua' required=''></div>
-  </div>
-  
-  <div class='form-group'>
-  <label for='Company' class='col-sm-3 control-label'>Company/position Ru/En</label>
-  <div class='col-sm-3'> <input type='text' class='form-control' name='Company' placeholder='Company/position' required=''></div>
-  <div class='col-sm-3'> <input type='text' class='form-control' name='Company_ua' placeholder='Company/position_ua' required=''></div>
-  </div>
-  
-  <div class='form-group'>
-  <label for='Text_sm' class='col-sm-3 control-label'>Description</label>
-  <div class='col-sm-3'> <textarea rows='4' cols='50' type='text' class='form-control' name='feedback' placeholder='Description' required=''></textarea></div></div>    
-  
-  <div class='form-group last'>
-  <div class='col-sm-offset-3 col-sm-9'>
-  <button type='submit' name='addPartnerContent' class='btn btn-success btn-xs'>Add</button>
-  <a class='btn btn-default btn-xs' href='{$config['sitelink']}admin/index.php'>Cancel</a>
-</div></div></form>";
-}
-  }else{ //Descriptionов нету
-echo " <form class='form-horizontal' role='form' action='' enctype='multipart/form-data' method='post' style='margin-top:30px;'>
-  <div class='form-group'>
-  <label for='SliImg' class='col-sm-3 control-label'>Customer photo (square)</label>
-  <div class='col-sm-3'> 
-  <input class='btn btn-default form-control' type='file' accept='image/jpeg,image/png,image/gif' required='required' name='newImage'>
-  </div></div> 
-  
-  <div class='form-group'>
-  <label for='Name' class='col-sm-3 control-label'>Customer Name Ru/En</label>
-  <div class='col-sm-3'> <input type='text' class='form-control' name='Name' placeholder='Customer Name' required=''></div>
-  <div class='col-sm-3'> <input type='text' class='form-control' name='Name_ua' placeholder='Customer Name_ua' required=''></div>
-  </div>
-  
-  <div class='form-group'>
-  <label for='Company' class='col-sm-3 control-label'>Company/position Ru/En</label>
-  <div class='col-sm-3'> <input type='text' class='form-control' name='Company' placeholder='Company/position' required=''></div>
-  <div class='col-sm-3'> <input type='text' class='form-control' name='Company_ua' placeholder='Company/position_ua' required=''></div>
-  </div>
-  
-  <div class='form-group'>
-  <label for='Text_sm' class='col-sm-3 control-label'>Description</label>
-  <div class='col-sm-3'> <textarea rows='4' cols='50' type='text' class='form-control' name='feedback' placeholder='Description' required=''></textarea></div></div>    
-  
-  <div class='form-group last'>
-  <div class='col-sm-offset-3 col-sm-9'>
-  <button type='submit' name='addPartnerContent' class='btn btn-success btn-xs'>Add</button>
-  <a class='btn btn-default btn-xs' href='{$config['sitelink']}admin/index.php'>Cancel</a>
-</div></div></form>";
-  }
-  
-break;         
+              '.$intTaskIdhtml.'
+              <!-- кнопки -->
+              <div class="container">
+                <div class="row" style = "color:white;" >
+                  <div class="col-sm-3 offset-sm-3 col-lg-2 offset-lg-4">
+                    <button type="reset" class="btn btn-info btn-sm"><i class="fa fa-times"></i> Clear</button>
+                  </div>
+                  <div class="col-sm-3 col-lg-2">
+                    <button name="strInnFromForm" value="'.$strSubmitValue.'" type="submit" class="btn btn-success btn-sm "><i class="fa fa-lock"></i> Save</button>
+                  </div>
+                </div>
+              </div>
+              <!-- кнопки конец-->
+            </div>
+          </form>
+          <!-- форма конец-->';
+        }
+      //если нужно просто отображать страници (запрос на удаление есть)
+      }else{
+        $boolExId = false;
+        //проверяем есть ли переданный ID и получаем список его изображений
+        if(CheckData('sl_feedback', 'id', $_GET['delWithId'])){
+          $arrItemData = selectFromTable('sl_feedback', array('image','text_big','text_big_en','text_company','text_company_en','text_small'), true, 'id', $_GET['delWithId'])[0];
+          $boolExId = true;
+        } 
+        //все остальное смысла не имеет если нету айдишника
+        if($boolExId){
+          echo "<div class='myShapka'>Approve feedback removing</div>";
+          
+          echo '<!-- форма -->
+            <form action="" method="post" autocomplete="off" onsubmit="winWait();">
+              <input type="hidden" value="'.$_GET['delWithId'].'" name="id" required>
+              <!-- кнопки -->
+              <div class="container">
+                <h4><strong>removing feedback from:</strong> '.$arrItemData['text_big'].'/'.$arrItemData['text_big_en'].'</h4>
+                <p>Will be removed 1 row from db</p>
+                <p><strong>Text:</strong> '.$arrItemData['text_small'].'</p>
+                <div class="row" style = "color:white;" >
+                  <div class="col-sm-3 offset-sm-3 col-lg-2 offset-lg-4">
+                    <button name="strInnFromForm" value="RemoveFeed" id="" type="submit" class="btn btn-danger btn-sm "><i class="fa fa-lock"></i> Remove</button>
+                  </div>
+                  <div class="col-sm-3 col-lg-2">
+                    <a id="" class="btn btn-info btn-sm btnModal" href="'.$config['sitelink'].'admin/index.php?strPage=Feedback"><i class="fa fa-reply"></i> Back</a>
+                  </div>
+                </div>
+              </div>
+              <!-- кнопки конец-->
+            </form>
+            <!-- форма конец-->';
+        //нету айдишника
+        }else{
+          echo '<div class="row">
+                  <div class="col-sm-12">
+                    Sorry but item with id-'.$_GET['inID'].' not exist<br> 
+                    <a id="" class="btn btn-info btn-sm btnModal" href="'.$config['sitelink'].'admin/index.php?strPage=Feedback"><i class="fa fa-reply"></i> Back</a>
+                  </div>
+                </div>';
+        }
+      }
+    break;    
+    /*---------------------------------------------------------------------------------*/
+    /*--работа в раздете изменить отзывы-----------------------------------------------*/
+    /*---------------------------------------------------------------------------------*/       
 case 'Partners': //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////        
 echo "<div class='myShapka'>{$menu['Partners']}</div>";
 if(CheckContent('Partners')){ //Text - Header блока скилы
