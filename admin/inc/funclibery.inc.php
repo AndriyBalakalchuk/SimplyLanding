@@ -543,9 +543,9 @@ function getImagesFromStr($strImages){
 function Content($Stranitsa, $intUserPermis){ 
   global $config, $menu;
 
-  /*---------------------------------------------------------------------------------*/
-  /*--Подбор контента по выбранному в меню пункту------------------------------------*/
-  /*---------------------------------------------------------------------------------*/
+  /*-----------------------------------------------------------------------------------*/
+  /*--Подбор контента по выбранному в меню пункту--------------------------------------*/
+  /*-----------------------------------------------------------------------------------*/
   switch ($Stranitsa) { 
     /*---------------------------------------------------------------------------------*/
     /*--работа в раздете модераторы----------------------------------------------------*/
@@ -1002,50 +1002,89 @@ function Content($Stranitsa, $intUserPermis){
       }
     break;
     /*---------------------------------------------------------------------------------*/
-    /*--работа в раздете изменить телефон----------------------------------------------*/
+    /*--работа в раздете инфо о чем сайт-----------------------------------------------*/
     /*---------------------------------------------------------------------------------*/
-    case 'Telephone': 
-      echo "<div class='myShapka'>{$menu['Telephone']}</div>";
-      if(CheckData('sl_contacts', 'contact_for', 'Telephone')){ //tel. number есть
-        $ArrayData = selectFromTable('sl_contacts', array('id', 'contact_for','contact','time','edit_by'), true, 'contact_for', 'Telephone')[0];
+    case 'About': 
+      echo "<div class='myShapka'>{$menu['About']}</div>";
+      if(CheckData('sl_content', 'content_for', 'About')){ //данные для слайдера есть
+        $ArrayData = selectFromTable('sl_content', array('content_for', 'text_big', 'text_small', 'text_big_en', 'text_small_en', 'time','edit_by'), true, 'content_for', 'About')[0];
         $strSubmitValue = 'updIN';
         $strData=date("d.m.Y",$ArrayData['time']);
         $strEditorHTML = "<div style='text-align:center;'>Last editing $strData, user: {$ArrayData['edit_by']}</div>";
-        $strContact = $ArrayData['contact'];
-      }else{ //tel. number нету
-        $strEditorHTML = '';
-        $strContact = '';
+        $text_big=$ArrayData['text_big'];
+        $text_small=$ArrayData['text_small'];            
+        $text_big_en=$ArrayData['text_big_en'];
+        $text_small_en=$ArrayData['text_small_en'];
+      }else{ //данные для слайдера  нету
         $strSubmitValue = 'addINTO';
+        $strEditorHTML = '';
+        $text_big = '';
+        $text_small = '';            
+        $text_big_en = '';
+        $text_small_en = '';
       }   
 
+
       echo $strEditorHTML.'<!-- форма -->
-            <form action="" method="post" autocomplete="off" onsubmit="winWait();">
-              <div class="form-row" style="padding-bottom: 15px;">
-                <div class="col-lg-4 offset-lg-4">
-                  <label for="telephone">Contact tel. number*</label>
-                  <div class="input-group">
-                    <div class="input-group-prepend">
-                      <span class="input-group-text" id="inputGroupPrepend1"><i class="fa fa-phone"></i></span>
-                    </div>
-                    <input type="text" class="form-control" id="telephone" name="Telephone" value="'.$strContact.'" aria-describedby="inputGroupPrepend1" required>
-                  </div>
-                </div>
+      <form action="" method="post" autocomplete="off" onsubmit="winWait();">
+        <div class="form-row" style="padding-bottom: 15px;">
+          <div class="col-lg-2 offset-lg-4">
+            <label for="header">Header Ru*</label>
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="inputGroupPrepend1"><i class="fa fa-header"></i></span>
               </div>
-              <input type="hidden" value="Telephone" name="strContact_for" required>
-              <!-- кнопки -->
-              <div class="container">
-                <div class="row" style = "color:white;" >
-                  <div class="col-sm-3 offset-sm-3 col-lg-2 offset-lg-4">
-                    <button type="reset" class="btn btn-info btn-sm"><i class="fa fa-times"></i> Clear</button>
-                  </div>
-                  <div class="col-sm-3 col-lg-2">
-                    <button name="strInnFromForm" value="'.$strSubmitValue.'" id="" type="submit" class="btn btn-success btn-sm "><i class="fa fa-lock"></i> Save</button>
-                  </div>
-                </div>
+              <input type="text" class="form-control" id="header" name="header" value="'.$text_big.'" aria-describedby="inputGroupPrepend1" required>
+            </div>
+          </div>
+          <div class="col-lg-2">
+            <label for="header_en">Header En*</label>
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="inputGroupPrepend2"><i class="fa fa-header"></i></span>
               </div>
-              <!-- кнопки конец-->
-            </form>
-            <!-- форма конец-->';
+              <input type="text" class="form-control" id="header_en" name="header_en" value="'.$text_big_en.'" aria-describedby="inputGroupPrepend2" required>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row" style="padding-bottom: 15px;">
+          <div class="col-lg-4 offset-lg-4">
+            <label for="text_block">Text Block Ru/En*</label>
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="inputGroupPrepend3"><i class="fa fa-font"></i></span>
+              </div>
+              <textarea rows="4" cols="50" type="text" class="form-control" id="text_block" name="text_block" aria-describedby="inputGroupPrepend3" required>'.$text_small.'</textarea>
+            </div>
+          </div>
+        </div>
+        <div class="form-row" style="padding-bottom: 15px;">
+          <div class="col-lg-4 offset-lg-4">
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="inputGroupPrepend4"><i class="fa fa-font"></i></span>
+              </div>
+              <textarea rows="4" cols="50" type="text" class="form-control" id="text_block_en" name="text_block_en" aria-describedby="inputGroupPrepend4" required>'.$text_small_en.'</textarea>
+            </div>
+          </div>
+        </div>
+        <input type="hidden" value="About" name="strContent_for" required>
+        <!-- кнопки -->
+        <div class="container">
+          <div class="row" style = "color:white;" >
+            <div class="col-sm-3 offset-sm-3 col-lg-2 offset-lg-4">
+              <button type="reset" class="btn btn-info btn-sm"><i class="fa fa-times"></i> Clear</button>
+            </div>
+            <div class="col-sm-3 col-lg-2">
+              <button name="strInnFromForm" value="'.$strSubmitValue.'" id="" type="submit" class="btn btn-success btn-sm "><i class="fa fa-lock"></i> Save</button>
+            </div>
+          </div>
+        </div>
+        <!-- кнопки конец-->
+      </form>
+      <!-- форма конец-->';
+      
     break;
     /*---------------------------------------------------------------------------------*/
     /*--работа в раздете изменить шапку------------------------------------------------*/
@@ -1668,7 +1707,7 @@ function Content($Stranitsa, $intUserPermis){
     break;  
     /*---------------------------------------------------------------------------------*/
     /*--работа в раздете изменить портфолио--------------------------------------------*/
-    /*---------------------------------------------------------------------------------*/     
+    /*---------------------------------------------------------------------------------*/
     case 'Portfolio': 
       //если нужно просто отображать страници (запроса на удаления итема или изображения нету)
       if(!isset($_GET['delWithId']) and !isset($_GET['delWithName'])){
@@ -2065,7 +2104,7 @@ function Content($Stranitsa, $intUserPermis){
     break;
     /*---------------------------------------------------------------------------------*/
     /*--работа в раздете изменить отзывы-----------------------------------------------*/
-    /*---------------------------------------------------------------------------------*/    
+    /*---------------------------------------------------------------------------------*/
     case 'Feedback': 
       //если нужно просто отображать страници (запроса на удаления нету)
       if(!isset($_GET['delWithId'])){
@@ -2353,846 +2392,882 @@ function Content($Stranitsa, $intUserPermis){
       }
     break;    
     /*---------------------------------------------------------------------------------*/
-    /*--работа в раздете изменить отзывы-----------------------------------------------*/
-    /*---------------------------------------------------------------------------------*/       
-case 'Partners': //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////        
-echo "<div class='myShapka'>{$menu['Partners']}</div>";
-if(CheckContent('Partners')){ //Text - Header блока скилы
-      $ArrayData=CheckContent('Partners', TRUE);
-      $data=date("d.m.y",$ArrayData['time']);
-      $text_big=$ArrayData['text_big'];
-      $text_small=$ArrayData['text_small'];
-      $text_big_ua=$ArrayData['text_big_ua'];
-      $text_small_ua=$ArrayData['text_small_ua'];
-      $Edit=$ArrayData['edit_by'];
-echo "<div style='text-align:center;'>Last editing $data, user: $Edit</div>";    
+    /*--работа в раздете изменить партнеров--------------------------------------------*/
+    /*---------------------------------------------------------------------------------*/
+    case 'Partners':
+      if(!isset($_GET['delWithName'])){//если запроса на удаление картинки нет, то отображаем страницу
+        echo "<div class='myShapka'>{$menu['Partners']}</div>";
+        if(CheckData('sl_content', 'content_for', 'partners_header')){ //данные для заголовка портфолио есть
+          $ArrayData = selectFromTable('sl_content', array('content_for', 'text_big', 'text_big_en', 'time','edit_by'), true, 'content_for', 'partners_header')[0];
+          $strSubmitValue = 'updIN';
+          $strData=date("d.m.Y",$ArrayData['time']);
+          $strEditorHTML = "<div style='text-align:center;'>Last editing $strData, user: {$ArrayData['edit_by']}</div>";
+          $text_big=$ArrayData['text_big'];          
+          $text_big_en=$ArrayData['text_big_en'];
+        }else{ //данные для заголовка портфолио нету
+          $strSubmitValue = 'addINTO';
+          $strEditorHTML = '';
+          $text_big = '';
+          $text_big_en = '';
+        }   
 
-echo " <form class='form-horizontal' role='form' action='' method='post' style='margin-top:30px;'>
-      <div class='form-group'>
-      <label for='Zagolovok' class='col-sm-3 control-label'>Header Ru/En</label>
-      <div class='col-sm-3'> <input type='text' class='form-control' name='Zagolovok' placeholder='$text_big' value='$text_big' required=''></div>
-      <div class='col-sm-3'> <input type='text' class='form-control' name='Zagolovok_ua' placeholder='$text_big_ua' value='$text_big_ua' required=''></div>
-      </div>   
+        echo $strEditorHTML.'<!-- форма -->
+        <form action="" method="post" autocomplete="off" onsubmit="winWait();">
+          <div class="form-row" style="padding-bottom: 15px;">
+            <div class="col-lg-2 offset-lg-4">
+              <label for="h_header">Header Ru*</label>
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text" id="inputGroupPrepend1"><i class="fa fa-header"></i></span>
+                </div>
+                <input type="text" class="form-control" id="h_header" name="header" value="'.$text_big.'" aria-describedby="inputGroupPrepend1" required>
+              </div>
+            </div>
+            <div class="col-lg-2">
+              <label for="h_header_en">Header En*</label>
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text" id="inputGroupPrepend2"><i class="fa fa-header"></i></span>
+                </div>
+                <input type="text" class="form-control" id="h_header_en" name="header_en" value="'.$text_big_en.'" aria-describedby="inputGroupPrepend2" required>
+              </div>
+            </div>
+          </div>
 
-      <div class='form-group last'>
-      <div class='col-sm-offset-3 col-sm-9' style='text-align: left;'>
-      <button type='submit' name='updatePartnersHeader' class='btn btn-success btn-xs'>Change</button>
-      <a class='btn btn-default btn-xs' href='{$config['sitelink']}admin/index.php'>Cancel</a>
-</div></div></form><hr>";
-}else{ //заголовка нету
-echo " <form class='form-horizontal' role='form' action='' method='post' style='margin-top:30px;'>
-      <div class='form-group'>
-      <label for='Zagolovok' class='col-sm-3 control-label'>Header Ru/En</label>
-      <div class='col-sm-3'> <input type='text' class='form-control' name='Zagolovok' placeholder='Enter the header' required=''></div>
-      <div class='col-sm-3'> <input type='text' class='form-control' name='Zagolovok_ua' placeholder='Enter the header_en' required=''></div>
-      </div>       
-
-      <div class='form-group last'>
-      <div class='col-sm-offset-3 col-sm-9' style='text-align: left;'>
-      <button type='submit' name='addPartnersHeader' class='btn btn-success btn-xs'>Add</button>
-      <a class='btn btn-default btn-xs' href='{$config['sitelink']}admin/index.php'>Cancel</a>
-</div></div></form><hr>";
-}
-
-  
-  if(CheckImages('LOGOS')){ //логотипы есть
-      $ArrayData=CheckImages('LOGOS', TRUE);
-if(!isset($ArrayData[1]['image_name'])){ //если есть только один слайд
-$data=date("d.m.y",$ArrayData[0]['time']);
-$img_name=$ArrayData[0]['image_name'];
-$Edit=$ArrayData[0]['edit_by'];
-echo "<div style='text-align:center;'>Last editing $data, user: $Edit</div>";    
-echo "<div class='container-fluid'>
-  <div class='col-sm-2'>
-  <div class='col-sm-12'><img src='images/Slider/mini/$img_name' width='100%'></div>
-  <div class='col-sm-12' style='text-align:center;'>
-  <a href='".$config['sitelink']."admin/index.php?Page=Partners&delWithName=$img_name' class='btn btn-default btn-xs'>Remove</a>
-  </div>
-</div></div>";
-}else{//если слайдов много
-foreach($ArrayData as $Array){
-$data=date("d.m.y",$Array['time']);
-$img_name=$Array['image_name'];
-$Edit=$Array['edit_by'];
-
-echo "<div class='col-sm-2'>
-  <div style='col-sm-12'>Added: $data, user: $Edit</div>
-  <div class='col-sm-12'><img src='images/Slider/mini/$img_name' width='100%'></div>
-  <div class='col-sm-12' style='text-align:center;'>
-  <a href='".$config['sitelink']."admin/index.php?Page=Partners&delWithName=$img_name' class='btn btn-default btn-xs'>Remove</a>
-  </div></div>";}
-}            
+          <input type="hidden" value="" name="text_block" required>
+          <input type="hidden" value="" name="text_block_en" required>
+          <input type="hidden" value="partners_header" name="strContent_for" required>
+          <!-- кнопки -->
+          <div class="container">
+            <div class="row" style = "color:white;" >
+              <div class="col-sm-3 offset-sm-3 col-lg-2 offset-lg-4">
+                <button type="reset" class="btn btn-info btn-sm"><i class="fa fa-times"></i> Clear</button>
+              </div>
+              <div class="col-sm-3 col-lg-2">
+                <button name="strInnFromForm" value="'.$strSubmitValue.'" type="submit" class="btn btn-success btn-sm "><i class="fa fa-lock"></i> Save</button>
+              </div>
+            </div>
+          </div>
+          <!-- кнопки конец-->
+        </form>
+        <!-- форма конец-->';
+    
+        echo "<div class='myShapka'>Images</div>";
+        if(CheckData('sl_images', 'image_for', 'Partners')){ //лого партнеров есть
+          $ArrayData = selectFromTable('sl_images', array('image_for', 'image_name', 'time','edit_by'), true, 'image_for', 'Partners');
+          $htmlExistingImages = '<div class="row">';
+          foreach ($ArrayData as $ArrayRow) {
+            $strData=date("d.m.Y",$ArrayRow['time']);
+            $htmlExistingImages .= "
+              <div class='col-sm-2'>
+                <div style='text-align:center;'>Added: $strData, user: {$ArrayRow['edit_by']}</div>
+                <div class='col-sm-12'><img src='images/Slider/mini/{$ArrayRow['image_name']}' width='100%'></div>
+                <div class='col-sm-12' style='text-align:center;'>
+                  <a href='".$config['sitelink']."admin/index.php?strPage=Partners&delWithName={$ArrayRow['image_name']}' class='btn btn-danger btn-sm btnModal'><i class='fa fa-lock'></i> Remove</a>
+                </div>
+              </div>";
+          }
+          $htmlExistingImages .= '</div>';
+        }else{ //лого партнеров нету
+          $htmlExistingImages = '';
+        }   
       
-      
-echo " <form class='form-horizontal col-sm-12' enctype='multipart/form-data' role='form' action='' method='post' style='margin-top:30px;'>
-  <div class='form-group'>
-  <label for='SliImg' class='col-sm-3 control-label'>Add logo (180*80px)</label>
-  <div class='col-sm-3'> 
-  <input class='btn btn-default form-control' type='file' accept='image/jpeg,image/png,image/gif' required='required' name='newImage'>
-  </div></div>       
-  
-  <div class='form-group last'>
-  <div class='col-sm-offset-3 col-sm-9'>
-  <button type='submit' name='addLOGOImage' class='btn btn-success btn-xs'>Add</button>
-  <a class='btn btn-default btn-xs' href='{$config['sitelink']}admin/index.php'>Cancel</a>
-</div></div></form>";
-  }else{ //картинки для слайдера в базе нету
-echo " <form class='form-horizontal' enctype='multipart/form-data' role='form' action='' method='post' style='margin-top:30px;'>
-  <div class='form-group'>
-  <label for='SliImg' class='col-sm-3 control-label'>Add logo (180*80px)</label>
-  <div class='col-sm-3'> 
-  <input class='btn btn-default form-control' type='file' accept='image/jpeg,image/png,image/gif' required='required' name='newImage'>
-  </div></div>       
-  
-  <div class='form-group last'>
-  <div class='col-sm-offset-3 col-sm-9'>
-  <button type='submit' name='addLOGOImage' class='btn btn-success btn-xs'>Add</button>
-  <a class='btn btn-default btn-xs' href='{$config['sitelink']}admin/index.php'>Cancel</a>
-</div></div></form>";
-  } 
-break;       
-case 'Expirience': /////////************************************//////////////////////////********************************************/***************
-echo "<div class='myShapka'>{$menu['Expirience']}</div>";
-if(CheckContent('Expirience')){ //Text - Header Опыт
-          $ArrayData=CheckContent('Expirience', TRUE);
-          $data=date("d.m.y",$ArrayData['time']);
-          $text_big=$ArrayData['text_big'];
-          $text_small=$ArrayData['text_small'];
-          $text_big_ua=$ArrayData['text_big_ua'];
-          $text_small_ua=$ArrayData['text_small_ua'];
-          $Edit=$ArrayData['edit_by'];
-  echo "<div style='text-align:center;'>Last editing $data, user: $Edit</div>";    
+        echo $htmlExistingImages.'<!-- форма -->
+        <form action="" enctype="multipart/form-data" method="post" autocomplete="off" onsubmit="winWait();">
+          <div class="form-row" style="padding-bottom: 15px;">
+            <div class="col-lg-4 offset-lg-4">
+              <label for="new_image">Add image (570*600px)*</label>
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text" id="inputGroupPrepend1"><i class="fa fa-image"></i></span>
+                </div>
+                <input type="file" class="form-control" accept="image/jpeg,image/png,image/gif" id="new_image" name="new_image" aria-describedby="inputGroupPrepend1" required>
+              </div>
+            </div>
+          </div>
+          <input type="hidden" value="Partners" name="strImage_for" required>
+          <!-- кнопки -->
+          <div class="container">
+            <div class="row" style = "color:white;" >
+              <div class="col-sm-3 offset-sm-3 col-lg-2 offset-lg-4">
+                <button type="reset" class="btn btn-info btn-sm"><i class="fa fa-times"></i> Clear</button>
+              </div>
+              <div class="col-sm-3 col-lg-2">
+                <button name="strInnFromForm" value="addINTO" id="" type="submit" class="btn btn-success btn-sm "><i class="fa fa-image"></i> Add image</button>
+              </div>
+            </div>
+          </div>
+          <!-- кнопки конец-->
+        </form>
+        <!-- форма конец-->';
+      //если пришел запрос на удаление картинки то отобразить переспрашивание
+      }else{ 
+        $boolINDB = false;
+        $boolINFiles = false;
+        $boolINFilesMini = false;
+        //проверяем есть ли такая картинка в базе
+        if(CheckData('sl_images', 'image_name', $_GET['delWithName'])){$boolINDB = true;}
+        //проверяем есть ли такая картинка в файлах
+        if(file_exists($path.'images/Slider/'.$_GET['delWithName'])){$boolINFiles = true;}
+        //проверяем есть ли такая миниатюра в файлах
+        if(file_exists($path.'images/Slider/mini/'.$_GET['delWithName'])){$boolINFilesMini = true;}
 
-  echo " <form class='form-horizontal' role='form' action='' method='post' style='margin-top:30px;'>
-          <div class='form-group'>
-          <label for='Zagolovok' class='col-sm-3 control-label'>Header Ru/En</label>
-          <div class='col-sm-3'> <input type='text' class='form-control' name='Zagolovok' placeholder='$text_big' value='$text_big' required=''></div>
-          <div class='col-sm-3'> <input type='text' class='form-control' name='Zagolovok_ua' placeholder='$text_big_ua' value='$text_big_ua' required=''></div>
-          </div>   
-
-          <div class='form-group last'>
-          <div class='col-sm-offset-3 col-sm-9' style='text-align: left;'>
-          <button type='submit' name='updateExpirienceHeader' class='btn btn-success btn-xs'>Change</button>
-          <a class='btn btn-default btn-xs' href='{$config['sitelink']}admin/index.php'>Cancel</a>
-  </div></div></form><hr>";
-}else{ //Textа заголовка  нету
-  echo " <form class='form-horizontal' role='form' action='' method='post' style='margin-top:30px;'>
-          <div class='form-group'>
-          <label for='Zagolovok' class='col-sm-3 control-label'>Header Ru/En</label>
-          <div class='col-sm-3'> <input type='text' class='form-control' name='Zagolovok' placeholder='Enter the header' required=''></div>
-          <div class='col-sm-3'> <input type='text' class='form-control' name='Zagolovok_ua' placeholder='Enter the header_en' required=''></div>
-          </div>       
-
-          <div class='form-group last'>
-          <div class='col-sm-offset-3 col-sm-9' style='text-align: left;'>
-          <button type='submit' name='addExpirienceHeader' class='btn btn-success btn-xs'>Add</button>
-          <a class='btn btn-default btn-xs' href='{$config['sitelink']}admin/index.php'>Cancel</a>
-  </div></div></form><hr>";
-}        
-if(CheckSkill('Expirience')){ //Text в блок опыт есть
-      $ArrayData=CheckSkill('Expirience', TRUE); 
-if(!isset($ArrayData[1]['text_big'])){ //одина только строка Textа в опыте   
-      $data=date("d.m.y",$ArrayData[0]['time']);
-      $Edit=$ArrayData[0]['edit_by'];
-echo "<div style='text-align:center;'>Last editing $data, user: $Edit</div>";   
-echo " 
-<form class='form-horizontal' role='form' action='' method='post' style='margin-top:30px;'>
-  <div class='form-group'>
-  <label for='Zagolovok' class='col-sm-3 control-label'>Header Ru/En</label>
-<div class='col-sm-3'> 
-<input type='text' class='form-control' name='Zagolovok' placeholder='{$ArrayData[0]['text_big']}' value='{$ArrayData[0]['text_big']}' required=''></div>
-<div class='col-sm-3'> 
-<input type='text' class='form-control' name='Zagolovok_ua' placeholder='{$ArrayData[0]['text_big_ua']}' value='{$ArrayData[0]['text_big_ua']}' required=''></div>
-</div>
-  
-  <div class='form-group'>
-  <label for='Text_sm' class='col-sm-3 control-label'>Description  Ru/En</label>
-  <div class='col-sm-3'> 
-<input type='text' class='form-control' name='Text_sm' placeholder='{$ArrayData[0]['text_small']}' value='{$ArrayData[0]['text_small']}' required=''></div>
-<div class='col-sm-3'> 
-<input type='text' class='form-control' name='Text_sm_ua' placeholder='{$ArrayData[0]['text_small_ua']}' value='{$ArrayData[0]['text_small_ua']}' required=''></div>
-</div>    
-
-<input type='hidden'  name='id' value='{$ArrayData[0]['id']}'>
-
-  <div class='form-group last'>
-  <div class='col-sm-offset-3 col-sm-9'>
-  <button type='submit' name='updateHardSoftSkill' class='btn btn-success btn-xs'>Change</button>
-  <a class='btn btn-default btn-xs' href='{$config['sitelink']}admin/index.php?Page=Skills&skill_for=hardskill&delSkillID={$ArrayData[0]['id']}'>Remove</a>
-</div></div></form>";
-
-echo " <hr><form class='form-horizontal' role='form' action='' enctype='multipart/form-data' method='post' style='margin-top:30px;'>        
-  <div class='form-group'>
-  <label for='Zagolovok' class='col-sm-3 control-label'>Header Ru/En</label>
-  <div class='col-sm-3'> <input type='text' class='form-control' name='Zagolovok' placeholder='Header' required=''></div>
-  <div class='col-sm-3'> <input type='text' class='form-control' name='Zagolovok_ua' placeholder='Header_en' required=''></div>
-  </div>
-  
-  <div class='form-group'>
-  <label for='Text_sm' class='col-sm-3 control-label'>Description Ru/En</label>
-  <div class='col-sm-3'> <input type='text' class='form-control' name='Text_sm' placeholder='Description Ru' required=''></div>
-  <div class='col-sm-3'> <input type='text' class='form-control' name='Text_sm_ua' placeholder='Description En' required=''></div>
-  </div>    
-  
-  <div class='form-group last'>
-  <div class='col-sm-offset-3 col-sm-9'>
-  <button type='submit' name='addExpirienceSkill' class='btn btn-success btn-xs'>Add</button>
-  <a class='btn btn-default btn-xs' href='{$config['sitelink']}admin/index.php'>Cancel</a>
-</div></div></form>";
-}else{ //больше одного Textа блоке опыт
-foreach($ArrayData as $SomeArr){
-      $data=date("d.m.y",$SomeArr['time']);
-      $Edit=$SomeArr['edit_by'];
-echo "<div style='text-align:center;'>Last editing $data, user: $Edit</div>";   
-echo " 
-<form class='form-horizontal' role='form' action='' method='post' style='margin-top:30px;'>
-  <div class='form-group'>
-  <label for='Zagolovok' class='col-sm-3 control-label'>Header Ru/En</label>
-  <div class='col-sm-3'> 
-<input type='text' class='form-control' name='Zagolovok' placeholder='{$SomeArr['text_big']}' value='{$SomeArr['text_big']}' required=''></div>
-  <div class='col-sm-3'> 
-<input type='text' class='form-control' name='Zagolovok_ua' placeholder='{$SomeArr['text_big_ua']}' value='{$SomeArr['text_big_ua']}' required=''></div>
-</div>
-  
-  <div class='form-group'>
-  <label for='Text_sm' class='col-sm-3 control-label'>Description  Ru/En</label>
-  <div class='col-sm-3'> 
-<input type='text' class='form-control' name='Text_sm' placeholder='{$SomeArr['text_small']}' value='{$SomeArr['text_small']}' required=''></div>
-<div class='col-sm-3'> 
-<input type='text' class='form-control' name='Text_sm_ua' placeholder='{$SomeArr['text_small_ua']}' value='{$SomeArr['text_small_ua']}' required=''></div>
-</div>    
-
-<input type='hidden'  name='id' value='{$SomeArr['id']}'>
-
-  <div class='form-group last'>
-  <div class='col-sm-offset-3 col-sm-9'>
-  <button type='submit' name='updateHardSoftSkill' class='btn btn-success btn-xs'>Change</button>
-  <a class='btn btn-default btn-xs' href='{$config['sitelink']}admin/index.php?Page=Skills&skill_for=hardskill&delSkillID={$SomeArr['id']}'>Remove</a>
-</div></div></form><hr>";} 
-
-echo " <hr><form class='form-horizontal' role='form' action='' enctype='multipart/form-data' method='post' style='margin-top:30px;'>        
-  <div class='form-group'>
-  <label for='Zagolovok' class='col-sm-3 control-label'>Header Ru/En</label>
-  <div class='col-sm-3'> <input type='text' class='form-control' name='Zagolovok' placeholder='Header' required=''></div>
-  <div class='col-sm-3'> <input type='text' class='form-control' name='Zagolovok_ua' placeholder='Header_en' required=''></div>
-  </div>
-  
-  <div class='form-group'>
-  <label for='Text_sm' class='col-sm-3 control-label'>Description Ru/En</label>
-  <div class='col-sm-3'> <input type='text' class='form-control' name='Text_sm' placeholder='Description Ru' required=''></div>
-  <div class='col-sm-3'> <input type='text' class='form-control' name='Text_sm_ua' placeholder='Description En' required=''></div>
-  </div>    
-  
-  <div class='form-group last'>
-  <div class='col-sm-offset-3 col-sm-9'>
-  <button type='submit' name='addExpirienceSkill' class='btn btn-success btn-xs'>Add</button>
-  <a class='btn btn-default btn-xs' href='{$config['sitelink']}admin/index.php'>Cancel</a>
-</div></div></form>";
-}
-  }else{ //Text в блок Опыт нету
-echo " <hr><form class='form-horizontal' role='form' action='' enctype='multipart/form-data' method='post' style='margin-top:30px;'>        
-  <div class='form-group'>
-  <label for='Zagolovok' class='col-sm-3 control-label'>Header Ru/En</label>
-  <div class='col-sm-3'> <input type='text' class='form-control' name='Zagolovok' placeholder='Header' required=''></div>
-  <div class='col-sm-3'> <input type='text' class='form-control' name='Zagolovok_ua' placeholder='Header_en' required=''></div>
-  </div>
-  
-  <div class='form-group'>
-  <label for='Text_sm' class='col-sm-3 control-label'>Description Ru/En</label>
-  <div class='col-sm-3'> <input type='text' class='form-control' name='Text_sm' placeholder='Description Ru' required=''></div>
-  <div class='col-sm-3'> <input type='text' class='form-control' name='Text_sm_ua' placeholder='Description En' required=''></div>
-  </div>    
-  
-  <div class='form-group last'>
-  <div class='col-sm-offset-3 col-sm-9'>
-  <button type='submit' name='addExpirienceSkill' class='btn btn-success btn-xs'>Add</button>
-  <a class='btn btn-default btn-xs' href='{$config['sitelink']}admin/index.php'>Cancel</a>
-</div></div></form>";
-  }
-  break;
-case 'Contacts': //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  echo "<div class='myShapka'>{$menu['Contacts']}</div>";
-if(CheckContent('Contacts')){ //Text - Header Контакты
-          $ArrayData=CheckContent('Contacts', TRUE);
-          $data=date("d.m.y",$ArrayData['time']);
-          $text_big=$ArrayData['text_big'];
-          $text_small=$ArrayData['text_small'];
-          $text_big_ua=$ArrayData['text_big_ua'];
-          $text_small_ua=$ArrayData['text_small_ua'];
-          $Edit=$ArrayData['edit_by'];
-  echo "<div style='text-align:center;'>Last editing $data, user: $Edit</div>";    
-
-  echo " <form class='form-horizontal' role='form' action='' method='post' style='margin-top:30px;'>
-          <div class='form-group'>
-          <label for='Zagolovok' class='col-sm-3 control-label'>Header Ru/En</label>
-          <div class='col-sm-3'> <input type='text' class='form-control' name='Zagolovok' placeholder='$text_big' value='$text_big' required=''></div>
-          <div class='col-sm-3'> <input type='text' class='form-control' name='Zagolovok_ua' placeholder='$text_big_ua' value='$text_big_ua' required=''></div>
-          </div>   
-
-          <div class='form-group last'>
-          <div class='col-sm-offset-3 col-sm-9' style='text-align: left;'>
-          <button type='submit' name='updateContactsHeader' class='btn btn-success btn-xs'>Change</button>
-          <a class='btn btn-default btn-xs' href='{$config['sitelink']}admin/index.php'>Cancel</a>
-  </div></div></form><hr>";
-}else{ //Textа заголовка  нету
-  echo " <form class='form-horizontal' role='form' action='' method='post' style='margin-top:30px;'>
-          <div class='form-group'>
-          <label for='Zagolovok' class='col-sm-3 control-label'>Header Ru/En</label>
-          <div class='col-sm-3'> <input type='text' class='form-control' name='Zagolovok' placeholder='Enter the header' required=''></div>
-          <div class='col-sm-3'> <input type='text' class='form-control' name='Zagolovok_ua' placeholder='Enter the header_en' required=''></div>
-          </div>       
-
-          <div class='form-group last'>
-          <div class='col-sm-offset-3 col-sm-9' style='text-align: left;'>
-          <button type='submit' name='addContactsHeader' class='btn btn-success btn-xs'>Add</button>
-          <a class='btn btn-default btn-xs' href='{$config['sitelink']}admin/index.php'>Cancel</a>
-  </div></div></form><hr>";
-}  
-  
-//if(CheckContent('Contacts')){ //Text контакты есть
-//            $ArrayData=CheckContent('Contacts', TRUE);
-//            $data=date("d.m.y",$ArrayData['time']);
-//            $text_big=$ArrayData['text_big'];
-//            $text_small=$ArrayData['text_small'];
-//            $text_big_ua=$ArrayData['text_big_ua'];
-//            $text_small_ua=$ArrayData['text_small_ua'];
-//            $Edit=$ArrayData['edit_by'];
-//echo "<div style='text-align:center;'>Last editing $data, user: $Edit</div>";    
-//            
-//echo " <form class='form-horizontal' role='form' action='' method='post' style='margin-top:30px;'>
-//        <div class='form-group'>
-//        <label for='Zagolovok' class='col-sm-3 control-label'>Header Ru/En</label>
-//        <div class='col-sm-3'> <input type='text' class='form-control' name='Zagolovok' placeholder='$text_big' value='$text_big' required=''></div>
-//        <div class='col-sm-3'> <input type='text' class='form-control' name='Zagolovok_ua' placeholder='$text_big_ua' value='$text_big_ua' required=''></div>
-//        </div>
-//        
-//        <div class='form-group'>
-//        <label for='Text_sm' class='col-sm-3 control-label'>Text Ru/En</label>
-//        <div class='col-sm-3'> <textarea rows='4' cols='50' type='text' class='form-control' name='Text_sm' placeholder='$text_small' required=''>$text_small</textarea></div>
-//        <div class='col-sm-3'> <textarea rows='4' cols='50' type='text' class='form-control' name='Text_sm_ua' placeholder='$text_small_ua' required=''>$text_small_ua</textarea></div>
-//        </div>    
-//        
-//        <div class='form-group last'>
-//        <div class='col-sm-offset-3 col-sm-9'>
-//        <button type='submit' name='updateContacts' class='btn btn-success btn-xs'>Change</button>
-//        <a class='btn btn-default btn-xs' href='{$config['sitelink']}admin/index.php'>Cancel</a>
-//</div></div></form>";
-//        }else{ //Text контакты нету
-//echo " <form class='form-horizontal' role='form' action='' method='post' style='margin-top:30px;'>
-//        <div class='form-group'>
-//        <label for='Zagolovok' class='col-sm-3 control-label'>Header Ru/En</label>
-//        <div class='col-sm-3'> <input type='text' class='form-control' name='Zagolovok' placeholder='Enter the header' required=''></div>
-//        <div class='col-sm-3'> <input type='text' class='form-control' name='Zagolovok_ua' placeholder='Enter the header_ua' required=''></div>
-//        </div>
-//        
-//        <div class='form-group'>
-//        <label for='Text_sm' class='col-sm-3 control-label'>Text Ru/En</label>
-//        <div class='col-sm-3'> <textarea rows='4' cols='50' type='text' class='form-control' name='Text_sm' placeholder='Введите Text' required=''></textarea></div>
-//        <div class='col-sm-3'> <textarea rows='4' cols='50' type='text' class='form-control' name='Text_sm_ua' placeholder='Введите Text_ua' required=''></textarea></div>
-//        </div>        
-//        
-//        <div class='form-group last'>
-//        <div class='col-sm-offset-3 col-sm-9'>
-//        <button type='submit' name='addContacts' class='btn btn-success btn-xs'>Add</button>
-//        <a class='btn btn-default btn-xs' href='{$config['sitelink']}admin/index.php'>Cancel</a>
-//</div></div></form>";
-//        }
-  
-  if(CheckContent('Contacts2')){ //Text контакты2 есть
-      $ArrayData=CheckContent('Contacts2', TRUE);
-      $data=date("d.m.y",$ArrayData['time']);
-      $text_big=$ArrayData['text_big'];
-      $text_small=$ArrayData['text_small'];
-      $text_big_ua=$ArrayData['text_big_ua'];
-      $text_small_ua=$ArrayData['text_small_ua'];
-      $Edit=$ArrayData['edit_by'];
-echo "<div style='text-align:center;'>Last editing $data, user: $Edit</div>";    
-      
-echo " <form class='form-horizontal' role='form' action='' method='post' style='margin-top:30px;'>
-  <div class='form-group'>
-  <label for='Zagolovok' class='col-sm-3 control-label'>Header Ru/En</label>
-  <div class='col-sm-3'> <input type='text' class='form-control' name='Zagolovok' placeholder='$text_big' value='$text_big' required=''></div>
-  <div class='col-sm-3'> <input type='text' class='form-control' name='Zagolovok_ua' placeholder='$text_big_ua' value='$text_big_ua' required=''></div>
-  </div>
-  
-  <div class='form-group'>
-  <label for='Text_sm' class='col-sm-3 control-label'>Text Ru/En</label>
-  <div class='col-sm-3'> <textarea rows='4' cols='50' type='text' class='form-control' name='Text_sm' placeholder='$text_small' required=''>$text_small</textarea></div>
-  <div class='col-sm-3'> <textarea rows='4' cols='50' type='text' class='form-control' name='Text_sm_ua' placeholder='$text_small_ua' required=''>$text_small_ua</textarea></div>
-  </div>   
-  
-  <div class='form-group last'>
-  <div class='col-sm-offset-3 col-sm-9'>
-  <button type='submit' name='updateContacts2' class='btn btn-success btn-xs'>Change</button>
-  <a class='btn btn-default btn-xs' href='{$config['sitelink']}admin/index.php'>Cancel</a>
-</div></div></form>";
-  }else{ //Text контакты2 нету
-echo " <form class='form-horizontal' role='form' action='' method='post' style='margin-top:30px;'>
-  <div class='form-group'>
-  <label for='Zagolovok' class='col-sm-3 control-label'>Header Ru/En</label>
-  <div class='col-sm-3'> <input type='text' class='form-control' name='Zagolovok' placeholder='Enter the header' required=''></div>
-  <div class='col-sm-3'> <input type='text' class='form-control' name='Zagolovok_ua' placeholder='Enter the header_ua' required=''></div>
-  </div>
-  
-  <div class='form-group'>
-  <label for='Text_sm' class='col-sm-3 control-label'>Text Ru/En</label>
-  <div class='col-sm-3'> <textarea rows='4' cols='50' type='text' class='form-control' name='Text_sm' placeholder='Введите Text' required=''></textarea></div>
-  <div class='col-sm-3'> <textarea rows='4' cols='50' type='text' class='form-control' name='Text_sm_ua' placeholder='Введите Text_ua' required=''></textarea></div>
-  </div>         
-  
-  <div class='form-group last'>
-  <div class='col-sm-offset-3 col-sm-9'>
-  <button type='submit' name='addContacts2' class='btn btn-success btn-xs'>Add</button>
-  <a class='btn btn-default btn-xs' href='{$config['sitelink']}admin/index.php'>Cancel</a>
-</div></div></form>";
-  }
-  
-if(CheckContact('Email')){ //Email есть
-      $ArrayData=CheckContact('Email', TRUE);
-      $data=date("d.m.y",$ArrayData['time']);
-      $Contact=$ArrayData['contact'];
-      $Edit=$ArrayData['edit_by'];
-  echo "<div style='text-align:center;'>Last editing $data, user: $Edit</div>";    
-      
-  echo " <form class='form-horizontal' role='form' action='' method='post' style='margin-top:30px;'>
-          <div class='form-group'>
-          <label for='Email' class='col-sm-3 control-label'>Email</label>
-          <div class='col-sm-3'> 
-          <input type='text' class='form-control' name='Email' id='Email' placeholder='".$Contact."' required=''></div></div>
-
-          <div class='form-group last'>
-          <div class='col-sm-offset-3 col-sm-9'>
-          <button type='submit' name='updateEmail' class='btn btn-success btn-xs'>Change Email</button>
-          <a class='btn btn-default btn-xs' href='{$config['sitelink']}admin/index.php'>Cancel</a>
-  </div></div></form>";
-  }else{ //Email нету
-echo " <form class='form-horizontal' role='form' action='' method='post' style='margin-top:30px;'>
-  <div class='form-group'>
-  <label for='Email' class='col-sm-3 control-label'>Email</label>
-  <div class='col-sm-3'> <input type='text' class='form-control' name='Email' id='Email' placeholder='Введите Email' required=''></div></div>
-  
-  <div class='form-group last'>
-  <div class='col-sm-offset-3 col-sm-9'>
-  <button type='submit' name='addEmail' class='btn btn-success btn-xs'>Add Email</button>
-  <a class='btn btn-default btn-xs' href='{$config['sitelink']}admin/index.php'>Cancel</a>
-</div></div></form>";
-  }
-if(CheckContact('Facebook')){ //Facebook есть
-      $ArrayData=CheckContact('Facebook', TRUE);
-      $data=date("d.m.y",$ArrayData['time']);
-      $Contact=$ArrayData['contact'];
-      $Edit=$ArrayData['edit_by'];
-  echo "<div style='text-align:center;'>Last editing $data, user: $Edit</div>";    
-      
-  echo " <form class='form-horizontal' role='form' action='' method='post' style='margin-top:30px;'>
-          <div class='form-group'>
-          <label for='Facebook' class='col-sm-3 control-label'>Facebook</label>
-          <div class='col-sm-3'> 
-          <input type='text' class='form-control' name='Facebook' id='Facebook' placeholder='".$Contact."' required=''></div></div>
-
-          <div class='form-group last'>
-          <div class='col-sm-offset-3 col-sm-9'>
-          <button type='submit' name='updateFacebook' class='btn btn-success btn-xs'>Change Facebook</button>
-          <a class='btn btn-default btn-xs' href='{$config['sitelink']}admin/index.php'>Cancel</a>
-  </div></div></form>";
-  }else{ //Facebook нету
-echo " <form class='form-horizontal' role='form' action='' method='post' style='margin-top:30px;'>
-  <div class='form-group'>
-  <label for='Facebook' class='col-sm-3 control-label'>Facebook</label>
-  <div class='col-sm-3'> <input type='text' class='form-control' name='Facebook' id='Facebook' placeholder='Введите Facebook' required=''></div></div>
-  
-  <div class='form-group last'>
-  <div class='col-sm-offset-3 col-sm-9'>
-  <button type='submit' name='addFacebook' class='btn btn-success btn-xs'>Add Facebook</button>
-  <a class='btn btn-default btn-xs' href='{$config['sitelink']}admin/index.php'>Cancel</a>
-</div></div></form>";
-  }
-if(CheckContact('instagram')){ //instagram есть
-      $ArrayData=CheckContact('instagram', TRUE);
-      $data=date("d.m.y",$ArrayData['time']);
-      $Contact=$ArrayData['contact'];
-      $Edit=$ArrayData['edit_by'];
-  echo "<div style='text-align:center;'>Last editing $data, user: $Edit</div>";    
-      
-  echo " <form class='form-horizontal' role='form' action='' method='post' style='margin-top:30px;'>
-          <div class='form-group'>
-          <label for='instagram' class='col-sm-3 control-label'>instagram</label>
-          <div class='col-sm-3'> 
-          <input type='text' class='form-control' name='instagram' id='instagram' placeholder='".$Contact."' required=''></div></div>
-
-          <div class='form-group last'>
-          <div class='col-sm-offset-3 col-sm-9'>
-          <button type='submit' name='updateinstagram' class='btn btn-success btn-xs'>Change instagram</button>
-          <a class='btn btn-default btn-xs' href='{$config['sitelink']}admin/index.php'>Cancel</a>
-  </div></div></form>";
-  }else{ //instagram нету
-echo " <form class='form-horizontal' role='form' action='' method='post' style='margin-top:30px;'>
-  <div class='form-group'>
-  <label for='instagram' class='col-sm-3 control-label'>instagram</label>
-  <div class='col-sm-3'> <input type='text' class='form-control' name='instagram' id='instagram' placeholder='Введите instagram' required=''></div></div>
-  
-  <div class='form-group last'>
-  <div class='col-sm-offset-3 col-sm-9'>
-  <button type='submit' name='addinstagram' class='btn btn-success btn-xs'>Add instagram</button>
-  <a class='btn btn-default btn-xs' href='{$config['sitelink']}admin/index.php'>Cancel</a>
-</div></div></form>";
-  }  
-if(CheckContact('youtube')){ //youtube есть
-      $ArrayData=CheckContact('youtube', TRUE);
-      $data=date("d.m.y",$ArrayData['time']);
-      $Contact=$ArrayData['contact'];
-      $Edit=$ArrayData['edit_by'];
-  echo "<div style='text-align:center;'>Last editing $data, user: $Edit</div>";    
-      
-  echo " <form class='form-horizontal' role='form' action='' method='post' style='margin-top:30px;'>
-          <div class='form-group'>
-          <label for='youtube' class='col-sm-3 control-label'>youtube</label>
-          <div class='col-sm-3'> 
-          <input type='text' class='form-control' name='youtube' id='youtube' placeholder='".$Contact."' required=''></div></div>
-
-          <div class='form-group last'>
-          <div class='col-sm-offset-3 col-sm-9'>
-          <button type='submit' name='updateyoutube' class='btn btn-success btn-xs'>Change youtube</button>
-          <a class='btn btn-default btn-xs' href='{$config['sitelink']}admin/index.php'>Cancel</a>
-  </div></div></form>";
-  }else{ //youtube нету
-echo " <form class='form-horizontal' role='form' action='' method='post' style='margin-top:30px;'>
-  <div class='form-group'>
-  <label for='youtube' class='col-sm-3 control-label'>youtube</label>
-  <div class='col-sm-3'> <input type='text' class='form-control' name='youtube' id='youtube' placeholder='Введите youtube' required=''></div></div>
-  
-  <div class='form-group last'>
-  <div class='col-sm-offset-3 col-sm-9'>
-  <button type='submit' name='addyoutube' class='btn btn-success btn-xs'>Add youtube</button>
-  <a class='btn btn-default btn-xs' href='{$config['sitelink']}admin/index.php'>Cancel</a>
-</div></div></form>";
-  } 
-if(CheckContact('upwork')){ //upwork есть
-      $ArrayData=CheckContact('upwork', TRUE);
-      $data=date("d.m.y",$ArrayData['time']);
-      $Contact=$ArrayData['contact'];
-      $Edit=$ArrayData['edit_by'];
-  echo "<div style='text-align:center;'>Last editing $data, user: $Edit</div>";    
-      
-  echo " <form class='form-horizontal' role='form' action='' method='post' style='margin-top:30px;'>
-          <div class='form-group'>
-          <label for='upwork' class='col-sm-3 control-label'>upwork</label>
-          <div class='col-sm-3'> 
-          <input type='text' class='form-control' name='upwork' id='upwork' placeholder='".$Contact."' required=''></div></div>
-
-          <div class='form-group last'>
-          <div class='col-sm-offset-3 col-sm-9'>
-          <button type='submit' name='updateupwork' class='btn btn-success btn-xs'>Change upwork</button>
-          <a class='btn btn-default btn-xs' href='{$config['sitelink']}admin/index.php'>Cancel</a>
-  </div></div></form>";
-  }else{ //upwork нету
-echo " <form class='form-horizontal' role='form' action='' method='post' style='margin-top:30px;'>
-  <div class='form-group'>
-  <label for='upwork' class='col-sm-3 control-label'>upwork</label>
-  <div class='col-sm-3'> <input type='text' class='form-control' name='upwork' id='upwork' placeholder='Введите upwork' required=''></div></div>
-  
-  <div class='form-group last'>
-  <div class='col-sm-offset-3 col-sm-9'>
-  <button type='submit' name='addupwork' class='btn btn-success btn-xs'>Add upwork</button>
-  <a class='btn btn-default btn-xs' href='{$config['sitelink']}admin/index.php'>Cancel</a>
-</div></div></form>";
-  } 
-if(CheckContact('linkedin')){ //linkedin есть
-      $ArrayData=CheckContact('linkedin', TRUE);
-      $data=date("d.m.y",$ArrayData['time']);
-      $Contact=$ArrayData['contact'];
-      $Edit=$ArrayData['edit_by'];
-  echo "<div style='text-align:center;'>Last editing $data, user: $Edit</div>";    
-      
-  echo " <form class='form-horizontal' role='form' action='' method='post' style='margin-top:30px;'>
-          <div class='form-group'>
-          <label for='linkedin' class='col-sm-3 control-label'>linkedin</label>
-          <div class='col-sm-3'> 
-          <input type='text' class='form-control' name='linkedin' id='linkedin' placeholder='".$Contact."' required=''></div></div>
-
-          <div class='form-group last'>
-          <div class='col-sm-offset-3 col-sm-9'>
-          <button type='submit' name='updatelinkedin' class='btn btn-success btn-xs'>Change linkedin</button>
-          <a class='btn btn-default btn-xs' href='{$config['sitelink']}admin/index.php'>Cancel</a>
-  </div></div></form>";
-  }else{ //linkedin нету
-echo " <form class='form-horizontal' role='form' action='' method='post' style='margin-top:30px;'>
-  <div class='form-group'>
-  <label for='linkedin' class='col-sm-3 control-label'>linkedin</label>
-  <div class='col-sm-3'> <input type='text' class='form-control' name='linkedin' id='linkedin' placeholder='Введите linkedin' required=''></div></div>
-  
-  <div class='form-group last'>
-  <div class='col-sm-offset-3 col-sm-9'>
-  <button type='submit' name='addlinkedin' class='btn btn-success btn-xs'>Add linkedin</button>
-  <a class='btn btn-default btn-xs' href='{$config['sitelink']}admin/index.php'>Cancel</a>
-</div></div></form>";
-  } 
-  
-break;
-case 'MapLocPoints': //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////     
- echo "<div class='myShapka'>Map locations</div>";
-if(CheckMapContent()){ //Text в блок карта   (есть)
-      $ArrayData=CheckMapContent(TRUE);   
-if(!isset($ArrayData[1]['latitude'])){ //точек на карту одна
-$data=date("d.m.y",$ArrayData[0]['time']);
-$Edit=$ArrayData[0]['edit_by']; 
-echo "<div style='text-align:center;'>Last editing $data, user: $Edit</div>";
-echo "
-<form class='form-horizontal' role='form' action='' method='post' style='margin-top:30px;'>
-  
-  <div class='form-group'>
-      <label for='id' class='col-sm-3 control-label'>Point ID</label>
-  <div class='col-sm-3'> <input type='text' class='form-control' name='fake_id' value='0' disabled></div></div>
-
-  <input type='hidden'  name='id' value='{$ArrayData[0]['id']}'>
-
-  <div class='form-group'>
-      <label for='lat' class='col-sm-3 control-label'>Latitude</label>
-  <div class='col-sm-3'> <input type='text' class='form-control' name='lat' placeholder='50.439148' value='{$ArrayData[0]['latitude']}' required=''></div></div>
-  
-  <div class='form-group'>
-      <label for='lng' class='col-sm-3 control-label'>Longitude</label>
-  <div class='col-sm-3'> <input type='text' class='form-control' name='lng' placeholder='30.523342' value='{$ArrayData[0]['longitude']}' required=''></div></div>
-  
-   <div class='form-group'>
-      <label for='loc_name' class='col-sm-3 control-label'>Header Ru/En</label>
-      <div class='col-sm-3'> 
-          <input type='text' class='form-control' name='loc_name' placeholder='Header Ru' value='{$ArrayData[0]['loc_name']}' required=''>
-      </div>
-      <div class='col-sm-3'> 
-          <input type='text' class='form-control' name='loc_name_ua' placeholder='Header Ua' value='{$ArrayData[0]['loc_name_ua']}' required=''>
-      </div>
-  </div>
-  
-   <div class='form-group'>
-      <label for='loc_address1' class='col-sm-3 control-label'>Short name Ru/En</label>
-      <div class='col-sm-3'> 
-          <input type='text' class='form-control' name='loc_address1' placeholder='Short name Ru' value='{$ArrayData[0]['loc_address1']}' required=''>
-      </div>
-      <div class='col-sm-3'> 
-          <input type='text' class='form-control' name='loc_address1_ua' placeholder='Short name Ua' value='{$ArrayData[0]['loc_address1_ua']}' required=''>
-      </div>
-  </div>
-  
-   <div class='form-group'>
-      <label for='loc_address2' class='col-sm-3 control-label'>Address Ru/En</label>
-      <div class='col-sm-3'> 
-          <input type='text' class='form-control' name='loc_address2' placeholder='Address Ru' value='{$ArrayData[0]['loc_address2']}' required=''>
-      </div>
-      <div class='col-sm-3'> 
-          <input type='text' class='form-control' name='loc_address2_ua' placeholder='Address Ua' value='{$ArrayData[0]['loc_address2_ua']}' required=''>
-      </div>
-  </div>
-
-  <div class='form-group last'>
-  <div class='col-sm-offset-3 col-sm-9'>
-  <button type='submit' name='updateMapLocContent' class='btn btn-success btn-xs'>Change</button>
-  <a class='btn btn-default btn-xs' href='{$config['sitelink']}admin/index.php?Page=MapLocPoints&delMapLocContentID={$ArrayData[0]['id']}'>Remove</a>
-</div></div></form>";
-
-echo " <form class='form-horizontal' role='form' action='' enctype='multipart/form-data' method='post' style='margin-top:30px;'>
+        if($boolINDB or $boolINFiles or $boolINFilesMini){
+          echo "<div class='myShapka'>Approve image removing</div>";
           
-  <div class='form-group'>
-      <label for='lat' class='col-sm-3 control-label'>Latitude</label>
-  <div class='col-sm-3'> <input type='text' class='form-control' name='lat' placeholder='50.439148' required=''></div></div>
-  
-  <div class='form-group'>
-      <label for='lng' class='col-sm-3 control-label'>Longitude</label>
-  <div class='col-sm-3'> <input type='text' class='form-control' name='lng' placeholder='30.523342' required=''></div></div>
-  
-   <div class='form-group'>
-      <label for='loc_name' class='col-sm-3 control-label'>Header Ru/En</label>
-      <div class='col-sm-3'> 
-          <input type='text' class='form-control' name='loc_name' placeholder='Header Ru' required=''>
-      </div>
-      <div class='col-sm-3'> 
-          <input type='text' class='form-control' name='loc_name_ua' placeholder='Header Ua' required=''>
-      </div>
-  </div>
-  
-   <div class='form-group'>
-      <label for='loc_address1' class='col-sm-3 control-label'>Short name Ru/En</label>
-      <div class='col-sm-3'> 
-          <input type='text' class='form-control' name='loc_address1' placeholder='Short name Ru' required=''>
-      </div>
-      <div class='col-sm-3'> 
-          <input type='text' class='form-control' name='loc_address1_ua' placeholder='Short name Ua' required=''>
-      </div>
-  </div>
-  
-   <div class='form-group'>
-      <label for='loc_address2' class='col-sm-3 control-label'>Address Ru/En</label>
-      <div class='col-sm-3'> 
-          <input type='text' class='form-control' name='loc_address2' placeholder='Address Ru' required=''>
-      </div>
-      <div class='col-sm-3'> 
-          <input type='text' class='form-control' name='loc_address2_ua' placeholder='Address Ua' required=''>
-      </div>
-  </div>
-  
-  <div class='form-group last'>
-  <div class='col-sm-offset-3 col-sm-9'>
-  <button type='submit' name='addMapLocContent' class='btn btn-success btn-xs'>Add</button>
-  <a class='btn btn-default btn-xs' href='{$config['sitelink']}admin/index.php'>Cancel</a>
-</div></div></form>";
-}else{ //точек на карту больше одной
-$i=0;
-foreach($ArrayData as $SomeArr){
-$data=date("d.m.y",$SomeArr['time']);
-$Edit=$SomeArr['edit_by']; 
-echo "<div style='text-align:center;'>Last editing $data, user: $Edit</div>";
-echo "
-<form class='form-horizontal' role='form' action='' method='post' style='margin-top:30px;'>
-  
-  <div class='form-group'>
-      <label for='id' class='col-sm-3 control-label'>Point ID</label>
-  <div class='col-sm-3'> <input type='text' class='form-control' name='fake_id' value='$i' disabled></div></div>
+          echo '<!-- форма -->
+            <form action="" method="post" autocomplete="off" onsubmit="winWait();">
+              <input type="hidden" value="Partners" name="strImage_for" required>
+              <input type="hidden" value="'.$_GET['delWithName'].'" name="image_name" required>
+              <input type="hidden" value="'.$boolINDB.'" name="boolINDB" required>
+              <input type="hidden" value="'.$boolINFiles.'" name="boolINFiles" required>
+              <input type="hidden" value="'.$boolINFilesMini.'" name="boolINFilesMini" required>
+              <!-- кнопки -->
+              <div class="container">
+                <a href="images/Slider/'.$_GET['delWithName'].'" target="_blank"><img src="images/Slider/mini/'.$_GET['delWithName'].'" width="250px"></a>
+                <div class="row" style = "color:white;" >
+                  <div class="col-sm-3 offset-sm-3 col-lg-2 offset-lg-4">
+                    <button name="strInnFromForm" value="RemoveIMG" id="" type="submit" class="btn btn-danger btn-sm "><i class="fa fa-lock"></i> Remove '.$_GET['delWithName'].'</button>
+                  </div>
+                  <div class="col-sm-3 col-lg-2">
+                    <a id="" class="btn btn-info btn-sm btnModal" href="'.$config['sitelink'].'admin/index.php?strPage=Partners"><i class="fa fa-reply"></i> Back</a>
+                  </div>
+                </div>
+              </div>
+              <!-- кнопки конец-->
+            </form>
+            <!-- форма конец-->';
+        }else{
+          echo "<div class='myShapka'>No data to removing</div>";
+          echo '<a id="" class="btn btn-info btn-sm btnModal" href="'.$config['sitelink'].'admin/index.php?strPage=Partners"><i class="fa fa-reply"></i> Back</a>';
+        }
+      }
+    break;
+    /*---------------------------------------------------------------------------------*/
+    /*--работа в раздете изменить контакты---------------------------------------------*/
+    /*---------------------------------------------------------------------------------*/
+    case 'Contacts':
+      echo "<div class='myShapka'>{$menu['Contacts']}</div>";
+      if(CheckData('sl_content', 'content_for', 'сontacts_header')){ //данные для Text - Header есть
+        $ArrayData = selectFromTable('sl_content', array('content_for', 'text_big', 'text_big_en', 'time','edit_by'), true, 'content_for', 'сontacts_header')[0];
+        $strSubmitValue = 'updIN';
+        $strData=date("d.m.Y",$ArrayData['time']);
+        $strEditorHTML = "<div style='text-align:center;'>Last editing $strData, user: {$ArrayData['edit_by']}</div>";
+        $text_big=$ArrayData['text_big'];          
+        $text_big_en=$ArrayData['text_big_en'];
+      }else{ //данные для Text - Header нету
+        $strSubmitValue = 'addINTO';
+        $strEditorHTML = '';
+        $text_big = '';
+        $text_big_en = '';
+      }   
 
-  <input type='hidden'  name='id' value='{$SomeArr['id']}'>
+      echo $strEditorHTML.'<!-- форма -->
+      <form action="" method="post" autocomplete="off" onsubmit="winWait();">
+        <div class="form-row" style="padding-bottom: 15px;">
+          <div class="col-lg-2 offset-lg-4">
+            <label for="h_header">Header Ru*</label>
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="inputGroupPrepend1"><i class="fa fa-address-book"></i></span>
+              </div>
+              <input type="text" class="form-control" id="h_header" name="header" value="'.$text_big.'" aria-describedby="inputGroupPrepend1" required>
+            </div>
+          </div>
+          <div class="col-lg-2">
+            <label for="h_header_en">Header En*</label>
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="inputGroupPrepend2"><i class="fa fa-address-book"></i></span>
+              </div>
+              <input type="text" class="form-control" id="h_header_en" name="header_en" value="'.$text_big_en.'" aria-describedby="inputGroupPrepend2" required>
+            </div>
+          </div>
+        </div>
 
-  <div class='form-group'>
-      <label for='lat' class='col-sm-3 control-label'>Latitude</label>
-  <div class='col-sm-3'> <input type='text' class='form-control' name='lat' placeholder='50.439148' value='{$SomeArr['latitude']}' required=''></div></div>
-  
-  <div class='form-group'>
-      <label for='lng' class='col-sm-3 control-label'>Longitude</label>
-  <div class='col-sm-3'> <input type='text' class='form-control' name='lng' placeholder='30.523342' value='{$SomeArr['longitude']}' required=''></div></div>
-  
-   <div class='form-group'>
-      <label for='loc_name' class='col-sm-3 control-label'>Header Ru/En</label>
-      <div class='col-sm-3'> 
-          <input type='text' class='form-control' name='loc_name' placeholder='Header Ru' value='{$SomeArr['loc_name']}' required=''>
-      </div>
-      <div class='col-sm-3'> 
-          <input type='text' class='form-control' name='loc_name_ua' placeholder='Header Ua' value='{$SomeArr['loc_name_ua']}' required=''>
-      </div>
-  </div>
-  
-   <div class='form-group'>
-      <label for='loc_address1' class='col-sm-3 control-label'>Short name Ru/En</label>
-      <div class='col-sm-3'> 
-          <input type='text' class='form-control' name='loc_address1' placeholder='Short name Ru' value='{$SomeArr['loc_address1']}' required=''>
-      </div>
-      <div class='col-sm-3'> 
-          <input type='text' class='form-control' name='loc_address1_ua' placeholder='Short name Ua' value='{$SomeArr['loc_address1_ua']}' required=''>
-      </div>
-  </div>
-  
-   <div class='form-group'>
-      <label for='loc_address2' class='col-sm-3 control-label'>Address Ru/En</label>
-      <div class='col-sm-3'> 
-          <input type='text' class='form-control' name='loc_address2' placeholder='Address Ru' value='{$SomeArr['loc_address2']}' required=''>
-      </div>
-      <div class='col-sm-3'> 
-          <input type='text' class='form-control' name='loc_address2_ua' placeholder='Address Ua' value='{$SomeArr['loc_address2_ua']}' required=''>
-      </div>
-  </div>
+        <input type="hidden" value="" name="text_block" required>
+        <input type="hidden" value="" name="text_block_en" required>
+        <input type="hidden" value="сontacts_header" name="strContent_for" required>
+        <!-- кнопки -->
+        <div class="container">
+          <div class="row" style = "color:white;" >
+            <div class="col-sm-3 offset-sm-3 col-lg-2 offset-lg-4">
+              <button type="reset" class="btn btn-info btn-sm"><i class="fa fa-times"></i> Clear</button>
+            </div>
+            <div class="col-sm-3 col-lg-2">
+              <button name="strInnFromForm" value="'.$strSubmitValue.'" type="submit" class="btn btn-success btn-sm "><i class="fa fa-lock"></i> Save</button>
+            </div>
+          </div>
+        </div>
+        <!-- кнопки конец-->
+      </form>
+      <!-- форма конец-->';
 
-  <div class='form-group last'>
-  <div class='col-sm-offset-3 col-sm-9'>
-  <button type='submit' name='updateMapLocContent' class='btn btn-success btn-xs'>Change</button>
-  <a class='btn btn-default btn-xs' href='{$config['sitelink']}admin/index.php?Page=MapLocPoints&delMapLocContentID={$SomeArr['id']}'>Remove</a>
-</div></div></form>";$i++;} 
+      if(CheckData('sl_content', 'content_for', 'сontacts_sec_header')){ //данные для Text - Header второго уровня есть
+        $ArrayData = selectFromTable('sl_content', array('content_for', 'text_big', 'text_big_en', 'time','edit_by'), true, 'content_for', 'сontacts_sec_header')[0];
+        $strSubmitValue = 'updIN';
+        $strData=date("d.m.Y",$ArrayData['time']);
+        $strEditorHTML = "<div style='text-align:center;'>Last editing $strData, user: {$ArrayData['edit_by']}</div>";
+        $text_big=$ArrayData['text_big'];          
+        $text_big_en=$ArrayData['text_big_en'];
+      }else{ //данные для Text - Header второго уровня нету
+        $strSubmitValue = 'addINTO';
+        $strEditorHTML = '';
+        $text_big = '';
+        $text_big_en = '';
+      }   
 
-echo " <form class='form-horizontal' role='form' action='' enctype='multipart/form-data' method='post' style='margin-top:30px;'>
+      echo $strEditorHTML.'<!-- форма -->
+      <form action="" method="post" autocomplete="off" onsubmit="winWait();">
+        <div class="form-row" style="padding-bottom: 15px;">
+          <div class="col-lg-2 offset-lg-4">
+            <label for="h2_header">Second header Ru*</label>
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="inputGroupPrepend1"><i class="fa fa-address-book-o"></i></span>
+              </div>
+              <input type="text" class="form-control" id="h2_header" name="header" value="'.$text_big.'" aria-describedby="inputGroupPrepend1" required>
+            </div>
+          </div>
+          <div class="col-lg-2">
+            <label for="h2_header_en">Second header En*</label>
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="inputGroupPrepend2"><i class="fa fa-address-book-o"></i></span>
+              </div>
+              <input type="text" class="form-control" id="h2_header_en" name="header_en" value="'.$text_big_en.'" aria-describedby="inputGroupPrepend2" required>
+            </div>
+          </div>
+        </div>
+
+        <input type="hidden" value="" name="text_block" required>
+        <input type="hidden" value="" name="text_block_en" required>
+        <input type="hidden" value="сontacts_sec_header" name="strContent_for" required>
+        <!-- кнопки -->
+        <div class="container">
+          <div class="row" style = "color:white;" >
+            <div class="col-sm-3 offset-sm-3 col-lg-2 offset-lg-4">
+              <button type="reset" class="btn btn-info btn-sm"><i class="fa fa-times"></i> Clear</button>
+            </div>
+            <div class="col-sm-3 col-lg-2">
+              <button name="strInnFromForm" value="'.$strSubmitValue.'" type="submit" class="btn btn-success btn-sm "><i class="fa fa-lock"></i> Save</button>
+            </div>
+          </div>
+        </div>
+        <!-- кнопки конец-->
+      </form>
+      <!-- форма конец-->';
+
+      if(CheckData('sl_content', 'content_for', 'phone')){ //данные для tel. number есть
+        $ArrayData = selectFromTable('sl_content', array('content_for', 'text_big', 'text_big_en', 'time','edit_by'), true, 'content_for', 'phone')[0];
+        $strSubmitValue = 'updIN';
+        $strData=date("d.m.Y",$ArrayData['time']);
+        $strEditorHTML = "<div style='text-align:center;'>Last editing $strData, user: {$ArrayData['edit_by']}</div>";
+        $text_big=$ArrayData['text_big'];          
+        $text_big_en=$ArrayData['text_big_en'];
+      }else{ //данные для tel. number нету
+        $strSubmitValue = 'addINTO';
+        $strEditorHTML = '';
+        $text_big = '';
+        $text_big_en = '';
+      }   
+
+      echo $strEditorHTML.'<!-- форма -->
+      <form action="" method="post" autocomplete="off" onsubmit="winWait();">
+        <div class="form-row" style="padding-bottom: 15px;">
+          <div class="col-lg-2 offset-lg-4">
+            <label for="phone">Phone number Ru*</label>
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="inputGroupPrepend1"><i class="fa fa-phone"></i></span>
+              </div>
+              <input type="text" class="form-control" id="phone" name="header" value="'.$text_big.'" aria-describedby="inputGroupPrepend1" required>
+            </div>
+          </div>
+          <div class="col-lg-2">
+            <label for="phone_en">Phone number En*</label>
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="inputGroupPrepend2"><i class="fa fa-phone"></i></span>
+              </div>
+              <input type="text" class="form-control" id="phone_en" name="header_en" value="'.$text_big_en.'" aria-describedby="inputGroupPrepend2" required>
+            </div>
+          </div>
+        </div>
+
+        <input type="hidden" value="" name="text_block" required>
+        <input type="hidden" value="" name="text_block_en" required>
+        <input type="hidden" value="phone" name="strContent_for" required>
+        <!-- кнопки -->
+        <div class="container">
+          <div class="row" style = "color:white;" >
+            <div class="col-sm-3 offset-sm-3 col-lg-2 offset-lg-4">
+              <button type="reset" class="btn btn-info btn-sm"><i class="fa fa-times"></i> Clear</button>
+            </div>
+            <div class="col-sm-3 col-lg-2">
+              <button name="strInnFromForm" value="'.$strSubmitValue.'" type="submit" class="btn btn-success btn-sm "><i class="fa fa-lock"></i> Save</button>
+            </div>
+          </div>
+        </div>
+        <!-- кнопки конец-->
+      </form>
+      <!-- форма конец-->';
+
+      if(CheckData('sl_content', 'content_for', 'Email')){ //данные для Email есть
+        $ArrayData = selectFromTable('sl_content', array('content_for', 'text_big', 'text_big_en', 'time','edit_by'), true, 'content_for', 'Email')[0];
+        $strSubmitValue = 'updIN';
+        $strData=date("d.m.Y",$ArrayData['time']);
+        $strEditorHTML = "<div style='text-align:center;'>Last editing $strData, user: {$ArrayData['edit_by']}</div>";
+        $text_big=$ArrayData['text_big'];          
+        $text_big_en=$ArrayData['text_big_en'];
+      }else{ //данные для Email нету
+        $strSubmitValue = 'addINTO';
+        $strEditorHTML = '';
+        $text_big = '';
+        $text_big_en = '';
+      }   
+
+      echo $strEditorHTML.'<!-- форма -->
+      <form action="" method="post" autocomplete="off" onsubmit="winWait();">
+        <div class="form-row" style="padding-bottom: 15px;">
+          <div class="col-lg-2 offset-lg-4">
+            <label for="Email">Email Ru*</label>
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="inputGroupPrepend1"><i class="fa fa-at"></i></span>
+              </div>
+              <input type="email" class="form-control" id="Email" name="header" value="'.$text_big.'" aria-describedby="inputGroupPrepend1" required>
+            </div>
+          </div>
+          <div class="col-lg-2">
+            <label for="Email_en">Email En*</label>
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="inputGroupPrepend2"><i class="fa fa-at"></i></span>
+              </div>
+              <input type="email" class="form-control" id="Email_en" name="header_en" value="'.$text_big_en.'" aria-describedby="inputGroupPrepend2" required>
+            </div>
+          </div>
+        </div>
+
+        <input type="hidden" value="" name="text_block" required>
+        <input type="hidden" value="" name="text_block_en" required>
+        <input type="hidden" value="Email" name="strContent_for" required>
+        <!-- кнопки -->
+        <div class="container">
+          <div class="row" style = "color:white;" >
+            <div class="col-sm-3 offset-sm-3 col-lg-2 offset-lg-4">
+              <button type="reset" class="btn btn-info btn-sm"><i class="fa fa-times"></i> Clear</button>
+            </div>
+            <div class="col-sm-3 col-lg-2">
+              <button name="strInnFromForm" value="'.$strSubmitValue.'" type="submit" class="btn btn-success btn-sm "><i class="fa fa-lock"></i> Save</button>
+            </div>
+          </div>
+        </div>
+        <!-- кнопки конец-->
+      </form>
+      <!-- форма конец-->';
           
-  <div class='form-group'>
-      <label for='lat' class='col-sm-3 control-label'>Latitude</label>
-  <div class='col-sm-3'> <input type='text' class='form-control' name='lat' placeholder='50.439148' required=''></div></div>
-  
-  <div class='form-group'>
-      <label for='lng' class='col-sm-3 control-label'>Longitude</label>
-  <div class='col-sm-3'> <input type='text' class='form-control' name='lng' placeholder='30.523342' required=''></div></div>
-  
-   <div class='form-group'>
-      <label for='loc_name' class='col-sm-3 control-label'>Header Ru/En</label>
-      <div class='col-sm-3'> 
-          <input type='text' class='form-control' name='loc_name' placeholder='Header Ru' required=''>
-      </div>
-      <div class='col-sm-3'> 
-          <input type='text' class='form-control' name='loc_name_ua' placeholder='Header Ua' required=''>
-      </div>
-  </div>
-  
-   <div class='form-group'>
-      <label for='loc_address1' class='col-sm-3 control-label'>Short name Ru/En</label>
-      <div class='col-sm-3'> 
-          <input type='text' class='form-control' name='loc_address1' placeholder='Short name Ru' required=''>
-      </div>
-      <div class='col-sm-3'> 
-          <input type='text' class='form-control' name='loc_address1_ua' placeholder='Short name Ua' required=''>
-      </div>
-  </div>
-  
-   <div class='form-group'>
-      <label for='loc_address2' class='col-sm-3 control-label'>Address Ru/En</label>
-      <div class='col-sm-3'> 
-          <input type='text' class='form-control' name='loc_address2' placeholder='Address Ru' required=''>
-      </div>
-      <div class='col-sm-3'> 
-          <input type='text' class='form-control' name='loc_address2_ua' placeholder='Address Ua' required=''>
-      </div>
-  </div>
-  
-  <div class='form-group last'>
-  <div class='col-sm-offset-3 col-sm-9'>
-  <button type='submit' name='addMapLocContent' class='btn btn-success btn-xs'>Add</button>
-  <a class='btn btn-default btn-xs' href='{$config['sitelink']}admin/index.php'>Cancel</a>
-</div></div></form>";
-}
-  }else{ //карт нету
-echo " <form class='form-horizontal' role='form' action='' enctype='multipart/form-data' method='post' style='margin-top:30px;'>
+      if(CheckData('sl_content', 'content_for', 'Facebook')){ //данные для Facebook есть
+        $ArrayData = selectFromTable('sl_content', array('content_for', 'text_big', 'text_big_en', 'time','edit_by'), true, 'content_for', 'Facebook')[0];
+        $strSubmitValue = 'updIN';
+        $strData=date("d.m.Y",$ArrayData['time']);
+        $strEditorHTML = "<div style='text-align:center;'>Last editing $strData, user: {$ArrayData['edit_by']}</div>";
+        $text_big=$ArrayData['text_big'];          
+        $text_big_en=$ArrayData['text_big_en'];
+      }else{ //данные для Facebook нету
+        $strSubmitValue = 'addINTO';
+        $strEditorHTML = '';
+        $text_big = '';
+        $text_big_en = '';
+      }   
+
+      echo $strEditorHTML.'<!-- форма -->
+      <form action="" method="post" autocomplete="off" onsubmit="winWait();">
+        <div class="form-row" style="padding-bottom: 15px;">
+          <div class="col-lg-2 offset-lg-4">
+            <label for="Facebook">Facebook Ru*</label>
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="inputGroupPrepend1"><i class="fa fa-facebook-square"></i></span>
+              </div>
+              <input type="text" class="form-control" id="Facebook" name="header" value="'.$text_big.'" aria-describedby="inputGroupPrepend1" required>
+            </div>
+          </div>
+          <div class="col-lg-2">
+            <label for="Facebook_en">Facebook En*</label>
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="inputGroupPrepend2"><i class="fa fa-facebook-square"></i></span>
+              </div>
+              <input type="text" class="form-control" id="Facebook_en" name="header_en" value="'.$text_big_en.'" aria-describedby="inputGroupPrepend2" required>
+            </div>
+          </div>
+        </div>
+
+        <input type="hidden" value="" name="text_block" required>
+        <input type="hidden" value="" name="text_block_en" required>
+        <input type="hidden" value="Facebook" name="strContent_for" required>
+        <!-- кнопки -->
+        <div class="container">
+          <div class="row" style = "color:white;" >
+            <div class="col-sm-3 offset-sm-3 col-lg-2 offset-lg-4">
+              <button type="reset" class="btn btn-info btn-sm"><i class="fa fa-times"></i> Clear</button>
+            </div>
+            <div class="col-sm-3 col-lg-2">
+              <button name="strInnFromForm" value="'.$strSubmitValue.'" type="submit" class="btn btn-success btn-sm "><i class="fa fa-lock"></i> Save</button>
+            </div>
+          </div>
+        </div>
+        <!-- кнопки конец-->
+      </form>
+      <!-- форма конец-->';
+        
+      if(CheckData('sl_content', 'content_for', 'instagram')){ //данные для instagram есть
+        $ArrayData = selectFromTable('sl_content', array('content_for', 'text_big', 'text_big_en', 'time','edit_by'), true, 'content_for', 'instagram')[0];
+        $strSubmitValue = 'updIN';
+        $strData=date("d.m.Y",$ArrayData['time']);
+        $strEditorHTML = "<div style='text-align:center;'>Last editing $strData, user: {$ArrayData['edit_by']}</div>";
+        $text_big=$ArrayData['text_big'];          
+        $text_big_en=$ArrayData['text_big_en'];
+      }else{ //данные для instagram нету
+        $strSubmitValue = 'addINTO';
+        $strEditorHTML = '';
+        $text_big = '';
+        $text_big_en = '';
+      }   
+
+      echo $strEditorHTML.'<!-- форма -->
+      <form action="" method="post" autocomplete="off" onsubmit="winWait();">
+        <div class="form-row" style="padding-bottom: 15px;">
+          <div class="col-lg-2 offset-lg-4">
+            <label for="instagram">instagram Ru*</label>
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="inputGroupPrepend1"><i class="fa fa-instagram"></i></span>
+              </div>
+              <input type="text" class="form-control" id="instagram" name="header" value="'.$text_big.'" aria-describedby="inputGroupPrepend1" required>
+            </div>
+          </div>
+          <div class="col-lg-2">
+            <label for="instagram_en">instagram En*</label>
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="inputGroupPrepend2"><i class="fa fa-instagram"></i></span>
+              </div>
+              <input type="text" class="form-control" id="instagram_en" name="header_en" value="'.$text_big_en.'" aria-describedby="inputGroupPrepend2" required>
+            </div>
+          </div>
+        </div>
+
+        <input type="hidden" value="" name="text_block" required>
+        <input type="hidden" value="" name="text_block_en" required>
+        <input type="hidden" value="instagram" name="strContent_for" required>
+        <!-- кнопки -->
+        <div class="container">
+          <div class="row" style = "color:white;" >
+            <div class="col-sm-3 offset-sm-3 col-lg-2 offset-lg-4">
+              <button type="reset" class="btn btn-info btn-sm"><i class="fa fa-times"></i> Clear</button>
+            </div>
+            <div class="col-sm-3 col-lg-2">
+              <button name="strInnFromForm" value="'.$strSubmitValue.'" type="submit" class="btn btn-success btn-sm "><i class="fa fa-lock"></i> Save</button>
+            </div>
+          </div>
+        </div>
+        <!-- кнопки конец-->
+      </form>
+      <!-- форма конец-->';
+        
+      if(CheckData('sl_content', 'content_for', 'youtube')){ //данные для youtube есть
+        $ArrayData = selectFromTable('sl_content', array('content_for', 'text_big', 'text_big_en', 'time','edit_by'), true, 'content_for', 'youtube')[0];
+        $strSubmitValue = 'updIN';
+        $strData=date("d.m.Y",$ArrayData['time']);
+        $strEditorHTML = "<div style='text-align:center;'>Last editing $strData, user: {$ArrayData['edit_by']}</div>";
+        $text_big=$ArrayData['text_big'];          
+        $text_big_en=$ArrayData['text_big_en'];
+      }else{ //данные для youtube нету
+        $strSubmitValue = 'addINTO';
+        $strEditorHTML = '';
+        $text_big = '';
+        $text_big_en = '';
+      }   
+
+      echo $strEditorHTML.'<!-- форма -->
+      <form action="" method="post" autocomplete="off" onsubmit="winWait();">
+        <div class="form-row" style="padding-bottom: 15px;">
+          <div class="col-lg-2 offset-lg-4">
+            <label for="youtube">youtube Ru*</label>
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="inputGroupPrepend1"><i class="fa fa-youtube"></i></span>
+              </div>
+              <input type="text" class="form-control" id="youtube" name="header" value="'.$text_big.'" aria-describedby="inputGroupPrepend1" required>
+            </div>
+          </div>
+          <div class="col-lg-2">
+            <label for="youtube_en">youtube En*</label>
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="inputGroupPrepend2"><i class="fa fa-youtube"></i></span>
+              </div>
+              <input type="text" class="form-control" id="youtube_en" name="header_en" value="'.$text_big_en.'" aria-describedby="inputGroupPrepend2" required>
+            </div>
+          </div>
+        </div>
+
+        <input type="hidden" value="" name="text_block" required>
+        <input type="hidden" value="" name="text_block_en" required>
+        <input type="hidden" value="youtube" name="strContent_for" required>
+        <!-- кнопки -->
+        <div class="container">
+          <div class="row" style = "color:white;" >
+            <div class="col-sm-3 offset-sm-3 col-lg-2 offset-lg-4">
+              <button type="reset" class="btn btn-info btn-sm"><i class="fa fa-times"></i> Clear</button>
+            </div>
+            <div class="col-sm-3 col-lg-2">
+              <button name="strInnFromForm" value="'.$strSubmitValue.'" type="submit" class="btn btn-success btn-sm "><i class="fa fa-lock"></i> Save</button>
+            </div>
+          </div>
+        </div>
+        <!-- кнопки конец-->
+      </form>
+      <!-- форма конец-->';
+
+      if(CheckData('sl_content', 'content_for', 'upwork')){ //данные для upwork есть
+        $ArrayData = selectFromTable('sl_content', array('content_for', 'text_big', 'text_big_en', 'time','edit_by'), true, 'content_for', 'upwork')[0];
+        $strSubmitValue = 'updIN';
+        $strData=date("d.m.Y",$ArrayData['time']);
+        $strEditorHTML = "<div style='text-align:center;'>Last editing $strData, user: {$ArrayData['edit_by']}</div>";
+        $text_big=$ArrayData['text_big'];          
+        $text_big_en=$ArrayData['text_big_en'];
+      }else{ //данные для upwork нету
+        $strSubmitValue = 'addINTO';
+        $strEditorHTML = '';
+        $text_big = '';
+        $text_big_en = '';
+      }   
+
+      echo $strEditorHTML.'<!-- форма -->
+      <form action="" method="post" autocomplete="off" onsubmit="winWait();">
+        <div class="form-row" style="padding-bottom: 15px;">
+          <div class="col-lg-2 offset-lg-4">
+            <label for="upwork">upwork Ru*</label>
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="inputGroupPrepend1"><i class="fa fa-user-circle"></i></span>
+              </div>
+              <input type="text" class="form-control" id="upwork" name="header" value="'.$text_big.'" aria-describedby="inputGroupPrepend1" required>
+            </div>
+          </div>
+          <div class="col-lg-2">
+            <label for="upwork_en">upwork En*</label>
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="inputGroupPrepend2"><i class="fa fa-user-circle"></i></span>
+              </div>
+              <input type="text" class="form-control" id="upwork_en" name="header_en" value="'.$text_big_en.'" aria-describedby="inputGroupPrepend2" required>
+            </div>
+          </div>
+        </div>
+
+        <input type="hidden" value="" name="text_block" required>
+        <input type="hidden" value="" name="text_block_en" required>
+        <input type="hidden" value="upwork" name="strContent_for" required>
+        <!-- кнопки -->
+        <div class="container">
+          <div class="row" style = "color:white;" >
+            <div class="col-sm-3 offset-sm-3 col-lg-2 offset-lg-4">
+              <button type="reset" class="btn btn-info btn-sm"><i class="fa fa-times"></i> Clear</button>
+            </div>
+            <div class="col-sm-3 col-lg-2">
+              <button name="strInnFromForm" value="'.$strSubmitValue.'" type="submit" class="btn btn-success btn-sm "><i class="fa fa-lock"></i> Save</button>
+            </div>
+          </div>
+        </div>
+        <!-- кнопки конец-->
+      </form>
+      <!-- форма конец-->';
+      
+      if(CheckData('sl_content', 'content_for', 'linkedin')){ //данные для linkedin есть
+        $ArrayData = selectFromTable('sl_content', array('content_for', 'text_big', 'text_big_en', 'time','edit_by'), true, 'content_for', 'linkedin')[0];
+        $strSubmitValue = 'updIN';
+        $strData=date("d.m.Y",$ArrayData['time']);
+        $strEditorHTML = "<div style='text-align:center;'>Last editing $strData, user: {$ArrayData['edit_by']}</div>";
+        $text_big=$ArrayData['text_big'];          
+        $text_big_en=$ArrayData['text_big_en'];
+      }else{ //данные для linkedin нету
+        $strSubmitValue = 'addINTO';
+        $strEditorHTML = '';
+        $text_big = '';
+        $text_big_en = '';
+      }   
+
+      echo $strEditorHTML.'<!-- форма -->
+      <form action="" method="post" autocomplete="off" onsubmit="winWait();">
+        <div class="form-row" style="padding-bottom: 15px;">
+          <div class="col-lg-2 offset-lg-4">
+            <label for="linkedin">linkedin Ru*</label>
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="inputGroupPrepend1"><i class="fa fa-linkedin-square"></i></span>
+              </div>
+              <input type="text" class="form-control" id="linkedin" name="header" value="'.$text_big.'" aria-describedby="inputGroupPrepend1" required>
+            </div>
+          </div>
+          <div class="col-lg-2">
+            <label for="linkedin_en">linkedin En*</label>
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="inputGroupPrepend2"><i class="fa fa-linkedin-square"></i></span>
+              </div>
+              <input type="text" class="form-control" id="linkedin_en" name="header_en" value="'.$text_big_en.'" aria-describedby="inputGroupPrepend2" required>
+            </div>
+          </div>
+        </div>
+
+        <input type="hidden" value="" name="text_block" required>
+        <input type="hidden" value="" name="text_block_en" required>
+        <input type="hidden" value="linkedin" name="strContent_for" required>
+        <!-- кнопки -->
+        <div class="container">
+          <div class="row" style = "color:white;" >
+            <div class="col-sm-3 offset-sm-3 col-lg-2 offset-lg-4">
+              <button type="reset" class="btn btn-info btn-sm"><i class="fa fa-times"></i> Clear</button>
+            </div>
+            <div class="col-sm-3 col-lg-2">
+              <button name="strInnFromForm" value="'.$strSubmitValue.'" type="submit" class="btn btn-success btn-sm "><i class="fa fa-lock"></i> Save</button>
+            </div>
+          </div>
+        </div>
+        <!-- кнопки конец-->
+      </form>
+      <!-- форма конец-->';      
+    break;
+    /*---------------------------------------------------------------------------------*/
+    /*--работа в раздете изменить что-то в теме----------------------------------------*/
+    /*---------------------------------------------------------------------------------*/
+    case 'Theme':
+      echo "<div class='myShapka'>{$menu['Theme']}</div>";
+      if(CheckData('sl_content', 'content_for', 'sitetitle')){ //данные для основной тайтл темы есть
+        $ArrayData = selectFromTable('sl_content', array('content_for', 'text_big', 'text_big_en', 'time','edit_by'), true, 'content_for', 'sitetitle')[0];
+        $strSubmitValue = 'updIN';
+        $strData=date("d.m.Y",$ArrayData['time']);
+        $strEditorHTML = "<div style='text-align:center;'>Last editing $strData, user: {$ArrayData['edit_by']}</div>";
+        $text_big=$ArrayData['text_big'];          
+        $text_big_en=$ArrayData['text_big_en'];
+      }else{ //данные для основной тайтл темы нету
+        $strSubmitValue = 'addINTO';
+        $strEditorHTML = '';
+        $text_big = '';
+        $text_big_en = '';
+      }   
+
+      echo $strEditorHTML.'<!-- форма -->
+      <form action="" method="post" autocomplete="off" onsubmit="winWait();">
+        <div class="form-row" style="padding-bottom: 15px;">
+          <div class="col-lg-2 offset-lg-4">
+            <label for="sitetitle">Primary site title Ru*</label>
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="inputGroupPrepend1"><i class="fa fa-header"></i></span>
+              </div>
+              <input type="text" class="form-control" id="sitetitle" name="header" value="'.$text_big.'"  aria-describedby="inputGroupPrepend1" required>
+            </div>
+          </div>
+          <div class="col-lg-2">
+            <label for="sitetitle_en">Primary site title En*</label>
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="inputGroupPrepend2"><i class="fa fa-header"></i></span>
+              </div>
+              <input type="text" class="form-control" id="sitetitle_en" name="header_en" value="'.$text_big_en.'"  aria-describedby="inputGroupPrepend2" required>
+            </div>
+          </div>
+        </div>
+
+        <input type="hidden" value="" name="text_block" required>
+        <input type="hidden" value="" name="text_block_en" required>
+        <input type="hidden" value="sitetitle" name="strContent_for" required>
+        <!-- кнопки -->
+        <div class="container">
+          <div class="row" style = "color:white;" >
+            <div class="col-sm-3 offset-sm-3 col-lg-2 offset-lg-4">
+              <button type="reset" class="btn btn-info btn-sm"><i class="fa fa-times"></i> Clear</button>
+            </div>
+            <div class="col-sm-3 col-lg-2">
+              <button name="strInnFromForm" value="'.$strSubmitValue.'" type="submit" class="btn btn-success btn-sm "><i class="fa fa-lock"></i> Save</button>
+            </div>
+          </div>
+        </div>
+        <!-- кнопки конец-->
+      </form>
+      <!-- форма конец-->';
+
+      if(CheckData('sl_content', 'content_for', 'prColor')){ //данные для основной цвет темы есть
+        $ArrayData = selectFromTable('sl_content', array('content_for', 'text_big', 'text_big_en', 'time','edit_by'), true, 'content_for', 'prColor')[0];
+        $strSubmitValue = 'updIN';
+        $strData=date("d.m.Y",$ArrayData['time']);
+        $strEditorHTML = "<div style='text-align:center;'>Last editing $strData, user: {$ArrayData['edit_by']}</div>";
+        $text_big=$ArrayData['text_big'];          
+        $text_big_en=$ArrayData['text_big_en'];
+      }else{ //данные для основной цвет темы нету
+        $strSubmitValue = 'addINTO';
+        $strEditorHTML = '';
+        $text_big = '';
+        $text_big_en = '';
+      }   
+
+      echo $strEditorHTML.'<!-- форма -->
+      <form action="" method="post" autocomplete="off" onsubmit="winWait();">
+        <div class="form-row" style="padding-bottom: 15px;">
+          <div class="col-lg-2 offset-lg-4">
+            <label for="prColor">Primary site color Ru*</label>
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="inputGroupPrepend1"><i class="fa fa-paint-brush "></i></span>
+              </div>
+              <input type="text" class="form-control" id="prColor" name="header" placeholder="#00a3ff" value="'.$text_big.'" aria-describedby="inputGroupPrepend1" required>
+            </div>
+          </div>
+          <div class="col-lg-2">
+            <label for="prColor_en">Primary site color En*</label>
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="inputGroupPrepend2"><i class="fa fa-paint-brush "></i></span>
+              </div>
+              <input type="text" class="form-control" id="prColor_en" name="header_en" placeholder="#00a3ff" value="'.$text_big_en.'" aria-describedby="inputGroupPrepend2" required>
+            </div>
+          </div>
+        </div>
+
+        <input type="hidden" value="" name="text_block" required>
+        <input type="hidden" value="" name="text_block_en" required>
+        <input type="hidden" value="prColor" name="strContent_for" required>
+        <!-- кнопки -->
+        <div class="container">
+          <div class="row" style = "color:white;" >
+            <div class="col-sm-3 offset-sm-3 col-lg-2 offset-lg-4">
+              <button type="reset" class="btn btn-info btn-sm"><i class="fa fa-times"></i> Clear</button>
+            </div>
+            <div class="col-sm-3 col-lg-2">
+              <button name="strInnFromForm" value="'.$strSubmitValue.'" type="submit" class="btn btn-success btn-sm "><i class="fa fa-lock"></i> Save</button>
+            </div>
+          </div>
+        </div>
+        <!-- кнопки конец-->
+      </form>
+      <!-- форма конец-->';
           
-  <div class='form-group'>
-      <label for='lat' class='col-sm-3 control-label'>Latitude</label>
-  <div class='col-sm-3'> <input type='text' class='form-control' name='lat' placeholder='50.439148' required=''></div></div>
-  
-  <div class='form-group'>
-      <label for='lng' class='col-sm-3 control-label'>Longitude</label>
-  <div class='col-sm-3'> <input type='text' class='form-control' name='lng' placeholder='30.523342' required=''></div></div>
-  
-   <div class='form-group'>
-      <label for='loc_name' class='col-sm-3 control-label'>Header Ru/En</label>
-      <div class='col-sm-3'> 
-          <input type='text' class='form-control' name='loc_name' placeholder='Header Ru' required=''>
-      </div>
-      <div class='col-sm-3'> 
-          <input type='text' class='form-control' name='loc_name_ua' placeholder='Header Ua' required=''>
-      </div>
-  </div>
-  
-   <div class='form-group'>
-      <label for='loc_address1' class='col-sm-3 control-label'>Short name Ru/En</label>
-      <div class='col-sm-3'> 
-          <input type='text' class='form-control' name='loc_address1' placeholder='Short name Ru' required=''>
-      </div>
-      <div class='col-sm-3'> 
-          <input type='text' class='form-control' name='loc_address1_ua' placeholder='Short name Ua' required=''>
-      </div>
-  </div>
-  
-   <div class='form-group'>
-      <label for='loc_address2' class='col-sm-3 control-label'>Address Ru/En</label>
-      <div class='col-sm-3'> 
-          <input type='text' class='form-control' name='loc_address2' placeholder='Address Ru' required=''>
-      </div>
-      <div class='col-sm-3'> 
-          <input type='text' class='form-control' name='loc_address2_ua' placeholder='Address Ua' required=''>
-      </div>
-  </div>
-  
-  <div class='form-group last'>
-  <div class='col-sm-offset-3 col-sm-9'>
-  <button type='submit' name='addMapLocContent' class='btn btn-success btn-xs'>Add</button>
-  <a class='btn btn-default btn-xs' href='{$config['sitelink']}admin/index.php'>Cancel</a>
-</div></div></form>";
+      if(CheckData('sl_content', 'content_for', 'sitefont')){ //данные для шрифт темы есть
+        $ArrayData = selectFromTable('sl_content', array('content_for', 'text_big', 'text_big_en', 'time','edit_by'), true, 'content_for', 'sitefont')[0];
+        $strSubmitValue = 'updIN';
+        $strData=date("d.m.Y",$ArrayData['time']);
+        $strEditorHTML = "<div style='text-align:center;'>Last editing $strData, user: {$ArrayData['edit_by']}</div>";
+        $text_big=$ArrayData['text_big'];          
+        $text_big_en=$ArrayData['text_big_en'];
+      }else{ //данные для шрифт темы нету
+        $strSubmitValue = 'addINTO';
+        $strEditorHTML = '';
+        $text_big = '';
+        $text_big_en = '';
+      }   
+
+      echo $strEditorHTML.'<!-- форма -->
+      <form action="" method="post" autocomplete="off" onsubmit="winWait();">
+        <div class="form-row" style="padding-bottom: 15px;">
+          <div class="col-lg-2 offset-lg-4">
+            <label for="sitefont">Site font Ru*</label>
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="inputGroupPrepend1"><i class="fa fa-font"></i></span>
+              </div>
+              <input type="text" class="form-control" id="sitefont" name="header" value="'.$text_big.'" placeholder="\'Roboto\', sans-serif" aria-describedby="inputGroupPrepend1" required>
+            </div>
+          </div>
+          <div class="col-lg-2">
+            <label for="sitefont_en">Site font En*</label>
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="inputGroupPrepend2"><i class="fa fa-font"></i></span>
+              </div>
+              <input type="text" class="form-control" id="sitefont_en" name="header_en" value="'.$text_big_en.'" placeholder="\'Roboto\', sans-serif" aria-describedby="inputGroupPrepend2" required>
+            </div>
+          </div>
+        </div>
+
+        <input type="hidden" value="" name="text_block" required>
+        <input type="hidden" value="" name="text_block_en" required>
+        <input type="hidden" value="sitefont" name="strContent_for" required>
+        <!-- кнопки -->
+        <div class="container">
+          <div class="row" style = "color:white;" >
+            <div class="col-sm-3 offset-sm-3 col-lg-2 offset-lg-4">
+              <button type="reset" class="btn btn-info btn-sm"><i class="fa fa-times"></i> Clear</button>
+            </div>
+            <div class="col-sm-3 col-lg-2">
+              <button name="strInnFromForm" value="'.$strSubmitValue.'" type="submit" class="btn btn-success btn-sm "><i class="fa fa-lock"></i> Save</button>
+            </div>
+          </div>
+        </div>
+        <!-- кнопки конец-->
+      </form>
+      <!-- форма конец-->';
+        
+      if(CheckData('sl_content', 'content_for', 'addScripts')){ //дополнительные скрипты (для страниц) есть
+        $ArrayData = selectFromTable('sl_content', array('content_for', 'text_small', 'text_small_en', 'time','edit_by'), true, 'content_for', 'addScripts')[0];
+        $strSubmitValue = 'updIN';
+        $strData=date("d.m.Y",$ArrayData['time']);
+        $strEditorHTML = "<div style='text-align:center;'>Last editing $strData, user: {$ArrayData['edit_by']}</div>";
+        $text_small=$ArrayData['text_small'];          
+        $text_small_en=$ArrayData['text_small_en'];
+      }else{ //дополнительные скрипты (для страниц) нету
+        $strSubmitValue = 'addINTO';
+        $strEditorHTML = '';
+        $text_small = '';
+        $text_small_en = '';
+      }   
+
+      echo $strEditorHTML.'<!-- форма -->
+      <form action="" method="post" autocomplete="off" onsubmit="winWait();">
+        <div class="form-row" style="padding-bottom: 15px;">
+          <div class="col-lg-6">
+            <label for="addScripts">Additional scripts Ru*</label>
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="inputGroupPrepend1"><i class="fa fa-code"></i></span>
+              </div>
+              <textarea rows="4" cols="50" type="text" class="form-control" id="addScripts" name="text_block" aria-describedby="inputGroupPrepend1" required>'.$text_small.'</textarea>
+            </div>
+          </div>
+          <div class="col-lg-6">
+            <label for="addScripts_en">Additional scripts En*</label>
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="inputGroupPrepend2"><i class="fa fa-code"></i></span>
+              </div>
+              <textarea rows="4" cols="50" type="text" class="form-control" id="addScripts_en" name="text_block_en" aria-describedby="inputGroupPrepend1" required>'.$text_small_en.'</textarea>
+            </div>
+          </div>
+        </div>
+
+        <input type="hidden" value="" name="header" required>
+        <input type="hidden" value="" name="header_en" required>
+        <input type="hidden" value="addScripts" name="strContent_for" required>
+        <!-- кнопки -->
+        <div class="container">
+          <div class="row" style = "color:white;" >
+            <div class="col-sm-3 offset-sm-3 col-lg-2 offset-lg-4">
+              <button type="reset" class="btn btn-info btn-sm"><i class="fa fa-times"></i> Clear</button>
+            </div>
+            <div class="col-sm-3 col-lg-2">
+              <button name="strInnFromForm" value="'.$strSubmitValue.'" type="submit" class="btn btn-success btn-sm "><i class="fa fa-lock"></i> Save</button>
+            </div>
+          </div>
+        </div>
+        <!-- кнопки конец-->
+      </form>
+      <!-- форма конец-->'; 
+    break;
+    default: echo "<div class='myShapka'>Choose one of pages in menu</div>";
   }
-  
-break; 
-  
-
-default: echo "<div class='myShapka'>Choose one of pages in menu</div>";
-}
-
-
 }

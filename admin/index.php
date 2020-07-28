@@ -147,21 +147,7 @@ if($_POST['strInnFromForm'] == 'ChanPassword'){ //пришел запрос на
   //------------------------------------------------------------------------------------------
   //------------------------------------------------------------------------------------------
   //определяем таблицу для добавления
-  if(isset($_POST['strContact_for'])){//определена таблица Контактов
-    if(isset($_POST[$_POST['strContact_for']]) and $_POST[$_POST['strContact_for']] != ''){//проверка что данные пришли
-      if($intUserPermis == 1 or $intUserPermis == 2){ //проверяем что пользователь может менять данные
-        if(addIntoTable('sl_contacts', array('contact_for','contact','time','edit_by'), array($_POST['strContact_for'],$_POST[$_POST['strContact_for']],time(),$_SESSION['new']['signature']))){
-          header("Location: index.php?strError=passOK&".$strCurCuery);exit;
-        }else{
-          header("Location: index.php?strError=BadDBAcces&".$strCurCuery);exit;
-        }
-      }else{//пользователь не может менять данные
-        header("Location: index.php?strError=BadUserAcces&".$strCurCuery);exit;
-      }
-    }else{//данные не пришли
-      header("Location: index.php?strError=Empty&".$strCurCuery);exit;
-    }
-  }elseif(isset($_POST['strContent_for'])){//определена таблица Контента
+  if(isset($_POST['strContent_for'])){//определена таблица Контента
     if($intUserPermis == 1 or $intUserPermis == 2){ //проверяем что пользователь может менять данные
       if(addIntoTable('sl_content', array('content_for','text_big', 'text_small', 'text_big_en', 'text_small_en', 'time','edit_by'), array($_POST['strContent_for'],$_POST['header'],$_POST['text_block'],$_POST['header_en'],$_POST['text_block_en'],time(),$_SESSION['new']['signature']))){
         header("Location: index.php?strError=passOK&".$strCurCuery);exit;
@@ -173,7 +159,7 @@ if($_POST['strInnFromForm'] == 'ChanPassword'){ //пришел запрос на
     }
   }elseif(isset($_POST['strImage_for'])){//определена таблица Изображений
     if($intUserPermis == 1 or $intUserPermis == 2){ //проверяем что пользователь может менять данные
-      $newImageName = uploadImage($_FILES['new_image'],$_POST['strImage_for'], 570, 600);
+      $newImageName = uploadImage($_FILES['new_image'],'Slider', 570, 600);
       if($newImageName!==false){ //загрузка изображения - ок
         if(addIntoTable('sl_images', array('image_for','image_name', 'time','edit_by'), array($_POST['strImage_for'],$newImageName,time(),$_SESSION['new']['signature']))){
           header("Location: index.php?strError=passOK&".$strCurCuery);exit;
@@ -195,21 +181,7 @@ if($_POST['strInnFromForm'] == 'ChanPassword'){ //пришел запрос на
   //------------------------------------------------------------------------------------------
   //------------------------------------------------------------------------------------------
   //определяем таблицу для вноса обновений
-  if(isset($_POST['strContact_for'])){//определена таблица Контактов
-    if(isset($_POST[$_POST['strContact_for']]) and $_POST[$_POST['strContact_for']] != ''){//проверка что данные пришли
-      if($intUserPermis == 1 or $intUserPermis == 2){ //проверяем что пользователь может менять данные
-        if(updateTable('sl_contacts', array('contact','time','edit_by'), 'contact_for', $_POST['strContact_for'], array($_POST[$_POST['strContact_for']],time(),$_SESSION['new']['signature']))){
-          header("Location: index.php?strError=passOK&".$strCurCuery);exit;
-        }else{
-          header("Location: index.php?strError=BadDBAcces&".$strCurCuery);exit;
-        }
-      }else{//пользователь не может менять данные
-        header("Location: index.php?strError=BadUserAcces&".$strCurCuery);exit;
-      }
-    }else{//данные не пришли
-      header("Location: index.php?strError=Empty&".$strCurCuery);exit;
-    }
-  }elseif(isset($_POST['strContent_for'])){//определена таблица Контента
+  if(isset($_POST['strContent_for'])){//определена таблица Контента
     if($intUserPermis == 1 or $intUserPermis == 2){ //проверяем что пользователь может менять данные
       if(updateTable('sl_content', array('text_big', 'text_small', 'text_big_en', 'text_small_en', 'time','edit_by'), 'content_for', $_POST['strContent_for'], array($_POST['header'],$_POST['text_block'],$_POST['header_en'],$_POST['text_block_en'],time(),$_SESSION['new']['signature']))){
         header("Location: index.php?strError=passOK&".$strCurCuery);exit;
@@ -241,8 +213,8 @@ if($_POST['strInnFromForm'] == 'ChanPassword'){ //пришел запрос на
   //определяем таблицу для вноса обновений
   if(isset($_POST['strImage_for'])){//определена таблица изображений
     if($_POST['boolINDB'] == 1){removeFromTable('sl_images', 'image_name', $_POST['image_name']);}
-    if($_POST['boolINFiles'] == 1){unlink("images/{$_POST['strImage_for']}/{$_POST['image_name']}");}
-    if($_POST['boolINFilesMini'] == 1){unlink("images/{$_POST['strImage_for']}/mini/{$_POST['image_name']}");}
+    if($_POST['boolINFiles'] == 1){unlink("images/Slider/{$_POST['image_name']}");}
+    if($_POST['boolINFilesMini'] == 1){unlink("images/Slider/mini/{$_POST['image_name']}");}
     header("Location: index.php?strPage={$_POST['strImage_for']}&strError=passOK");exit;     
   }elseif(isset($_POST['id'])){//определена таблица портфолио
     //проверяем есть ли переданный ID и получаем список его изображений

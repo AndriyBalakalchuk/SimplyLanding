@@ -14,17 +14,16 @@ $config['Copyright']            = 'Created by BVStudio in 2020.';  #мелкий
 
 # Настройки меню навигации
 $menu                           = array();
-$menu['MyData']	       	    = 'Edit Profile';  
-$menu['moders']	           	= 'Moderators'; 
-$menu['Telephone']	        = 'Telephone'; 
+$menu['MyData']	       	    = 'Edit Profile';
+$menu['moders']	           	= 'Moderators';
+$menu['About']	            = 'About';
 $menu['Slider']	      	    = 'Header';
 $menu['Skills']	         	= 'Skills';
-$menu['Portfolio']	      	= 'Portfolio'; 
-$menu['Feedback']	      	= 'Feedback'; 
-$menu['Partners']	      	= 'Partners'; 
-$menu['Expirience']	        = 'Expirience';
-$menu['Contacts']	      	= 'Contacts'; 
-$menu['MapLocPoints']	    = 'Map Locations'; 
+$menu['Portfolio']	      	= 'Portfolio';
+$menu['Feedback']	      	= 'Feedback';
+$menu['Partners']	      	= 'Partners';
+$menu['Contacts']	      	= 'Contacts';
+$menu['Theme']	            = 'Theme settings';
 
 # Настройки почты - если требуется отправки писем
 $email_config                   = array();

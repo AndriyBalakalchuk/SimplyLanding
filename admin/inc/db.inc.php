@@ -286,16 +286,6 @@ function CheckData($strTableName, $strColumnName, $strFindIt, $boolGetAll=false)
 
   //проверяем к какой таблице обращение, и создаем таблицу если ее нет (если такой таблици не планировалось, просто возвращаем фолс)
   switch ($strTableName) {
-    case 'sl_contacts':
-      $create_table = $objDB->exec("CREATE TABLE IF NOT EXISTS
-        `sl_contacts` (
-          id MEDIUMINT(10) COLLATE utf8_general_ci NOT NULL AUTO_INCREMENT, PRIMARY KEY(id),
-          contact_for VARCHAR(50) COLLATE utf8_general_ci NOT NULL,
-          contact VARCHAR(50) COLLATE utf8_general_ci NOT NULL,
-          time VARCHAR(50) COLLATE utf8_general_ci NOT NULL,
-          edit_by VARCHAR(50) COLLATE utf8_general_ci) DEFAULT CHARSET utf8;"
-        ); /*создаем таблицу*/
-    break;
     case 'sl_content':
       $create_table = $objDB->exec("CREATE TABLE IF NOT EXISTS
         `sl_content` (
