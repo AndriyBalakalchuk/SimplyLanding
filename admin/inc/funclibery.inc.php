@@ -2713,6 +2713,61 @@ function Content($Stranitsa, $intUserPermis){
       </form>
       <!-- форма конец-->';
 
+      if(CheckData('sl_content', 'content_for', 'location')){ //данные для локации есть
+        $ArrayData = selectFromTable('sl_content', array('content_for', 'text_big', 'text_big_en', 'time','edit_by'), true, 'content_for', 'location')[0];
+        $strSubmitValue = 'updIN';
+        $strData=date("d.m.Y",$ArrayData['time']);
+        $strEditorHTML = "<div style='text-align:center;'>Last editing $strData, user: {$ArrayData['edit_by']}</div>";
+        $text_big=$ArrayData['text_big'];          
+        $text_big_en=$ArrayData['text_big_en'];
+      }else{ //данные для локации нету
+        $strSubmitValue = 'addINTO';
+        $strEditorHTML = '';
+        $text_big = '';
+        $text_big_en = '';
+      }   
+
+      echo $strEditorHTML.'<!-- форма -->
+      <form action="" method="post" autocomplete="off" onsubmit="winWait();">
+        <div class="form-row" style="padding-bottom: 15px;">
+          <div class="col-lg-2 offset-lg-4">
+            <label for="location">Location Ru*</label>
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="inputGroupPrepend1"><i class="fa fa-map-marker"></i></span>
+              </div>
+              <input type="text" class="form-control" id="location" name="header" value="'.$text_big.'" aria-describedby="inputGroupPrepend1" required>
+            </div>
+          </div>
+          <div class="col-lg-2">
+            <label for="location_en">Location En*</label>
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="inputGroupPrepend2"><i class="fa fa-map-marker"></i></span>
+              </div>
+              <input type="text" class="form-control" id="location_en" name="header_en" value="'.$text_big_en.'" aria-describedby="inputGroupPrepend2" required>
+            </div>
+          </div>
+        </div>
+
+        <input type="hidden" value="" name="text_block" required>
+        <input type="hidden" value="" name="text_block_en" required>
+        <input type="hidden" value="location" name="strContent_for" required>
+        <!-- кнопки -->
+        <div class="container">
+          <div class="row" style = "color:white;" >
+            <div class="col-sm-3 offset-sm-3 col-lg-2 offset-lg-4">
+              <button type="reset" class="btn btn-info btn-sm"><i class="fa fa-times"></i> Clear</button>
+            </div>
+            <div class="col-sm-3 col-lg-2">
+              <button name="strInnFromForm" value="'.$strSubmitValue.'" type="submit" class="btn btn-success btn-sm "><i class="fa fa-lock"></i> Save</button>
+            </div>
+          </div>
+        </div>
+        <!-- кнопки конец-->
+      </form>
+      <!-- форма конец-->';
+
       if(CheckData('sl_content', 'content_for', 'Email')){ //данные для Email есть
         $ArrayData = selectFromTable('sl_content', array('content_for', 'text_big', 'text_big_en', 'time','edit_by'), true, 'content_for', 'Email')[0];
         $strSubmitValue = 'updIN';
