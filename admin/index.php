@@ -432,6 +432,61 @@ if($_POST['strInnFromForm'] == 'ChanPassword'){ //пришел запрос на
   }
   //------------------------------------------------------------------------------------------
   //------------------------------------------------------------------------------------------
+}elseif($_POST['strInnFromForm'] == 'addINTOfav'){//пришел запрос на добавление фавикона
+  //------------------------------------------------------------------------------------------
+  //------------------------------------------------------------------------------------------
+  if($intUserPermis == 1 or $intUserPermis == 2){ //проверяем что пользователь может менять данные
+    $newImageName = uploadImage($_FILES['new_image'],'', 32, 32);
+    if($newImageName!==false){ //загрузка изображения - ок
+      if(addIntoTable('sl_images', array('image_for','image_name', 'time','edit_by'), array($_POST['strImage_for'],$newImageName,time(),$_SESSION['new']['signature']))){
+        header("Location: index.php?strError=passOK&".$strCurCuery);exit;
+      }else{
+        header("Location: index.php?strError=BadDBAcces&".$strCurCuery);exit;
+      }
+    }else{//загрузка изображения - ОШИБКА 
+      header("Location: index.php?strError=BadDBAcces&".$strCurCuery);exit;
+    }
+  }else{//пользователь не может менять данные
+    header("Location: index.php?strError=BadUserAcces&".$strCurCuery);exit;
+  }
+  //------------------------------------------------------------------------------------------
+  //------------------------------------------------------------------------------------------
+}elseif($_POST['strInnFromForm'] == 'updINTOfav'){//пришел запрос на обновление фавикона
+  //------------------------------------------------------------------------------------------
+  //------------------------------------------------------------------------------------------
+  if($intUserPermis == 1 or $intUserPermis == 2){ //проверяем что пользователь может менять данные
+    //проверяем есть ли такой айди и получаем его изображение
+    if(CheckData('sl_images', 'id', $_POST['id'])){
+      $strOldImageName = selectFromTable('sl_images', array('image_name'), true, 'id', $_POST['id'])[0]['image_name'];
+    }else{
+      header("Location: index.php?strError=BadDBAcces&".$strCurCuery);exit;
+    }
+
+    if(isset($_FILES['new_image']) and $_FILES['new_image']['size'] > 0) {
+      $newImageName = uploadImage($_FILES['new_image'], '', 32, 32);
+      if($strOldImageName != '' and file_exists($path.'images/'.$strOldImageName)){
+        unlink("images/$strOldImageName");
+      }
+
+      if($newImageName==false or $newImageName=='' or $newImageName=='Ω'){ //загрузка изображения - не ок
+        $newImageName = '';
+      }
+    }
+
+    if(!isset($newImageName) or $newImageName==''){
+      $newImageName = $strOldImageName;
+    }
+
+      if(updateTable('sl_images',array('image_name', 'time','edit_by'), 'id', $_POST['id'], array($newImageName,time(),$_SESSION['new']['signature']))){
+        header("Location: index.php?strError=passOK&".$strCurCuery);exit;
+      }else{
+        header("Location: index.php?strError=BadDBAcces&".$strCurCuery);exit;
+      }
+  }else{//пользователь не может менять данные
+    header("Location: index.php?strError=BadUserAcces&".$strCurCuery);exit;
+  }
+  //------------------------------------------------------------------------------------------
+  //------------------------------------------------------------------------------------------
 }
 
 
@@ -560,7 +615,7 @@ if($_GET['strDo'] == 'Remove'){ //запрос на отмену задачи
                 <div class="modal-content" style = 'text-align:center;'>
                   <div class="container-fluid">
                     <div class="row">
-                      <div class="col-sm-12"><img height='25px' width = '55px' src='<?=$config['WaitingGIF']?>'></div>
+                      <div class="col-sm-12"><img style='padding-top:10px;' width = '55px' src='<?=$config['WaitingGIF']?>'></div>
                     </div>
                   </div>
                   <h3>Please don't do anything,</h3> <p> just wait until process will ends</p>

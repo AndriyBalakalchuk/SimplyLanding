@@ -508,15 +508,23 @@ function uploadImage($newImage, $strFolder, $width=1980, $height=1080){ //зал
   $FileRandName = explode('.', $newImage["name"]);
   $FileRandName= time().rand(1,9).'.'.array_pop($FileRandName);  //имя для изображения
   
-  //заливает картинку с подходящим размером   
-  $image = new SimpleImage();
-  $image->load($newImage["tmp_name"]);
-  $image->resize($width, $height);
-  $image->save("images/$strFolder/".$FileRandName);
-  //заливает миниатюру для просмотра в админке
-  $image->load("images/$strFolder/".$FileRandName);
-  $image->resizeToHeight(150);
-  $image->save("images/$strFolder/mini/".$FileRandName);
+  if($strFolder==''){
+    //заливает картинку с подходящим размером   
+    $image = new SimpleImage();
+    $image->load($newImage["tmp_name"]);
+    $image->resize($width, $height);
+    $image->save("images/".$FileRandName);
+  }else{
+    //заливает картинку с подходящим размером   
+    $image = new SimpleImage();
+    $image->load($newImage["tmp_name"]);
+    $image->resize($width, $height);
+    $image->save("images/$strFolder/".$FileRandName);
+    //заливает миниатюру для просмотра в админке
+    $image->load("images/$strFolder/".$FileRandName);
+    $image->resizeToHeight(150);
+    $image->save("images/$strFolder/mini/".$FileRandName);
+  }
     
 
   return $FileRandName;
@@ -1664,6 +1672,83 @@ function Content($Stranitsa, $intUserPermis){
             default: 
               echo "<a class='btn btn-info btn-sm btnModal' href='{$config['sitelink']}admin/index.php?strPage=Skills&skill_for=hardskill'>Hard skills</a> ";
               echo "<a class='btn btn-info btn-sm btnModal' href='{$config['sitelink']}admin/index.php?strPage=Skills&skill_for=softskill'>Soft skills</a> ";
+              if(CheckData('sl_content', 'content_for', 'Skills')){ //данные для слайдера есть
+                $ArrayData = selectFromTable('sl_content', array('content_for', 'text_big', 'text_small', 'text_big_en', 'text_small_en', 'time','edit_by'), true, 'content_for', 'Skills')[0];
+                $strSubmitValue = 'updIN';
+                $strData=date("d.m.Y",$ArrayData['time']);
+                $strEditorHTML = "<div style='text-align:center;'>Last editing $strData, user: {$ArrayData['edit_by']}</div>";
+                $text_big=$ArrayData['text_big'];
+                $text_small=$ArrayData['text_small'];            
+                $text_big_en=$ArrayData['text_big_en'];
+                $text_small_en=$ArrayData['text_small_en'];
+              }else{ //данные для слайдера  нету
+                $strSubmitValue = 'addINTO';
+                $strEditorHTML = '';
+                $text_big = '';
+                $text_small = '';            
+                $text_big_en = '';
+                $text_small_en = '';
+              }   
+      
+      
+              echo $strEditorHTML.'<!-- форма -->
+              <form action="" method="post" autocomplete="off" onsubmit="winWait();">
+                <div class="form-row" style="padding-bottom: 15px;">
+                  <div class="col-lg-2 offset-lg-4">
+                    <label for="header">Header Ru*</label>
+                    <div class="input-group">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text" id="inputGroupPrepend1"><i class="fa fa-header"></i></span>
+                      </div>
+                      <input type="text" class="form-control" id="header" name="header" value="'.$text_big.'" aria-describedby="inputGroupPrepend1" required>
+                    </div>
+                  </div>
+                  <div class="col-lg-2">
+                    <label for="header_en">Header En*</label>
+                    <div class="input-group">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text" id="inputGroupPrepend2"><i class="fa fa-header"></i></span>
+                      </div>
+                      <input type="text" class="form-control" id="header_en" name="header_en" value="'.$text_big_en.'" aria-describedby="inputGroupPrepend2" required>
+                    </div>
+                  </div>
+                </div>
+      
+                <div class="form-row" style="padding-bottom: 15px;">
+                  <div class="col-lg-4 offset-lg-2">
+                    <label for="text_block">Text Block Ru*</label>
+                    <div class="input-group">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text" id="inputGroupPrepend3"><i class="fa fa-font"></i></span>
+                      </div>
+                      <textarea rows="4" cols="50" type="text" class="form-control" id="text_block" name="text_block" aria-describedby="inputGroupPrepend3" required>'.$text_small.'</textarea>
+                    </div>
+                  </div>
+                  <div class="col-lg-4">
+                    <label for="text_block">Text Block En*</label>
+                    <div class="input-group">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text" id="inputGroupPrepend4"><i class="fa fa-font"></i></span>
+                      </div>
+                      <textarea rows="4" cols="50" type="text" class="form-control" id="text_block_en" name="text_block_en" aria-describedby="inputGroupPrepend4" required>'.$text_small_en.'</textarea>
+                    </div>
+                  </div>
+                </div>
+                <input type="hidden" value="Skills" name="strContent_for" required>
+                <!-- кнопки -->
+                <div class="container">
+                  <div class="row" style = "color:white;" >
+                    <div class="col-sm-3 offset-sm-3 col-lg-2 offset-lg-4">
+                      <button type="reset" class="btn btn-info btn-sm"><i class="fa fa-times"></i> Clear</button>
+                    </div>
+                    <div class="col-sm-3 col-lg-2">
+                      <button name="strInnFromForm" value="'.$strSubmitValue.'" id="" type="submit" class="btn btn-success btn-sm "><i class="fa fa-lock"></i> Save</button>
+                    </div>
+                  </div>
+                </div>
+                <!-- кнопки конец-->
+              </form>
+              <!-- форма конец-->';
           }
       }else{ //если пришел запрос на удаление скила то отобразить переспрашивание
         $boolINDB = false;
@@ -1815,17 +1900,21 @@ function Content($Stranitsa, $intUserPermis){
           $boolINDB = true; //отображаем блок для нового итема
           echo "<div class='myShapka'>{$menu['Portfolio']}</div>";
           if(CheckData('sl_content', 'content_for', 'portfolio_header')){ //данные для заголовка портфолио есть
-            $ArrayData = selectFromTable('sl_content', array('content_for', 'text_big', 'text_big_en', 'time','edit_by'), true, 'content_for', 'portfolio_header')[0];
+            $ArrayData = selectFromTable('sl_content', array('content_for', 'text_big', 'text_big_en', 'text_small', 'text_small_en', 'time','edit_by'), true, 'content_for', 'portfolio_header')[0];
             $strSubmitValue = 'updIN';
             $strData=date("d.m.Y",$ArrayData['time']);
             $strEditorHTML = "<div style='text-align:center;'>Last editing $strData, user: {$ArrayData['edit_by']}</div>";
             $text_big=$ArrayData['text_big'];          
             $text_big_en=$ArrayData['text_big_en'];
+            $text_small = $ArrayData['text_small'];
+            $text_small_en = $ArrayData['text_small_en'];
           }else{ //данные для заголовка портфолио нету
             $strSubmitValue = 'addINTO';
             $strEditorHTML = '';
             $text_big = '';         
             $text_big_en = '';
+            $text_small = '';
+            $text_small_en = '';
           }   
 
           echo $strEditorHTML.'<!-- форма -->
@@ -1851,8 +1940,26 @@ function Content($Stranitsa, $intUserPermis){
               </div>
             </div>
 
-            <input type="hidden" value="" name="text_block" required>
-            <input type="hidden" value="" name="text_block_en" required>
+            <div class="form-row" style="padding-bottom: 15px;">
+              <div class="col-lg-4 offset-lg-2">
+                <label for="text_block">Text Block Ru*</label>
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" id="inputGroupPrepend3"><i class="fa fa-font"></i></span>
+                  </div>
+                  <textarea rows="2" cols="50" type="text" class="form-control" id="text_block" name="text_block" aria-describedby="inputGroupPrepend3" required>'.$text_small.'</textarea>
+                </div>
+              </div>
+              <div class="col-lg-4">
+                <label for="text_block">Text Block En*</label>
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" id="inputGroupPrepend4"><i class="fa fa-font"></i></span>
+                  </div>
+                  <textarea rows="2" cols="50" type="text" class="form-control" id="text_block_en" name="text_block_en" aria-describedby="inputGroupPrepend4" required>'.$text_small_en.'</textarea>
+                </div>
+              </div>
+            </div>
             <input type="hidden" value="portfolio_header" name="strContent_for" required>
             <!-- кнопки -->
             <div class="container">
@@ -2101,6 +2208,89 @@ function Content($Stranitsa, $intUserPermis){
                 </div>';
         }
       }
+    break;
+    /*---------------------------------------------------------------------------------*/
+    /*--работа в раздете категории-----------------------------------------------------*/
+    /*---------------------------------------------------------------------------------*/
+    case 'Categories':
+      echo "<div class='myShapka'>{$menu['Categories']}</div>";
+      if(CheckData('sl_content', 'content_for', 'Categories')){ //данные для слайдера есть
+        $ArrayData = selectFromTable('sl_content', array('content_for', 'text_big', 'text_small', 'text_big_en', 'text_small_en', 'time','edit_by'), true, 'content_for', 'Categories')[0];
+        $strSubmitValue = 'updIN';
+        $strData=date("d.m.Y",$ArrayData['time']);
+        $strEditorHTML = "<div style='text-align:center;'>Last editing $strData, user: {$ArrayData['edit_by']}</div>";
+        $text_big=$ArrayData['text_big'];
+        $text_small=$ArrayData['text_small'];            
+        $text_big_en=$ArrayData['text_big_en'];
+        $text_small_en=$ArrayData['text_small_en'];
+      }else{ //данные для слайдера  нету
+        $strSubmitValue = 'addINTO';
+        $strEditorHTML = '';
+        $text_big = '';
+        $text_small = '';            
+        $text_big_en = '';
+        $text_small_en = '';
+      }   
+
+
+      echo $strEditorHTML.'<!-- форма -->
+      <form action="" method="post" autocomplete="off" onsubmit="winWait();">
+        <div class="form-row" style="padding-bottom: 15px;">
+          <div class="col-lg-2 offset-lg-4">
+            <label for="header">Header Ru*</label>
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="inputGroupPrepend1"><i class="fa fa-header"></i></span>
+              </div>
+              <input type="text" class="form-control" id="header" name="header" value="'.$text_big.'" aria-describedby="inputGroupPrepend1" required>
+            </div>
+          </div>
+          <div class="col-lg-2">
+            <label for="header_en">Header En*</label>
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="inputGroupPrepend2"><i class="fa fa-header"></i></span>
+              </div>
+              <input type="text" class="form-control" id="header_en" name="header_en" value="'.$text_big_en.'" aria-describedby="inputGroupPrepend2" required>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row" style="padding-bottom: 15px;">
+          <div class="col-lg-4 offset-lg-2">
+            <label for="text_block">Text Block Ru*</label>
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="inputGroupPrepend3"><i class="fa fa-font"></i></span>
+              </div>
+              <textarea rows="4" cols="50" type="text" class="form-control" id="text_block" name="text_block" aria-describedby="inputGroupPrepend3" required>'.$text_small.'</textarea>
+            </div>
+          </div>
+          <div class="col-lg-4">
+            <label for="text_block">Text Block En*</label>
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="inputGroupPrepend4"><i class="fa fa-font"></i></span>
+              </div>
+              <textarea rows="4" cols="50" type="text" class="form-control" id="text_block_en" name="text_block_en" aria-describedby="inputGroupPrepend4" required>'.$text_small_en.'</textarea>
+            </div>
+          </div>
+        </div>
+        <input type="hidden" value="Categories" name="strContent_for" required>
+        <!-- кнопки -->
+        <div class="container">
+          <div class="row" style = "color:white;" >
+            <div class="col-sm-3 offset-sm-3 col-lg-2 offset-lg-4">
+              <button type="reset" class="btn btn-info btn-sm"><i class="fa fa-times"></i> Clear</button>
+            </div>
+            <div class="col-sm-3 col-lg-2">
+              <button name="strInnFromForm" value="'.$strSubmitValue.'" id="" type="submit" class="btn btn-success btn-sm "><i class="fa fa-lock"></i> Save</button>
+            </div>
+          </div>
+        </div>
+        <!-- кнопки конец-->
+      </form>
+      <!-- форма конец-->';
     break;
     /*---------------------------------------------------------------------------------*/
     /*--работа в раздете изменить отзывы-----------------------------------------------*/
@@ -3151,6 +3341,54 @@ function Content($Stranitsa, $intUserPermis){
             </div>
             <div class="col-sm-3 col-lg-2">
               <button name="strInnFromForm" value="'.$strSubmitValue.'" type="submit" class="btn btn-success btn-sm "><i class="fa fa-lock"></i> Save</button>
+            </div>
+          </div>
+        </div>
+        <!-- кнопки конец-->
+      </form>
+      <!-- форма конец-->';
+
+      if(CheckData('sl_images', 'image_for', 'FavIco')){ //фотки для слайдера есть
+        $ArrayRow = selectFromTable('sl_images', array('id', 'image_for', 'image_name', 'time','edit_by'), true, 'image_for', 'FavIco')[0];
+        $htmlExistingImages = '<div class="row">';
+        $strData=date("d.m.Y",$ArrayRow['time']);
+        $htmlExistingImages .= "
+          <div class='col-sm-12'>
+            <div style='text-align:center;'>Added: $strData, user: {$ArrayRow['edit_by']}</div>
+              <img src='images/{$ArrayRow['image_name']}' width='32px'>
+          </div>";
+        $htmlExistingImages .= '</div>';
+        $strOnSubmit = 'updINTOfav';
+        $strId = '<input type="hidden" value="'.$ArrayRow['id'].'" name="id" required>';
+      }else{ //фотки для слайдера  нету
+        $htmlExistingImages = '';
+        $strOnSubmit = 'addINTOfav';
+        $strId = '';
+      }   
+    
+      echo $htmlExistingImages.'<!-- форма -->
+      <form action="" enctype="multipart/form-data" method="post" autocomplete="off" onsubmit="winWait();">
+        <div class="form-row" style="padding-bottom: 15px;">
+          <div class="col-lg-4 offset-lg-4">
+            <label for="new_image">Add image (1:1)*</label>
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="inputGroupPrepend1"><i class="fa fa-image"></i></span>
+              </div>
+              <input type="file" class="form-control" accept="image/jpeg,image/png,image/gif" id="new_image" name="new_image" aria-describedby="inputGroupPrepend1" required>
+            </div>
+          </div>
+        </div>
+        '.$strId.'
+        <input type="hidden" value="FavIco" name="strImage_for" required>
+        <!-- кнопки -->
+        <div class="container">
+          <div class="row" style = "color:white;" >
+            <div class="col-sm-3 offset-sm-3 col-lg-2 offset-lg-4">
+              <button type="reset" class="btn btn-info btn-sm"><i class="fa fa-times"></i> Clear</button>
+            </div>
+            <div class="col-sm-3 col-lg-2">
+              <button name="strInnFromForm" value="'.$strOnSubmit.'" id="" type="submit" class="btn btn-success btn-sm "><i class="fa fa-image"></i> Add image</button>
             </div>
           </div>
         </div>
