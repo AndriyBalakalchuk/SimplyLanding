@@ -42,13 +42,11 @@
 }
 
 .myMenu{
-  border: 1px solid black;
   padding-bottom: 20px;
 }
 
 .myContent{
   min-height: 50px;
-  border: 1px solid black;
   padding-bottom: 20px;
 }
 
@@ -60,7 +58,7 @@
   text-decoration: none;
   display: block;
   height: 30px;
-  border: 1px solid black;
+  border: 1px solid #ececec;
   background-color: white;
 }
 
@@ -71,8 +69,8 @@
   margin-top: 5px;
   display: block;
   height: 30px;
-  border: 1px solid black;
-  background-color: black;
+  border: 1px solid #ececec;
+  background-color: #555555;
 }
 
 .myMenuListActiv{
@@ -82,13 +80,13 @@
   margin-top: 5px;
   display: block;
   height: 30px;
-  border: 1px solid black;
-  background-color: #a1cd3a;
+  border: 1px solid #b5d46a;
+  background-color: #c8ea7b;
 }
 
 .myMenuList:hover{
   color: black;
-  background-color: #c8ea7b;
+  background-color: #f0ffce;
   text-decoration: none;
 }
 
@@ -97,7 +95,7 @@
   padding: 5px 0px 5px 0px;
   font-size: 12pt;
   text-align: center;
-  border-bottom: 1px solid black;
+  border-bottom: 1px solid #ececec;
 }
 
 .headerDiv{

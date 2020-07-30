@@ -1,0 +1,15 @@
+# переадресации на страници ошибок
+<IfModule mod_rewrite.c>
+  # Включает/выключает механизм mod_rewrite.
+  RewriteEngine On
+
+  # если нет страници на которую перебрасывает сервер (404), переадресуем на error.php
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule .* error.php [L]
+</IfModule>
+
+
+
+# Options +ExecCGI
+Options -Indexes

@@ -258,6 +258,23 @@ function getCleaFloat($float){
   }
 }
 
+//создает SVG плейсходры для отсутствующих картинок
+function getSVGplaceholder($intWidth, $intHeight){
+  $strSVG = '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" x="0px" y="0px" viewBox="0 0 '.$intWidth.' '.$intHeight.'" xml:space="preserve">
+  <style type="text/css">
+    .st0{fill:#DADADA;}
+    .st1{fill:none;}
+    .st2{fill:#878787;}
+    .st3{font-family:\'Arial Black\';}
+    .st4{font-size:'.($intHeight/10).'px;}
+  </style>
+  <rect x="0" y="0" class="st0" width="'.$intWidth.'" height="'.$intHeight.'"/>
+  <text transform="matrix(1 0 0 1 '.($intWidth/2).' '.($intHeight/2).')" text-anchor="middle" class="st2 st3 st4">'.$intWidth.'*'.$intHeight.'px</text>
+  </svg>';
+
+  return $strSVG;  
+}
+
 //переводим время в число, что бы можно было математику применять
 function getNumberFromTime($strHHmM){
   if(!empty(strpos($strHHmM,":"))){
@@ -472,7 +489,7 @@ function normalize_files_array($files = []) {
 
 //получаем кликабельные категории для автопрописания
 function getCategorys($strNeed){
-  $ArrayData = selectFromTable('sl_portfolio', array('item_category','item_category_en'));
+  $ArrayData = selectFromTable('sl_portfolio', array('item_category','item_category_en','images'));
   //если категорий нету вернуть что их нету
   if(!is_array($ArrayData)){return 'no categories yet';}
   //массив категорий без дублей
@@ -485,16 +502,49 @@ function getCategorys($strNeed){
     }
   }
 
-  //формируем кнопки из названий категорий
-  if($strNeed=='Buttons'){
+  
+  if($strNeed=='Buttons'){//формируем кнопки из названий категорий
     $htmlResult ='';
     for ($i=0; $i < count($arrClear); $i++) { 
       $htmlResult .= "<button class='btn btn-light btn-sm' style='margin:0px 2px 0px 2px;' onclick='add_CatToInput(\"{$arrClear[$i]}Ω{$arrClear_en[$i]}\")' type='button'>{$arrClear[$i]}/{$arrClear_en[$i]}</button>";
     }
     return $htmlResult;
+  }elseif($strNeed=='Blocks'){//формируем массивы из названий категорий и картинок в них
+    $arrResult = array();
+    $arrResult['names'] = array();
+    $arrResult['images'] = array();
+    for ($i=0; $i < count($arrClear); $i++) { 
+      shuffle($ArrayData);
+      for($w=0; $w < count($ArrayData) ; $w++){ 
+        if($ArrayData[$w]['item_category']==$arrClear[$i]){
+          $arrAllImagesINcategory = getImagesFromStr($ArrayData[$w]['images']);
+        break;
+        }
+      }
+      $arrResult['names'][] = $arrClear[$i];
+      $arrResult['images'][] = $arrAllImagesINcategory[array_rand($arrAllImagesINcategory,1)];
+    }
+    return $arrResult;
+  }elseif($strNeed=='Blocks_en'){//формируем массивы из названий категорий и картинок в них на англ языке
+    $arrResult = array();
+    $arrResult['names'] = array();
+    $arrResult['images'] = array();
+    for ($i=0; $i < count($arrClear_en); $i++) { 
+      shuffle($ArrayData);
+      for($w=0; $w < count($ArrayData) ; $w++){ 
+        if($ArrayData[$w]['item_category']==$arrClear_en[$i]){
+          $arrAllImagesINcategory = getImagesFromStr($ArrayData[$w]['images']);
+        break;
+        }
+      }
+      $arrResult['names'][] = $arrClear_en[$i];
+      $arrResult['images'][] = $arrAllImagesINcategory[array_rand($arrAllImagesINcategory,1)];
+    }
+    return $arrResult;
   }else{
     return '';
   }
+
 }
 
 function uploadImage($newImage, $strFolder, $width=1980, $height=1080){ //заливает новые картинки

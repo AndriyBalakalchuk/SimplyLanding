@@ -1,0 +1,771 @@
+html {
+	font-size: 16.5px;
+}
+
+body {
+	font-family: 'Roboto', sans-serif;
+	padding-top: 3.5rem;
+}
+
+h1 {
+	font-size: 3.33rem;
+	font-weight: 700;
+	text-align: left;
+	color: rgb(50,51,60);
+}
+
+h2 {
+	font-size: 2.6rem;
+	font-weight: 700;
+	text-align: left;
+	color: rgb(50,51,60);
+}
+
+.hr-for-h1 {
+	width: 160px;
+	margin-top: 10px;
+	border: 5px solid rgb(0,163,255);
+}
+
+/*
+	КНОПКИ
+*/
+.btn-primary {
+    color: rgb(255, 255, 255);
+    background-color: rgb(0,163,255);
+    border-color: rgb(0,163,255);
+}
+.btn-primary:hover {
+    color: rgb(255, 255, 255);
+    background-color: rgb(0,136,196);
+    border-color: rgb(0,136,196);
+}
+
+/*
+	ОБЩИЕ СТИЛИ
+*/
+.about-me .container,
+.my-services .container {
+	padding: 80px 0 50px 0;
+}
+
+.my-skills .container,
+.latest-works .container,
+.contact-me .container {
+	padding: 80px 0 180px 0;
+}
+
+.hello, 
+.my-skills,
+.latest-works,
+.contact-me {
+	background-color: rgb(247, 247, 250);
+	background-repeat: no-repeat;
+	background-position: 20% bottom;
+}
+
+.my-skills h1,
+.my-services h1,
+.latest-works h1,
+.contact-me h1 {
+	text-align: center;
+}
+
+.my-skills > .container > .row:nth-child(1) p,
+.my-services > .container > .row:nth-child(1) p,
+.latest-works > .container > .row:nth-child(1) p {
+	font-weight: 300;
+	text-align: center;
+	color: rgb(80,80,80);
+	padding-top: 30px;
+}
+
+/*
+	ВЕРХНЕЕ МЕНЮ
+*/
+.navbar {
+	background-color: rgb(255,255,255) !important;
+}
+.navbar-nav a {
+	font-weight: 700;
+}
+
+.navbar-nav a.active {
+	text-decoration: underline;
+	color: rgb(0,163,255) !important;
+}
+
+.navbar-nav span { /* кнопка выбора языка */
+	padding: .3rem .5rem;
+	color: rgb(255, 255, 255);
+	background-color:rgb(0,163,255);
+	border-radius: .2rem;
+}
+
+/*
+	HELLO
+*/
+
+.hello {
+	background-image: url("img/01_helllo.png");
+}
+
+.hello .container {
+	padding: 100px 0 200px 0;
+	background-image: url("img/Iam.png?v=2");
+	background-repeat: no-repeat;
+	background-position: right bottom;
+	background-size: auto 90%;
+}
+
+.hello h1 {
+	font-size: 4.2rem;
+	font-weight: 700;
+	color: rgb(50,51,60);
+}
+
+.hello p {
+	font-size: 1.45rem;
+	font-weight: 400;
+	color: rgb(120,120,120);
+}
+
+/*
+	ABOUT ME
+*/
+.about-me hr {
+	text-align: left;
+	margin-left: 0;
+}
+
+.about-me p {
+	font-weight: 300;
+	text-align: justify;
+	text-justify: inter-word;
+	color: rgb(80, 80, 80);
+}
+
+.about-me .row > div {
+	padding-top: 30px;
+}
+
+/*
+	MY SKILLS
+*/
+.my-skills {
+	background-image: url("img/02_skills.png");
+}
+
+.my-skills-description {
+	font-weight: 500;
+	padding-top: 40px;
+	color: rgb(50,51,60);
+}
+
+.my-skills-description > span:nth-of-type(2) {
+	float: right;
+}
+
+.progress {
+	background-color: rgb(220, 220, 220);
+}
+
+.progress-bar {
+	background-color: rgb(0,163,255);
+}
+
+/*
+	MY SERVICES
+*/
+.my-services .row:nth-child(2) {
+	padding-top: 40px;
+}
+
+.my-services .card,
+.my-services .card > img {
+	border-radius: .5rem;
+}
+
+.my-services .card > img {
+	border-radius: .5rem;
+}
+
+.my-services .card-img-overlay {
+	padding: 205px 20px 0 80px;
+}
+
+.my-services .card-title {
+	color: rgb(255, 255, 255);
+	text-shadow: 1px 1px 2px rgb(50,51,60);
+}
+
+.my-services .card-text {
+	font-size: 1.1rem;
+	font-weight: 300;
+	color: rgb(255, 255, 255);
+	text-shadow: 1px 1px 2px rgb(50,51,60);
+}
+
+/*
+	LATEST WORKS
+*/
+.latest-works {
+	background-image: url("img/03_portfolio.png");
+}
+
+.latest-works .row:nth-child(2) {
+	padding-top: 40px;
+}
+
+.latest-works .card,
+.latest-works .card > img {
+	border-radius: .5rem;
+}
+
+.latest-works .card-title {
+	font-weight: 700;
+	color: rgb(50,51,60);
+}
+
+.latest-works .card-text {
+	font-size: .9rem;
+	font-weight: 400;
+	text-align: justify;
+	color: rgb(80,80,80);
+}
+
+/*
+	REVIEWS
+*/
+.reviews {
+	margin-top: 35px;
+	padding: 30px 0 30px 0;
+	background-color: rgb(155,197,61);
+}
+
+.reviews .reviews-text {
+	text-align: center;
+	color: rgb(255,255,255)
+}
+
+.reviews .reviews-text p:nth-of-type(1) { /* первый параграф reviews */
+	padding: 10px 0;
+}
+
+.reviews .reviews-text p:nth-of-type(2) { /* второй параграф reviews */
+	font-weight: 300;
+	font-size: .85rem;
+}
+
+.reviews .reviews-stars { /* стиль звезд reviews */
+	width: 100%;
+	text-align: center;
+	font-size: 1.7rem;
+	color: rgb(253,231,76);
+	padding-bottom: 30px;
+}
+
+.reviews .d-flex { /* высота карусели reviews */
+	/* height: 330px; */
+}
+
+.reviews .align-self-center {
+	width: 100% !important;
+}
+
+.reviews .carousel-control-prev-icon { /* стрелка левая */
+	background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='%23fff' width='36' height='70' viewBox='0 0 36 70'%3e%3cpath d='M35.05,70a.94.94,0,0,1-.68-.28L0,35,34.37.28a1,1,0,0,1,1.35,0,1,1,0,0,1,0,1.36L2.7,35l33,33.36a1,1,0,0,1,0,1.36A.94.94,0,0,1,35.05,70Z'/%3e%3c/svg%3e");
+}
+
+.reviews .carousel-control-next-icon { /* стрелка правая */
+	background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='%23fff' width='8' height='8' viewBox='0 0 36 70'%3e%3cpath d='M1,70a.94.94,0,0,0,.68-.28L36,35,1.63.28A1,1,0,0,0,.28.28a1,1,0,0,0,0,1.36L33.3,35,.28,68.36a1,1,0,0,0,0,1.36A.94.94,0,0,0,1,70Z'/%3e%3c/svg%3e");
+}
+
+.reviews .carousel-control-next-icon, .carousel-control-prev-icon { /* размер стрелок */
+    width: 36px;
+    height: 70px;
+}
+
+.reviews .carousel-indicators {
+	margin-bottom: 0;
+}
+/*
+	CONTACT ME
+*/
+.contact-me {
+	background-image: url("img/04_contact.png");
+}
+
+.contact-me h5 {
+	font-size: 1.25rem;
+	line-height: 1.5;
+	font-weight: 700;
+	text-align: left;
+	color: rgb(50,51,60);
+}
+
+.contact-me > .container > .row:nth-child(2) {
+	padding-top: 40px;
+}
+
+.contact-me .contact-info {
+	margin-top: 1.5rem;
+	padding-inline-start: 0;
+}
+
+.contact-me .contact-info li {
+	list-style-type: none;
+	line-height: 2;
+	color: rgb(120,120,120);
+	white-space: nowrap;
+}
+
+.contact-me .contact-info li > a {
+	font-size: 1rem;
+	font-weight: 400;
+	color: rgb(120,120,120);
+}
+
+.contact-me .contact-info li > a:hover {
+	color: rgb(0,163,255);
+}
+
+.contact-me .contact-info i {
+	width: 32px;
+	text-align: center;
+	margin-right: 10px;
+	color: rgb(138,143,163);
+}
+
+.contact-me .follow-me {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+	overflow: hidden;
+}
+
+.contact-me .follow-me > li {
+	float: left;
+	margin-right: 10px;
+}
+
+.contact-me .follow-me > li > a {
+	font-size: 2.5rem;
+}
+
+.contact-me .fa-facebook-square {
+	color: rgb(59,89,152);
+}
+
+.contact-me .fa-youtube-square {
+	color: rgb(230,33,23);
+}
+
+.contact-me .fa-instagram {
+	color: rgb(221,42,123);
+}
+
+.contact-me .fa-upwork {
+	background-image: url(img/upwork.svg);
+}
+
+.contact-me label {
+	font-size: 1.25rem;
+	font-weight: 700;
+	text-align: left;
+	color: rgb(50,51,60);
+}
+
+.contact-me ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+	color: rgb(220,220,220);
+	opacity: 1; /* Firefox */
+}
+
+.contact-me :-ms-input-placeholder { /* Internet Explorer 10-11 */
+	color: rgb(220,220,220);
+}
+
+.contact-me ::-ms-input-placeholder { /* Microsoft Edge */
+	color: rgb(220,220,220);
+}
+
+/*
+	FOOTER
+*/
+.footer {
+	background-color: rgb(50,57,70);
+	padding: 75px 0 20px 0;
+	margin-top: 35px;
+	color: rgb(255, 255, 255);
+}
+
+.footer a {
+	color: rgb(255, 255, 255);
+}
+
+.footer a:hover {
+	color: rgb(0,163,255);
+}
+
+.footer hr {
+	margin-right: 70px;
+	border-bottom: 1px solid rgb(97, 104, 115);
+}
+
+.footer ul {
+	margin-top: 1.5rem;
+	padding-inline-start: 0;
+}
+
+.footer li {
+	list-style-type: none;
+}
+
+.footer i {
+	width: 32px;
+	text-align: center;
+	margin-right: 10px;
+	color: rgb(0,163,255);
+}
+
+.footer .col-md:nth-child(1) { /* контактная информация */
+	font-weight: 300;
+	line-height: 2;
+}
+
+.footer .col-md:nth-child(2) a {
+	font-weight: 300;
+}
+
+.footer .col-md:nth-child(3) i { /* иконки соц сетей */
+	font-size: 2.5rem;
+}
+
+.fa-upwork {
+	width: 35.36px !important;
+	height: 41.5px !important;
+	background-image: url(img/upwork2.svg);
+	background-repeat: no-repeat;
+	background-position: left bottom;
+	background-size: 35.36px 41.5px;
+	position: relative;
+	bottom: -6px;
+}
+
+.footer .col-md:nth-child(3) label { /* иконки соц сетей */
+	padding-top: 20px;
+	font-weight: 300;
+}
+
+.footer .row:nth-child(2) { /* стили тегов */
+	padding-top: 40px;
+	color: rgb(136,140,148);
+	text-align: center;
+}
+
+.footer .row:nth-child(2) p { /* стили тегов */
+	font-weight: 300;
+	font-size: 0.8rem;
+	line-height: 1.3;
+}
+
+/*
+	COPYRIGHT
+*/
+.copyright {
+	font-weight: 300;
+	font-size: 0.8rem;
+	text-align: center;
+	background-color: rgb(40,46,58);
+	padding: 15px 0 15px 0;
+	color: rgb(255, 255, 255);
+}
+
+/*
+	PAGES PORTFOLIO
+*/
+.page-bg-gray {
+	background-color: rgb(247, 247, 250);
+}
+
+.page-arrow-next-gray {
+	background-image: url(img/arrow-next-gray.png);
+    background-repeat: no-repeat;
+    background-position: center bottom;
+}
+
+.page-arrow-next-white {
+	background-image: url(img/arrow-next-white.png);
+    background-repeat: no-repeat;
+    background-position: center bottom;
+}
+
+.page-portfolio-top {
+	background-image: url(img/03_portfolio.png);
+    background-repeat: no-repeat;
+    background-position: 20% bottom;
+}
+
+.page-portfolio-top .container {
+	min-height: calc(100vh - 57px);
+    padding: 80px 0 180px 0;
+}
+
+.page-portfolio-top h1 {
+	font-size: 4.2rem;
+    font-weight: 700;
+	color: rgb(50,51,60);
+	text-align: left;
+}
+
+.page-portfolio-top p,
+.page-portfolio-description p,
+.page-portfolio-description li {
+	font-size: 1.45rem;
+	font-weight: 400;
+	color: rgb(120,120,120);
+}
+
+.page-portfolio-description li {
+	padding-bottom: 1rem;
+}
+
+.page-portfolio-description .container {
+	min-height: 100vh;
+    padding: 80px 0 80px 0;
+}
+
+.page-portfolio-description hr {
+	text-align: left;
+	margin-left: 0;
+}
+
+.page-portfolio-description i {
+	color: rgb(0,163,255);
+}
+
+.page-portfolio-description-title .row:nth-child(1) {
+	min-height: calc(20vh - 80px);
+}
+
+.page-portfolio-description-title .row:nth-child(2) {
+	min-height: calc(80vh - 80px);
+}
+
+/*
+	ДРУГИЕ РАЗМЕРЫ ЭКРАНА
+*/
+
+
+@media (min-width: 376px) and (max-width: 767px) { /* применить стили если размер экрана меньше 767px */
+	.hello .container {
+		padding: 50px 0 300px 0;
+		background-size: auto 60%;
+	}
+}
+
+@media (max-width: 576px) {
+	.row {
+		margin-left: 0 !important;
+		margin-right: 0 !important;
+	}
+
+	.hello, 
+	.my-skills,
+	.latest-works,
+	.contact-me {
+		background-image: none !important;
+	}
+
+	.about-me .container,
+	.my-skills .container,
+	.my-services .container,
+	.latest-works .container,
+	.contact-me .container {
+		padding: 50px 0 50px 0 !important;
+	}
+	
+	.reviews,
+	.footer {
+		margin-top: 0;
+	}
+
+	.hello .container {
+		text-align: center;
+		padding: 50px 0 300px 0;
+		background-size: 300px auto;
+		background-position: center bottom;
+	}
+	.hello h1,
+	.about-me h1 {
+		text-align: center;
+	}
+	.about-me hr {
+		text-align: center;
+		margin-left: auto;
+	}
+
+	.about-me {
+		text-align: center;
+	}
+
+	.latest-works md-4 {
+		padding: 0 !important;
+	}
+
+	.my-services .card-img-overlay {
+		padding: calc(100vw - 325px) 10px 0 15px;
+	}
+
+	.my-services .card-title {
+		font-size: 1.9rem;
+	}
+	
+	.my-services .card-text {
+		font-size: 1rem;
+	}
+
+	.reviews .carousel-control-prev,
+	.reviews .carousel-control-next {
+		display: none;
+	}
+
+	.contact-me .row > .col-md-8 hr {
+		display: block !important;
+	}
+
+	.contact-me form > div:last-of-type {
+		text-align: center;
+	}
+
+	.page-portfolio-top .container,
+	.page-portfolio-description .container {
+		padding-top: 50px;
+	}
+
+	.page-arrow-next-gray,
+	.page-arrow-next-white {
+		background-size: 40% auto;
+	}
+
+	.page-portfolio-top h1 {
+		font-size: 3.2rem;
+	}
+
+	.page-portfolio-top p,
+	.page-portfolio-description p,
+	.page-portfolio-description li {
+		font-size: 1rem;
+	}
+}
+
+@media (min-width: 576px) and  (max-width: 768px) {
+	.about-me {
+		text-align: center;
+	}
+
+	.reviews .carousel-control-prev,
+	.reviews .carousel-control-next {
+		display: none;
+	} 
+
+	.my-services .card-img-overlay {
+		padding: 180px 20px 0 80px;
+	}
+
+	.my-services .card-text {
+		font-size: 1.2rem;
+	}
+
+	.contact-me .row > .col-md-8 hr {
+		display: block !important;
+	}
+
+	.contact-me form > div:last-of-type {
+		text-align: center;
+	}
+}
+
+@media (min-width: 768px) and  (max-width: 992px) {
+	.my-services .card-img-overlay {
+		padding: 100px 20px 0 20px;
+	}
+
+	.my-services .card-title {
+		font-size: 1.8rem;
+	}
+	
+	.my-services .card-text {
+		font-size: 0.9rem;
+	}
+}
+
+@media (max-width: 992px) { /* применить стили если размер экрана меньше 992px */
+	.navbar-brand::after {
+		content: "BALAKALCHUK";
+		font-weight: 300;
+		color: rgb(80,80,80);
+	}
+
+	.hello, 
+	.my-skills,
+	.latest-works,
+	.contact-me {
+		background-position: 0% bottom;
+		background-size: 800px auto;
+	}
+
+	.page-portfolio-top {
+		background-image: none;
+	}
+
+	.page-portfolio-top .container {
+		padding-bottom: 80px;
+	}
+
+	.page-portfolio-top,
+	.page-portfolio-top h1,
+	.page-portfolio-description h1,
+	.page-portfolio-description h2,
+	.page-portfolio-description p,
+	.page-portfolio-description {
+		text-align: center !important;
+	}
+
+	.page-portfolio-description ul {
+		text-align: left !important;
+	}
+
+	.page-portfolio-top .row > div:last-of-type {
+		padding-top: 20px;
+	}
+
+	.page-portfolio-description hr {
+		text-align: center;
+		margin-left: auto;
+	}
+
+	.page-portfolio-description img {
+		padding: 10px 0;
+	}
+
+}
+
+@media (min-width: 992px) and  (max-width: 1200px) {
+	.my-services .card-img-overlay {
+		padding: 140px 20px 0 20px;
+	}
+}
+
+@media (min-width: 992px) {
+	.navbar-nav { /* стили меню */
+		width: 100% !important;
+	}
+	.navbar-nav > a {
+		width: calc(100%/8) !important; /* ширину делим на количество элементов в меню*/
+		text-align: center;
+	}
+	.navbar-nav :last-child {
+		text-align: right;
+	}
+}
