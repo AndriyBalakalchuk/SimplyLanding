@@ -1,22 +1,23 @@
 # SimplyLanding
 SimplyLanding (SL) - is simply CMS and visualization for the creation and managing basic dual-language landing site 
 
+# Variables info
 $arrAllData => Array
-    [Slider] => Array
+  [Slider] => Array
         (
-            [header] => Андрей
-            [description] => Веб-разработчик. Сайты, приложения и дополнения G Suite - это моя специализация.
+            [header] => 
+            [description] => 
         )
 
     [hardskill_header] => Array
         (
-            [header] => Проф. навык
+            [header] => 
             [description] => 
         )
 
     [softskill_header] => Array
         (
-            [header] => Коммуникативные навыки
+            [header] => 
             [description] => 
         )
 
@@ -24,16 +25,16 @@ $arrAllData => Array
         (
             [headers] => Array
                 (
-                    [0] => PHP
-                    [1] => JS
-                    [2] => SQL
+                    [0] => 
+                    [1] => 
+                    [2] => 
                 )
 
             [descriptions] => Array
                 (
-                    [0] => 80
-                    [1] => 70
-                    [2] => 30
+                    [0] => 
+                    [1] => 
+                    [2] => 
                 )
 
         )
@@ -42,97 +43,97 @@ $arrAllData => Array
         (
             [headers] => Array
                 (
-                    [0] => Project managment
+                    [0] => 
                 )
 
             [descriptions] => Array
                 (
-                    [0] => 80
+                    [0] => 
                 )
 
         )
 
     [portfolio_header] => Array
         (
-            [header] => Последние работы
-            [description] => Посмотрите мое портфолио и не стесняйтесь обращаться ко мне, если у вас есть дополнительные вопросы.
+            [header] => 
+            [description] => 
         )
 
     [Feedback] => Array
         (
-            [header] => Отзывы
+            [header] => 
             [description] => 
         )
 
     [partners_header] => Array
         (
-            [header] => Наши партнеры
+            [header] => 
             [description] => 
         )
 
     [сontacts_header] => Array
         (
-            [header] => Контакты
+            [header] => 
             [description] => 
         )
 
     [сontacts_sec_header] => Array
         (
-            [header] => Контактная информация
+            [header] => 
             [description] => 
         )
 
     [Email] => Array
         (
-            [header] => andriy@balakalchuk.com
+            [header] => 
             [description] => 
         )
 
     [Facebook] => Array
         (
-            [header] => Facebook
+            [header] =>
             [description] => 
         )
 
     [instagram] => Array
         (
-            [header] => instagram 
+            [header] => 
             [description] => 
         )
 
     [youtube] => Array
         (
-            [header] => youtube 
+            [header] =>
             [description] => 
         )
 
     [upwork] => Array
         (
-            [header] => upwork
+            [header] => 
             [description] => 
         )
 
     [linkedin] => Array
         (
-            [header] => linkedin
+            [header] => 
             [description] => 
         )
 
     [sitetitle] => Array
         (
-            [header] => Балакальчук
+            [header] => 
             [description] => 
         )
 
     [prColor] => Array
         (
-            [header] => #00a3ff
+            [header] => 
             [description] => 
         )
 
     [sitefont] => Array
         (
-            [header] => 'Roboto', sans-serif
+            [header] => 
             [description] => 
         )
 
@@ -146,25 +147,18 @@ $arrAllData => Array
 
     [phone] => Array
         (
-            [header] => +38 (066) 500-17-16
+            [header] =>
             [description] => 
         )
 
     [About] => Array
         (
-            [header] => Обо мне
-            [description] => Как вы читали раньше - я веб-разработчик. Мои навыки были накоплены за годы практики и обучения.
-
-Я могу помочь вам с: сайтами с прекрасным видом на любом устройстве (лендинги, корпоративные сайты, блоги, сайты с админ-панелью или без нее и т. Д.), Веб-приложениями для автоматизации процессов (оцифровка и удаление ручной работы), приложениями G Suite и дополнения. Я работаю в команде с профессиональными печатными и веб-дизайнерами, поэтому мы можем начать работу с вашей идеи.
-
-Просто прокрутите эту страницу и посмотрите на мое портфолио. Не стесняйтесь обращаться ко мне, если у вас есть дополнительные вопросы.
-
-Спасибо за ваше время, потраченное на чтение этого текста :)
-        )
+            [header] => 
+            [description] =>
 
     [location] => Array
         (
-            [header] => Киев, Украина
+            [header] => 
             [description] => 
         )
 
@@ -177,24 +171,24 @@ $arrAllData => Array
 
             [names] => Array
                 (
-                    [0] => Тестер
+                    [0] => 
                 )
 
             [positions] => Array
                 (
-                    [0] => просто компания
+                    [0] => 
                 )
 
             [texts] => Array
                 (
-                    [0] => ловрыаыло аорыв ашыов аловы аолыв аол sd
+                    [0] => 
                 )
 
         )
 
     [FavIco] => Array
         (
-            [image] => http://nas/SimplyLanding/admin/images/15960302814.png
+            [image] => 
         )
 
     [SliderIMG] => Array
@@ -222,32 +216,32 @@ $arrAllData => Array
         (
             [ids] => Array
                 (
-                    [0] => 12
+                    [0] => 
                 )
 
             [item_categorys] => Array
                 (
-                    [0] => asd
+                    [0] => 
                 )
 
             [images] => Array
                 (
                     [0] => Array
                         (
-                            [0] => 15961062837.jpg
-                            [1] => 15961062832.jpg
+                            [0] => 
+                            [1] => 
                         )
 
                 )
 
             [headers] => Array
                 (
-                    [0] => AAA
+                    [0] => 
                 )
 
             [texts] => Array
                 (
-                    [0] => asd
+                    [0] => 
                 )
 
         )
@@ -256,12 +250,12 @@ $arrAllData => Array
         (
             [names] => Array
                 (
-                    [0] => asd
+                    [0] => 
                 )
 
             [images] => Array
                 (
-                    [0] => 15961062837.jpg
+                    [0] => 
                 )
 
         )
