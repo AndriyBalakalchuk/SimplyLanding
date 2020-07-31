@@ -10,7 +10,14 @@ SimplyLanding (SL) - is simply CMS and visualization for the creation and managi
 **That's all..**
 
  If you need to use custom design(theme) ﹣ you can read about all output variables which will bring data into your HTML pages below
-## Files info
+## Files info  
+- root folder ← contains install file, errors files and theme files (css, index, page...)
+  - admin folder ← contains login and index files for CMS ﹣ all for giving you a possibility to manage your site content
+    - css folder ← contains css for admin panel interface
+    - images folder ← contains images uploaded from admin panel and other site images
+    - inc folder ← contains PHP libraries for working with database and interfaces
+    - lib folder ← contains foreign libraries such as bootstrap or font awesome
+    
 
 ## Variables info
 If you need to use your own HTML design with SL CMS - add into your page (in the top of the file) PHP block below (and change file format to PHP - example: index.html→index.php) - it will connect CMS to your HTML file and then all data inserted from the administration panel will be able to show at your page - just insert any variable from the list below  
@@ -41,7 +48,7 @@ If you need to use your own HTML design with SL CMS - add into your page (in the
 `  }else{header("Location: install.php");exit;}`  
 `  // Encoding header`  
 `  header('Content-type: text/html; charset='.$config['encoding']);`  
-`  //get all variables - details ---- → Readme`  
+`  //get all variables for index.php file - details ---- → Readme`  
 `  $arrAllData = getVariables(basename(__FILE__),$strLanguage);`  
 `?>`  
 
