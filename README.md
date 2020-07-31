@@ -1,7 +1,51 @@
 # SimplyLanding
 SimplyLanding (SL) - is simply CMS and visualization for the creation and managing basic dual-language landing site 
 
+## Install guide
+1. Download repository
+1. Unpack downloaded archive into hosting folder
+1. Open folder from step 2 via your browser
+1. Complete setup from the wizard, go to admin panel for add all data into your new site  (http(s)://yourdomainand sitefolder/**admin**/)
+
+**That's all..**
+
+ If you need to use custom design(theme) ﹣ you can read about all output variables which will bring data into your HTML pages below
+## Files info
+
 ## Variables info
+If you need to use your own HTML design with SL CMS - add into your page (in the top of the file) PHP block below (and change file format to PHP - example: index.html→index.php) - it will connect CMS to your HTML file and then all data inserted from the administration panel will be able to show at your page - just insert any variable from the list below  
+> example: if I need to insert slider header text at someplace of my HTML page, I will write at that place that  
+`<?=$arrAllData[Slider][header]?>`  
+
+`<?php`   
+`  // errors rule`  
+`  error_reporting(E_ALL & ~E_NOTICE); // Уровень вывода ошибок (без нотисов)`  
+`  // Absolute path`  
+`  $path = dirname(__FILE__) . '/';`  
+`  // Connecting database config and scripts`  
+`  include_once $path . 'admin/inc/db.inc.php';`  
+`  include_once $path . 'admin/inc/funclibery.inc.php';`  
+`  include_once $path . 'admin/inc/getData.inc.php';`  
+`  //there is no config file - not installed, then we start the installation`  
+`  //we check if there is data about the superuser, if everything is there - ok, no, then the installation is not finished`  
+`  if(file_exists($path.'admin/inc/config.inc.php')){`  
+`    // Config connection`  
+`    include_once $path.'admin/inc/config.inc.php';`  
+`    //connect to the database for all outgoing requests`  
+`    $objDB = GoToDB($config['connetion'], $config['user'], $config['password']);`  
+`    //check if there is a connection and if there is our superadmin`  
+`    if(!$objDB or !checkUserBy('signature',$config['SuperUser'], false)){`  
+`      //no, we send for installation`  
+`      header("Location: install.php");exit;}`  
+`  //there is no config file, we send for installation`  
+`  }else{header("Location: install.php");exit;}`  
+`  // Encoding header`  
+`  header('Content-type: text/html; charset='.$config['encoding']);`  
+`  //get all variables - details ---- → Readme`  
+`  $arrAllData = getVariables(basename(__FILE__),$strLanguage);`  
+`?>`  
+
+### Variables list  
 
 `$arrAllData[Slider][header]`
 
