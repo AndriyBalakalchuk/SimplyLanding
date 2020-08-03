@@ -38,9 +38,9 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title><?=$config['sitename']?> — <?=$strPageTitle?></title>
+    <title><?=$arrAllData['sitetitle']['header']?></title>
     <!-- Настройка favicon -->
-    <link rel="shortcut icon" href="<?=$config['Favicon']?>" type="image/png">
+    <link rel="shortcut icon" href="<?=$arrAllData['FavIco']['image']?>" type="image/png">
     <!-- Настройка viewport -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no, user-scalable=no">
     <!-- Кодировка веб-страницы -->
@@ -51,6 +51,33 @@
     <link rel="stylesheet" href="<?=$config['sitelink']?>admin/lib/font-awesome-4.7.0/css/font-awesome.min.css">
     <!-- Подключаем свой CSS -->
     <link rel="stylesheet" href="<?=$config['sitelink']?>main.css?v=09-05-20V1">
+    <style>
+      .hello {
+        background-image: url("<?=getSVGword(1400, 212, $arrAllData['Slider']['header'])?>");
+      }
+      .hello .container {
+        background-image: url("<?=$arrAllData['SliderIMG']['images'][0]?>");
+      }
+      .my-skills {
+      	background-image: url("<?=getSVGword(1400, 212, $arrAllData['Skills']['header'])?>");
+      }
+      <?php for ($i=0; $i < count($arrAllData['categories']['images']); $i++) {?>
+        #port<?=$i?>{
+          background-image: url("<?=$arrAllData['categories']['images'][$i]?>");
+        }
+      <?php }?>
+      .latest-works {
+        background-image: url("<?=getSVGword(1400, 212, $arrAllData['portfolio_header']['header'])?>");
+      }
+      .contact-me {
+        background-image: url("<?=getSVGword(1400, 212, $arrAllData['сontacts_header']['header'])?>");
+      }
+      @media (max-width: 992px) { /* применить стили если размер экрана меньше 992px */
+	      .navbar-brand::after {
+          content: "<?=$arrAllData['sitetitle']['header']?>";
+        }
+      }
+    </style>
   </head>
   <body data-spy="scroll" data-target=".navbar" data-offset="57">
 <!-- меню -->
@@ -80,9 +107,8 @@
 			<div class="container">
 				<div class="row">
 					<div class="col-md-6">
-						<h1>I’m Andriy</h1>
-						<p>Web developer. Sites, applications and G Suite add-ons it's my specialization.</p>
-						<a class="btn btn-primary btn-lg to-id" href="#contact-me" role="button">Contact me</a>
+						<h1><?=$arrAllData['Slider']['header']?></h1>
+						<p><?=$arrAllData['Slider']['description']?></p>
 					</div>
 					<div class="col-md-5">
 					</div>
@@ -95,21 +121,17 @@
 			<div class="container">
 				<div class="row">
 					<div class="col">
-						<h1>About Me</h1>
+						<h1><?=$arrAllData['About']['header']?></h1>
 						<hr class="hr-for-h1">
 					</div>
 				</div>
 				<div class="row">
 					<div class="col-md-5 text-center">
-						<img src="img/ad78d195987dbc704337530370b214d5.png" class="img-fluid" alt="">
+          <img src="<?=$arrAllData['SliderIMG']['images'][1]?>" class="img-fluid" alt="">
 					</div>
 					<div class="col-md-7 d-flex">
 						<div class="align-self-center">
-							<p>As you read before — I am a web developer. My skills were accumulated by the years of practice and learning.</p>
-							<p>I can help you with: sites with beautiful view in any device (landings, corporate sites, blogs, sites with admin panel or without, etc), web applications for automating processes (digitalization and manual work removing), G Suite applications and add-ons. I work in a team with professional print and web designers, that's why we can start work from your idea point.</p>
-							<p>Just scroll this page and take a look at my portfolio. Don't hesitate to contact me if you have any further questions.</p>
-							<p>Thanks for your time spent on reading this text :)</p>
-							<a class="btn btn-primary btn-lg to-id" href="#latest-works" role="button">My portfolio</a>
+							<p><?=$arrAllData['About']['description']?></p>
 						</div>
 					</div>
 				</div>
@@ -121,67 +143,31 @@
 			<div class="container">
 				<div class="row">
 					<div class="col-md-6 offset-md-3">
-						<h1>My Skills</h1>
+						<h1><?=$arrAllData['Skills']['header']?></h1>
 						<hr class="hr-for-h1">
-						<p>Below you can look at some of my skills levels, it's situation when I rate myself and I am recommend you scroll little down and look at my works.</p>
+						<p><?=$arrAllData['Skills']['description']?></p>
 					</div>
-				</div>
-				<div class="row">
-					<div class="col-md-6">
-						<div class="my-skills-description"><span>HTML & CSS</span><span>95%</span></div>
-						<div class="progress">
-							<div class="progress-bar" role="progressbar" style="width: 95%" aria-valuenow="95" aria-valuemin="0" aria-valuemax="100"></div>
-						</div>
-					</div>
-					<div class="col-md-6">
-						<div class="my-skills-description"><span>Unyson</span><span>95%</span></div>
-						<div class="progress">
-							<div class="progress-bar" role="progressbar" style="width: 95%" aria-valuenow="95" aria-valuemin="0" aria-valuemax="100"></div>
-						</div>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-md-6">
-						<div class="my-skills-description"><span>JavaScript</span><span>85%</span></div>
-						<div class="progress">
-							<div class="progress-bar" role="progressbar" style="width: 85%" aria-valuenow="85" aria-valuemin="0" aria-valuemax="100"></div>
-						</div>
-					</div>
-					<div class="col-md-6">
-						<div class="my-skills-description"><span>Bootstrap</span><span>95%</span></div>
-						<div class="progress">
-							<div class="progress-bar" role="progressbar" style="width: 95%" aria-valuenow="95" aria-valuemin="0" aria-valuemax="100"></div>
-						</div>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-md-6">
-						<div class="my-skills-description"><span>PHP</span><span>95%</span></div>
-						<div class="progress">
-							<div class="progress-bar" role="progressbar" style="width: 95%" aria-valuenow="95" aria-valuemin="0" aria-valuemax="100"></div>
-						</div>
-					</div>
-					<div class="col-md-6">
-						<div class="my-skills-description"><span>Photoshop / Illustrator / InDesign</span><span>85%</span></div>
-						<div class="progress">
-							<div class="progress-bar" role="progressbar" style="width: 85%" aria-valuenow="85" aria-valuemin="0" aria-valuemax="100"></div>
-						</div>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-md-6">
-						<div class="my-skills-description"><span>Google Script</span><span>95%</span></div>
-						<div class="progress">
-							<div class="progress-bar" role="progressbar" style="width: 95%" aria-valuenow="95" aria-valuemin="0" aria-valuemax="100"></div>
-						</div>
-					</div>
-					<div class="col-md-6">
-						<div class="my-skills-description"><span>WordPress</span><span>95%</span></div>
-						<div class="progress">
-							<div class="progress-bar" role="progressbar" style="width: 95%" aria-valuenow="95" aria-valuemin="0" aria-valuemax="100"></div>
-						</div>
-					</div>
-				</div>
+        </div>
+        <?php for ($i=0; $i < count($arrAllData['SkillHard']['headers']); $i++) {?>
+          <?php if($i%2==0){echo '<div class="row">';}?>     
+            <div class="col-md-6">
+              <div class="my-skills-description"><span><?=$arrAllData['SkillHard']['headers'][$i]?></span><span><?=$arrAllData['SkillHard']['descriptions'][$i]?>%</span></div>
+              <div class="progress">
+                <div class="progress-bar" role="progressbar" style="width: <?=$arrAllData['SkillHard']['descriptions'][$i]?>%" aria-valuenow="<?=$arrAllData['SkillHard']['descriptions'][$i]?>" aria-valuemin="0" aria-valuemax="100"></div>
+              </div>
+            </div>
+          <?php if($i%2==1){echo '</div>';}?> 
+        <?php }?>  
+        <?php for ($j=$i; $j < count($arrAllData['SkillSoft']['headers'])+$i; $j++) {?>
+          <?php if($j%2==0){echo '<div class="row">';}?>     
+            <div class="col-md-6">
+              <div class="my-skills-description"><span><?=$arrAllData['SkillSoft']['headers'][$j-$i]?></span><span><?=$arrAllData['SkillSoft']['descriptions'][$j-$i]?>%</span></div>
+              <div class="progress">
+                <div class="progress-bar" role="progressbar" style="width: <?=$arrAllData['SkillSoft']['descriptions'][$j-$i]?>%" aria-valuenow="<?=$arrAllData['SkillSoft']['descriptions'][$j-$i]?>" aria-valuemin="0" aria-valuemax="100"></div>
+              </div>
+            </div>
+          <?php if($j%2==1){echo '</div>';}?> 
+        <?php }?>  
 			</div>
 		</div>
 <!-- /my-skills -->
@@ -190,48 +176,23 @@
 			<div class="container">
 				<div class="row">
 					<div class="col-md-6 offset-md-3">
-						<h1>My Services</h1>
+						<h1><?=$arrAllData['Categories']['header']?></h1>
 						<hr class="hr-for-h1">
-						<p>Here are a few categories which will sort my portfolio for your comfort.</p>
+						<p><?=$arrAllData['Categories']['description']?></p>
 					</div>
 				</div>
 				<div class="row row-cols-1 row-cols-md-2">
-					<div class="col mb-4">
-						<div class="card h-100">
-							<img src="img/service-1.jpg" class="card-img-top" alt="...">
-							<div class="card-img-overlay">
-								<h2 class="card-title">Sites&WordPress</h2>
-								<p class="card-text">Web projects for WordPress CMS and other web sites projects.</p>
-							</div>
-						</div>
-					</div>
-					<div class="col mb-4">
-						<div class="card h-100">
-							<img src="img/service-2.jpg" class="card-img-top" alt="...">
-							<div class="card-img-overlay">
-								<h2 class="card-title">Web Applications</h2>
-								<p class="card-text">Websites which developed for corporate internal usage to automate teamwork processes and better effectivity.</p>
-							</div>
-						</div>
-					</div>
-					<div class="col mb-4">
-						<div class="card h-100">
-							<img src="img/service-3.jpg" class="card-img-top" alt="...">
-							<div class="card-img-overlay">
-								<h2 class="card-title">G Suite</h2>
-								<p class="card-text">Web applications and addons developed on the google script language for automating processes or creating new tools.</p>
-							</div>
-						</div>
-					</div>
-					<div class="col mb-4">
-						<div class="card h-100">
-							<img src="img/service-4.jpg" class="card-img-top" alt="...">
-							<div class="card-img-overlay">
-								<h2 class="card-title">Print Automation</h2>
-								<p class="card-text">Scripting for Adobe Photoshop, Illustrator, PDF, and other tools for automatization manual work process or giving new possibilities.</p>
-							</div>
-						</div>
-					</div>
+          <?php for ($i=0; $i < count($arrAllData['categories']['names']); $i++) {?>
+            <div class="col mb-4" style='height:370px;'>
+              <div class="card h-100" id="port<?=$i?>">
+                <div class="darker">
+                  <div class="card-img-overlay">
+                    <h2 class="card-title"><?=$arrAllData['categories']['names'][$i]?></h2>
+                  </div>
+                </div>
+              </div>
+            </div>
+          <?php }?>
 				</div>
 			</div>
 		</div>
@@ -241,39 +202,23 @@
 			<div class="container">
 				<div class="row">
 					<div class="col-md-6 offset-md-3">
-						<h1>Latest Works</h1>
+						<h1><?=$arrAllData['portfolio_header']['header']?></h1>
 						<hr class="hr-for-h1">
-						<p>Take a look at my portfolio and don't hesitate to contact me if you have any further questions.</p>
+						<p><?=$arrAllData['portfolio_header']['description']?></p>
 					</div>
 				</div>
 				<div class="row row-cols-1 row-cols-md-3">
-					<div class="col mb-4">
-					<div class="card h-100">
-						<img src="img/portfolio-1.jpg" class="card-img-top" alt="...">
-						<div class="card-body">
-							<h5 class="card-title">Variable Email</h5>
-							<p class="card-text">Variable Email - is tool which can help you to work with personalized email sendings, also it can be helpful at automated personalized email notification (using google triggers), it's easy to setup, and you don't need js knowledge to use it. Just try it!</p>
-						</div>
-					</div>
-					</div>
-					<div class="col mb-4">
-					<div class="card h-100">
-						<img src="img/portfolio-2.jpg" class="card-img-top" alt="...">
-						<div class="card-body">
-							<h5 class="card-title">Light landing-site with CMS </h5>
-							<p class="card-text">Landing page easy to install and run at your hosting. Inbuilt CMS is very light and you don't need any specific knowledge to create your beautiful, quick and easy web site with double language. This site type was created for a personal web page (as human presentation), but it can be used as a product presentation site or company presentation site too.</p>
-						</div>
-					</div>
-					</div>
-					<div class="col mb-4">
-					<div class="card h-100">
-						<img src="img/portfolio-3.jpg" class="card-img-top" alt="...">
-						<div class="card-body">
-							<h5 class="card-title">Price-tags generator </h5>
-							<p class="card-text">Web application called to remove manual price-tag creation for middle and big size of retail businesses. Generates ready to print pdf files with price tags in any format and size which was approved on the store.</p>
-						</div>
-					</div>
-					</div>
+          <?php for ($i=0; $i < count($arrAllData['portfolio']['headers']); $i++) { if($i==3){break;}?>
+            <div class="col mb-4">
+              <div class="card h-100">
+                <img src="<?=$config['sitelink']?>admin/images/Portfolio/<?=$arrAllData['portfolio']['images'][count($arrAllData['portfolio']['images'])-1-$i][0]?>" class="card-img-top" alt="...">
+                <div class="card-body">
+                  <h5 class="card-title"><?=$arrAllData['portfolio']['headers'][$i]?></h5>
+                  <p class="card-text"><?=$arrAllData['portfolio']['texts'][$i]?></p>
+                </div>
+              </div>
+            </div>
+          <?php }?>
 				</div>
 			</div>
 		</div>
@@ -283,71 +228,29 @@
 			<div class="container">
 				<div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
 					<ol class="carousel-indicators">
-					<li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
-					<li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
-					<li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
-					</ol>
+            <?php for ($i=0, $strAct='active'; $i < count($arrAllData['feedbacks']['names']); $i++) { if($i>0){$strAct='';}?>
+              <li data-target="#carouselExampleIndicators" data-slide-to="<?=$i?>" class="<?=$strAct?>"></li>
+            <?php }?>
+          </ol>
 					<div class="carousel-inner">
-						<div class="carousel-item active">
-							<div class="d-flex carousel-max-height">
-								<div class="align-self-center">
-									<div class="col-md-8 offset-md-2 reviews-text">
-										<h3>Lorem ipsum dolor first</h3>
-										<p>
-											"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lacus sed neque adipiscing nisl ornare euismod sed iaculis neque. Elementum et pulvinar urna sit lacus praesent. Posuere platea non, convallis dolor mi, interdum imperdiet. Neque quis erat commodo, pellentesque diam nulla sed et convallis dolor mi."
-										</p>
-										<p>- Upwork Client</p>
-									</div>
-									<div class="reviews-stars">
-										<i class="fa fa-star" aria-hidden="true"></i>
-										<i class="fa fa-star" aria-hidden="true"></i>
-										<i class="fa fa-star" aria-hidden="true"></i>
-										<i class="fa fa-star" aria-hidden="true"></i>
-										<i class="fa fa-star-half-o" aria-hidden="true"></i>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="carousel-item">
-							<div class="d-flex carousel-max-height">
-								<div class="align-self-center">
-									<div class="col-md-8 offset-md-2 reviews-text">
-										<h3>Lorem ipsum dolor second</h3>
-										<p>
-											"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lacus sed neque adipiscing nisl ornare euismod sed iaculis neque."
-										</p>
-										<p>- Upwork Client</p>
-									</div>
-									<div class="reviews-stars">
-										<i class="fa fa-star" aria-hidden="true"></i>
-										<i class="fa fa-star" aria-hidden="true"></i>
-										<i class="fa fa-star" aria-hidden="true"></i>
-										<i class="fa fa-star" aria-hidden="true"></i>
-										<i class="fa fa-star-half-o" aria-hidden="true"></i>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="carousel-item">
-							<div class="d-flex carousel-max-height">
-								<div class="align-self-center">
-									<div class="col-md-8 offset-md-2 reviews-text">
-										<h3>Lorem ipsum dolor third</h3>
-										<p>
-											"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lacus sed neque adipiscing nisl ornare euismod sed iaculis neque. Elementum et pulvinar urna sit lacus praesent. Posuere platea non, convallis dolor mi, interdum imperdiet. Neque quis erat commodo, pellentesque diam nulla sed et convallis dolor mi. Elementum et pulvinar urna sit lacus praesent. Posuere platea non, convallis dolor mi, interdum imperdiet. Neque quis erat commodo, pellentesque diam nulla sed et convallis dolor mi."
-										</p>
-										<p>- Upwork Client</p>
-									</div>
-									<div class="reviews-stars">
-										<i class="fa fa-star" aria-hidden="true"></i>
-										<i class="fa fa-star" aria-hidden="true"></i>
-										<i class="fa fa-star" aria-hidden="true"></i>
-										<i class="fa fa-star" aria-hidden="true"></i>
-										<i class="fa fa-star" aria-hidden="true"></i>
-									</div>
-								</div>
-							</div>
-						</div>
+            <?php for ($i=0, $strAct='active'; $i < count($arrAllData['feedbacks']['names']); $i++) { if($i>0){$strAct='';}?>
+              <div class="carousel-item <?=$strAct?>">
+                <div class="d-flex carousel-max-height">
+                  <div class="align-self-center">
+                    <div class="col-md-8 offset-md-2 reviews-text">
+                      <h3><?=$arrAllData['feedbacks']['names'][$i]?></h3>
+                      <p>
+                        "<?=$arrAllData['feedbacks']['texts'][$i]?>"
+                      </p>
+                      <p><?=$arrAllData['feedbacks']['positions'][$i]?></p>
+                    </div>
+                    <div class="reviews-stars">
+                      <?=$arrAllData['feedbacks']['images'][$i]?>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            <?php }?>
 					</div>
 					<a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
 					<span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -366,24 +269,24 @@
 			<div class="container">
 				<div class="row">
 					<div class="col-md-6 offset-md-3">
-						<h1>Contact Me</h1>
+						<h1><?=$arrAllData['сontacts_header']['header']?></h1>
 						<hr class="hr-for-h1">
 					</div>
 				</div>
 				<div class="row">
 					<div class="col-md-4">
-						<h5>Contact info</h5>
+						<h5><?=$arrAllData['сontacts_sec_header']['header']?></h5>
 						<ul class="contact-info">
-							<li><i class="fa fa-phone" aria-hidden="true"></i><a href="tel:+380665001716">+38 (066) 500-17-16</a></li>
-							<li><i class="fa fa-envelope" aria-hidden="true"></i><a href="mailto:andriy@balakalchuk.com">andriy@balakalchuk.com</a></li>
-							<li><i class="fa fa-map-marker" aria-hidden="true"></i>Kiev, Ukraine</li>
+							<li><i class="fa fa-phone" aria-hidden="true"></i><a href="tel:<?=$arrAllData['phone']['header']?>"><?=$arrAllData['phone']['header']?></a></li>
+							<li><i class="fa fa-envelope" aria-hidden="true"></i><a href="mailto:<?=$arrAllData['Email']['header']?>"><?=$arrAllData['Email']['header']?></a></li>
+							<li><i class="fa fa-map-marker" aria-hidden="true"></i><?=$arrAllData['location']['header']?></li>
 						</ul>
 						<h5>Follow me</h5>
 						<ul class="follow-me">
-							<li><a href="#"><i class="fa fa-facebook-square" aria-hidden="true"></i></a></li>
-							<li><a href="#"><i class="fa fa-youtube-square" aria-hidden="true"></i></a></li>
-							<li><a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a></li>
-							<li><a href="#"><i class="fa fa-upwork" aria-hidden="false"></i></a></li>
+							<li><a href="<?=$arrAllData['Facebook']['header']?>" target="_blank"><i class="fa fa-facebook-square" aria-hidden="true"></i></a></li>
+							<li><a href="<?=$arrAllData['youtube']['header']?>" target="_blank"><i class="fa fa-youtube-square" aria-hidden="true"></i></a></li>
+							<li><a href="<?=$arrAllData['instagram']['header']?>" target="_blank"><i class="fa fa-instagram" aria-hidden="true"></i></a></li>
+							<li><a href="<?=$arrAllData['upwork']['header']?>" target="_blank"><i class="fa fa-upwork" aria-hidden="false"></i></a></li>
 						</ul>
 					</div>
 					<div class="col-md-8">
@@ -429,12 +332,12 @@
 			<div class="container">
 				<div class="row">
 					<div class="col-md">
-						<h4>Contact info</h4>
+						<h4><?=$arrAllData['сontacts_sec_header']['header']?></h4>
 						<hr>
 						<ul>
-							<li><i class="fa fa-phone" aria-hidden="true"></i><a href="tel:+380665001716">+38 (066) 500-17-16</a></li>
-							<li><i class="fa fa-envelope" aria-hidden="true"></i><a href="mailto:andriy@balakalchuk.com">andriy@balakalchuk.com</a></li>
-							<li><i class="fa fa-map-marker" aria-hidden="true"></i>Kiev, Ukraine</li>
+							<li><i class="fa fa-phone" aria-hidden="true"></i><a href="tel:<?=$arrAllData['phone']['header']?>"><?=$arrAllData['phone']['header']?></a></li>
+							<li><i class="fa fa-envelope" aria-hidden="true"></i><a href="mailto:<?=$arrAllData['Email']['header']?>"><?=$arrAllData['Email']['header']?></a></li>
+							<li><i class="fa fa-map-marker" aria-hidden="true"></i><?=$arrAllData['location']['header']?></li>
 						</ul>
 					</div>
 					<div class="col-md">
@@ -453,10 +356,10 @@
 					<div class="col-md">
 						<h4>Follow me</h4>
 						<hr>
-						<a href="#"><i class="fa fa-facebook-square" aria-hidden="true"></i></a>&nbsp;
-						<a href="#"><i class="fa fa-youtube-square" aria-hidden="true"></i></a>&nbsp;
-						<a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>&nbsp;
-						<a href="#"><i class="fa fa-upwork" aria-hidden="false"></i></a>&nbsp;
+						<a href="<?=$arrAllData['Facebook']['header']?>" target="_blank"><i class="fa fa-facebook-square" aria-hidden="true"></i></a>&nbsp;
+						<a href="<?=$arrAllData['youtube']['header']?>" target="_blank"><i class="fa fa-youtube-square" aria-hidden="true"></i></a>&nbsp;
+						<a href="<?=$arrAllData['instagram']['header']?>" target="_blank"><i class="fa fa-instagram" aria-hidden="true"></i></a>&nbsp;
+						<a href="<?=$arrAllData['upwork']['header']?>" target="_blank"><i class="fa fa-upwork" aria-hidden="false"></i></a>&nbsp;
 						<br>
 						<form class="needs-validation" novalidate>
 							<label for="E-Mail">Get latest updates and offers.</label>
@@ -473,10 +376,21 @@
 				</div>
 				<div class="row">
 					<div class="col-md">
-						<h6>Tags</h6>
 						<p>
-							Skills: HTML, CSS, Bootstrap, Google Spreadsheets, Google Script, Google API<br>
-							Category: g suite, Web Applications
+              <?=$arrAllData['hardskill_header']['header']?>:
+              <?php for ($i=0, $strDecider=','; $i < count($arrAllData['SkillHard']['headers']); $i++){if($i==count($arrAllData['SkillHard']['headers'])-1){$strDecider='.';}?>
+                <?=$arrAllData['SkillHard']['headers'][$i]?><?=$strDecider?>
+              <?php }?>
+              <br>
+              <?=$arrAllData['softskill_header']['header']?>:
+              <?php for ($i=0, $strDecider=','; $i < count($arrAllData['SkillSoft']['headers']); $i++){if($i==count($arrAllData['SkillSoft']['headers'])-1){$strDecider='.';}?>
+                <?=$arrAllData['SkillSoft']['headers'][$i]?><?=$strDecider?>
+              <?php }?>
+              <br>
+              <?=$arrAllData['Categories']['header']?>: 
+              <?php for ($i=0, $strDecider=','; $i < count($arrAllData['categories']['names']); $i++){if($i==count($arrAllData['categories']['names'])-1){$strDecider='.';}?>
+                <?=$arrAllData['categories']['names'][$i]?><?=$strDecider?>
+              <?php }?>
 						</p>
 					</div>
 				</div>
@@ -487,7 +401,7 @@
 		<div class="copyright">
 			<div class="container">
 				<div class="row">
-					<div class="col-md">Copyright © 2020 Andriy Balakalchuk</div>
+					<div class="col-md"><?=$config['Copyright']?></div>
 				</div>
 			</div>
 		</div>

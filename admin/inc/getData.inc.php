@@ -42,6 +42,16 @@ function getVariables($strForPage,$strLanguage ='',$intItemId='nAn'){
             $arrAllData['softskill_header']['header'] = $arrMidler['text_big'.$strLanguage];
             $arrAllData['softskill_header']['description'] = $arrMidler['text_small'.$strLanguage];
           break;
+          case 'Skills':
+            $arrAllData['Skills'] = array();
+            $arrAllData['Skills']['header'] = $arrMidler['text_big'.$strLanguage];
+            $arrAllData['Skills']['description'] = $arrMidler['text_small'.$strLanguage];
+          break;
+          case 'Categories':
+            $arrAllData['Categories'] = array();
+            $arrAllData['Categories']['header'] = $arrMidler['text_big'.$strLanguage];
+            $arrAllData['Categories']['description'] = $arrMidler['text_small'.$strLanguage];
+          break;
           case 'SkillHard':
             if($intSkHaCount == 0){
             $arrAllData['SkillHard'] = array();
@@ -171,6 +181,16 @@ function getVariables($strForPage,$strLanguage ='',$intItemId='nAn'){
       $arrAllData['softskill_header']['header'] = 'Lorem ipsum';
       $arrAllData['softskill_header']['description'] = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.';
     }
+    if(!is_array($arrAllData['Skills'])){
+      $arrAllData['Skills'] = array();
+      $arrAllData['Skills']['header'] = 'Lorem ipsum';
+      $arrAllData['Skills']['description'] = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.';
+    }
+    if(!is_array($arrAllData['Categories'])){
+      $arrAllData['Categories'] = array();
+      $arrAllData['Categories']['header'] = 'Lorem ipsum';
+      $arrAllData['Categories']['description'] = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.';
+    }
     if(!is_array($arrAllData['SkillHard'])){
       $arrAllData['SkillHard'] = array();
       $arrAllData['SkillHard']['headers'] = array('Lorem ipsum');
@@ -289,7 +309,7 @@ function getVariables($strForPage,$strLanguage ='',$intItemId='nAn'){
         $arrAllData['feedbacks']['texts'] = array();
         }
         $intFeedCount++;
-        $arrAllData['feedbacks']['images'][] = '<img src="'.$config['sitelink'].'admin/images/ClientAvatar/'.$arrMidler['image'].'">';
+        $arrAllData['feedbacks']['images'][] = '<img class="avatar" src="'.$config['sitelink'].'admin/images/ClientAvatar/'.$arrMidler['image'].'">';
         $arrAllData['feedbacks']['names'][] = $arrMidler['text_big'.$strLanguage];
         $arrAllData['feedbacks']['positions'][] = $arrMidler['text_company'.$strLanguage];
         $arrAllData['feedbacks']['texts'][] = $arrMidler['text_small'];
@@ -298,7 +318,7 @@ function getVariables($strForPage,$strLanguage ='',$intItemId='nAn'){
     //проверяем все ли данные есть и если нету, вносим рыбу или плейсхолдеры
     if(!is_array($arrAllData['feedbacks'])){
       $arrAllData['feedbacks'] = array();
-      $arrAllData['feedbacks']['images'] = array('<div style="height:200px;width:200px;">'.getSVGplaceholder(200, 200).'</div>');
+      $arrAllData['feedbacks']['images'] = array('<img class="avatar" src="'.getSVGplaceholder(70, 70).'">');
       $arrAllData['feedbacks']['names'] = array('Lorem ipsum');
       $arrAllData['feedbacks']['positions'] = array('Lorem ipsum');
       $arrAllData['feedbacks']['texts'] = array('Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.');
@@ -319,7 +339,7 @@ function getVariables($strForPage,$strLanguage ='',$intItemId='nAn'){
               $arrAllData['SliderIMG']['images'] = array();
             }
             $intImgSliCount++;
-            $arrAllData['SliderIMG']['images'][] = '<img src="'.$config['sitelink'].'admin/images/Slider/'.$arrMidler['image_name'].'">';
+            $arrAllData['SliderIMG']['images'][] = $config['sitelink'].'admin/images/Slider/'.$arrMidler['image_name'];
           break;
           case 'FavIco':
             $arrAllData['FavIco'] = array();
@@ -339,7 +359,7 @@ function getVariables($strForPage,$strLanguage ='',$intItemId='nAn'){
     //проверяем все ли данные есть и если нету, вносим рыбу или плейсхолдеры
     if(!is_array($arrAllData['SliderIMG'])){
       $arrAllData['SliderIMG'] = array();
-      $arrAllData['SliderIMG']['images'] = array('<div style="width:570px;height:600px;">'.getSVGplaceholder(570, 600).'</div>');
+      $arrAllData['SliderIMG']['images'] = array(getSVGplaceholder(570, 600));
     }
     if(!is_array($arrAllData['FavIco'])){
       $arrAllData['FavIco'] = array();
@@ -380,7 +400,7 @@ function getVariables($strForPage,$strLanguage ='',$intItemId='nAn'){
       $arrAllData['portfolio'] = array();
       $arrAllData['portfolio']['ids'] = array('nAn');
       $arrAllData['portfolio']['item_categorys'] = array('nAn');
-      $arrAllData['portfolio']['images'] = array('<div style="height:525px;width:475px;">'.getSVGplaceholder(475, 525).'</div>');
+      $arrAllData['portfolio']['images'] = array(getSVGplaceholder(475, 525));
       $arrAllData['portfolio']['headers'] = array('Lorem ipsum');
       $arrAllData['portfolio']['texts'] = array('Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.');
     }
@@ -393,7 +413,7 @@ function getVariables($strForPage,$strLanguage ='',$intItemId='nAn'){
     if($arrAllData['categories']=='no categories yet'){
       $arrAllData['categories'] = array();
       $arrAllData['categories']['names'] = array('Lorem ipsum');
-      $arrAllData['categories']['images'] = array('<div style="height:525px;width:475px;">'.getSVGplaceholder(475, 525).'</div>');
+      $arrAllData['categories']['images'] = array(getSVGplaceholder(475, 525));
     }
   }
 

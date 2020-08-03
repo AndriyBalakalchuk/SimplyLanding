@@ -260,17 +260,19 @@ function getCleaFloat($float){
 
 //создает SVG плейсходры для отсутствующих картинок
 function getSVGplaceholder($intWidth, $intHeight){
-  $strSVG = '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" x="0px" y="0px" viewBox="0 0 '.$intWidth.' '.$intHeight.'" xml:space="preserve">
-  <style type="text/css">
-    .st0{fill:#DADADA;}
-    .st1{fill:none;}
-    .st2{fill:#878787;}
-    .st3{font-family:\'Arial Black\';}
-    .st4{font-size:'.($intHeight/10).'px;}
-  </style>
-  <rect x="0" y="0" class="st0" width="'.$intWidth.'" height="'.$intHeight.'"/>
-  <text transform="matrix(1 0 0 1 '.($intWidth/2).' '.($intHeight/2).')" text-anchor="middle" class="st2 st3 st4">'.$intWidth.'*'.$intHeight.'px</text>
-  </svg>';
+  $strSVG = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='".$intWidth."' height='".$intHeight."'><rect x='0' y='0' style='fill:lightgray;' width='".$intWidth."' height='".$intHeight."'/><text transform='matrix(1 0 0 1 ".($intWidth/2)." ".($intHeight/2).")' text-anchor='middle' style='fill:white; font-family:Arial Black; font-size:".($intHeight/10)."px;'>".$intWidth."*".$intHeight."px</text></svg>";
+
+  return $strSVG;  
+}
+
+//создает SVG тексты для блоков на фон
+function getSVGword($intWidth, $intHeight, $strText){
+  global $arrAllData;
+
+  $strFont = str_ireplace("'", '', $arrAllData['sitefont']['header']);
+  $strFont = str_ireplace('"', '', $strFont);
+
+  $strSVG = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='".$intWidth."' height='".$intHeight."'><text font-family='".$strFont."' font-weight='bold' transform='matrix(1 0 0 1 0 ".($intHeight).")' text-anchor='start' style='fill:white; font-size:".($intHeight*1.3)."px;'>".$strText."</text></svg>";
 
   return $strSVG;  
 }
@@ -522,7 +524,7 @@ function getCategorys($strNeed){
         }
       }
       $arrResult['names'][] = $arrClear[$i];
-      $arrResult['images'][] = $arrAllImagesINcategory[array_rand($arrAllImagesINcategory,1)];
+      $arrResult['images'][] = $config['sitelink'].'admin/images/Portfolio/'.$arrAllImagesINcategory[array_rand($arrAllImagesINcategory,1)];
     }
     return $arrResult;
   }elseif($strNeed=='Blocks_en'){//формируем массивы из названий категорий и картинок в них на англ языке
@@ -538,7 +540,7 @@ function getCategorys($strNeed){
         }
       }
       $arrResult['names'][] = $arrClear_en[$i];
-      $arrResult['images'][] = $arrAllImagesINcategory[array_rand($arrAllImagesINcategory,1)];
+      $arrResult['images'][] = $config['sitelink'].'admin/images/Portfolio/'.$arrAllImagesINcategory[array_rand($arrAllImagesINcategory,1)];
     }
     return $arrResult;
   }else{
