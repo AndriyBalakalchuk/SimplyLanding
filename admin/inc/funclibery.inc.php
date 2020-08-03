@@ -547,7 +547,7 @@ function getCategorys($strNeed){
 
 }
 
-function uploadImage($newImage, $strFolder, $width=1980, $height=1080){ //заливает новые картинки
+function uploadImage($newImage, $strFolder, $width=1980, $height=1080, $imageName = ''){ //заливает новые картинки
   global $config, $path, $_FILES;
  
   # Подключение редакторв изображений
@@ -556,8 +556,12 @@ function uploadImage($newImage, $strFolder, $width=1980, $height=1080){ //зал
   if($newImage['error'] !=0){return false;} //ошибка загрузки
 
   $FileRandName = explode('.', $newImage["name"]);
-  $FileRandName= time().rand(1,9).'.'.array_pop($FileRandName);  //имя для изображения
-  
+  if($imageName==''){
+    $FileRandName= time().rand(1,9).'.'.array_pop($FileRandName);  //имя для изображения
+  }else{
+    $FileRandName= $imageName.'.'.array_pop($FileRandName);  //имя для изображения в случае принудительного именования
+  }
+
   if($strFolder==''){
     //заливает картинку с подходящим размером   
     $image = new SimpleImage();
@@ -3398,7 +3402,7 @@ function Content($Stranitsa, $intUserPermis){
       </form>
       <!-- форма конец-->';
 
-      if(CheckData('sl_images', 'image_for', 'FavIco')){ //фотки для слайдера есть
+      if(CheckData('sl_images', 'image_for', 'FavIco')){ //иконка для фавикона есть
         $ArrayRow = selectFromTable('sl_images', array('id', 'image_for', 'image_name', 'time','edit_by'), true, 'image_for', 'FavIco')[0];
         $htmlExistingImages = '<div class="row">';
         $strData=date("d.m.Y",$ArrayRow['time']);
@@ -3410,7 +3414,7 @@ function Content($Stranitsa, $intUserPermis){
         $htmlExistingImages .= '</div>';
         $strOnSubmit = 'updINTOfav';
         $strId = '<input type="hidden" value="'.$ArrayRow['id'].'" name="id" required>';
-      }else{ //фотки для слайдера  нету
+      }else{ //фотки для фавикона  нету
         $htmlExistingImages = '';
         $strOnSubmit = 'addINTOfav';
         $strId = '';

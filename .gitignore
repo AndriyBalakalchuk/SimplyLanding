@@ -35,6 +35,9 @@ Temporary Items
 
 # Игнорировать файлы
 admin/inc/config.inc.php
+admin/images/fav.*
+
+
 
 # Игнорируем папки
 admin/images/ClientAvatar/*.jpg

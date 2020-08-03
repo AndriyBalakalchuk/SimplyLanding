@@ -436,7 +436,7 @@ if($_POST['strInnFromForm'] == 'ChanPassword'){ //пришел запрос на
   //------------------------------------------------------------------------------------------
   //------------------------------------------------------------------------------------------
   if($intUserPermis == 1 or $intUserPermis == 2){ //проверяем что пользователь может менять данные
-    $newImageName = uploadImage($_FILES['new_image'],'', 32, 32);
+    $newImageName = uploadImage($_FILES['new_image'],'', 32, 32, 'fav');
     if($newImageName!==false){ //загрузка изображения - ок
       if(addIntoTable('sl_images', array('image_for','image_name', 'time','edit_by'), array($_POST['strImage_for'],$newImageName,time(),$_SESSION['new']['signature']))){
         header("Location: index.php?strError=passOK&".$strCurCuery);exit;
@@ -463,10 +463,10 @@ if($_POST['strInnFromForm'] == 'ChanPassword'){ //пришел запрос на
     }
 
     if(isset($_FILES['new_image']) and $_FILES['new_image']['size'] > 0) {
-      $newImageName = uploadImage($_FILES['new_image'], '', 32, 32);
       if($strOldImageName != '' and file_exists($path.'images/'.$strOldImageName)){
         unlink("images/$strOldImageName");
       }
+      $newImageName = uploadImage($_FILES['new_image'], '', 32, 32, 'fav');
 
       if($newImageName==false or $newImageName=='' or $newImageName=='Ω'){ //загрузка изображения - не ок
         $newImageName = '';
