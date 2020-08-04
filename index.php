@@ -30,6 +30,13 @@
   // Заголовок кодировки
   header('Content-type: text/html; charset='.$config['encoding']);
 
+  //определяем язык для пользователя
+  if(!isset($_COOKIE["Language"]) or $_COOKIE["Language"] == ''){
+	$strLanguage = '';
+  }else{
+	$strLanguage = $_COOKIE["Language"];
+  }
+
   //получаем все переменные - детали ----→ Readme
   $arrAllData = getVariables(basename(__FILE__),$strLanguage);
   
@@ -76,6 +83,52 @@
 	      .navbar-brand::after {
           content: "<?=$arrAllData['sitetitle']['header']?>";
         }
+	    }
+      .contact-me .contact-info li > a:hover {
+        color: <?=$arrAllData['prColor']['header']?>;
+      }
+      .footer a:hover {
+	      color: <?=$arrAllData['prColor']['header']?>;
+      }
+      .footer i {
+        color: <?=$arrAllData['prColor']['header']?>;
+      }
+      .progress-bar {
+	      background-color: <?=$arrAllData['prColor']['header']?>;
+      }
+      .page-portfolio-description i {
+	      color: <?=$arrAllData['prColor']['header']?>;
+      }
+      .hr-for-h1 {
+        border: 5px solid <?=$arrAllData['prColor']['header']?>;
+      }
+      .btn-primary {
+        background-color: <?=$arrAllData['prColor']['header']?>;
+        border-color: <?=$arrAllData['prColor']['header']?>;
+      }
+      .btn-primary:hover {
+        background-color: <?=alter_brightness($arrAllData['prColor']['header'], 6, 'up')?> !important;
+        border-color: <?=alter_brightness($arrAllData['prColor']['header'], 6, 'up')?> !important;
+      }
+      .btn-primary:focus {
+        background-color: <?=alter_brightness($arrAllData['prColor']['header'], 10, 'down')?> !important;
+        border-color: <?=alter_brightness($arrAllData['prColor']['header'], 10, 'down')?> !important;
+      }
+      .btn-primary:active {
+        background-color: <?=alter_brightness($arrAllData['prColor']['header'], 10, 'down')?> !important;
+        border-color: <?=alter_brightness($arrAllData['prColor']['header'], 10, 'down')?> !important;
+      }
+      .navbar-nav a.active {
+        color: <?=$arrAllData['prColor']['header']?> !important;
+      }
+      .navbar-nav span { /* кнопка выбора языка */
+        background-color:<?=$arrAllData['prColor']['header']?>;
+      }
+      .fa-upwork {
+        background-image: url("<?=getSVGupwork($arrAllData['prColor']['header'])?>");
+      }
+      body {
+        font-family: <?=$arrAllData['sitefont']['header']?>;
       }
     </style>
   </head>
@@ -89,14 +142,9 @@
 				</button>
 				<div class="collapse navbar-collapse" id="navbarNavAltMarkup">
 				<div class="navbar-nav">
-					<a class="nav-item nav-link active" href="#hello">Home</a>
-					<a class="nav-item nav-link" href="#about-me">About Me</a>
-					<a class="nav-item nav-link" href="#my-skills">My Skills</a>
-					<a class="nav-item nav-link" href="#my-services">Services</a>
-					<a class="nav-item nav-link" href="#latest-works">Portfolio</a>
-					<a class="nav-item nav-link" href="#">News</a>
-					<a class="nav-item nav-link" href="#contact-me">Contact</a>
-					<a class="nav-item nav-link" href="#"><span>RU</span></a>
+					<?php for ($i=0, $strAct='active'; $i < count($arrAllData['Navbar']); $i++) { if($i>0){$strAct='';}?>
+						<a class="nav-item nav-link <?=$strAct?>" href="<?=$arrAllData['Navbar'][$i][1]?>"><?=$arrAllData['Navbar'][$i][0]?></a>
+					<?php }?>
 				</div>
 				</div>
 			</div>
@@ -281,7 +329,7 @@
 							<li><i class="fa fa-envelope" aria-hidden="true"></i><a href="mailto:<?=$arrAllData['Email']['header']?>"><?=$arrAllData['Email']['header']?></a></li>
 							<li><i class="fa fa-map-marker" aria-hidden="true"></i><?=$arrAllData['location']['header']?></li>
 						</ul>
-						<h5>Follow me</h5>
+						<h5><?=$arrAllData['footer']['follow']?></h5>
 						<ul class="follow-me">
 							<li><a href="<?=$arrAllData['Facebook']['header']?>" target="_blank"><i class="fa fa-facebook-square" aria-hidden="true"></i></a></li>
 							<li><a href="<?=$arrAllData['youtube']['header']?>" target="_blank"><i class="fa fa-youtube-square" aria-hidden="true"></i></a></li>
@@ -291,35 +339,35 @@
 					</div>
 					<div class="col-md-8">
 						<hr style="display: none;">
-						<form class="needs-validation" novalidate>
+						<form class="needs-validation" method='post' action='admin/send.php' novalidate>
 							<div class="form-group">
-								<label for="formInputName">Name</label>
-								<input type="text" class="form-control form-control-lg" id="formInputName" placeholder="Type your name" required>
-								<div class="valid-feedback">Looks good!</div>
-								<div class="invalid-feedback">Please type your name.</div>
+								<label for="formInputName"><?=$arrAllData['feedbackForm']['name']?></label>
+								<input type="text" name="name" class="form-control form-control-lg" id="formInputName" placeholder="<?=$arrAllData['feedbackForm']['pl_name']?>" required>
+								<div class="valid-feedback"><?=$arrAllData['feedbackForm']['Ok']?></div>
+								<div class="invalid-feedback"><?=$arrAllData['feedbackForm']['pl_name']?></div>
 							</div>
 							<div class="form-row">
 								<div class="form-group col-md-6">
-									<label for="formInputPhone">Phone number</label>
-									<input type="text" class="form-control form-control-lg" id="formInputPhone" placeholder="Type your phone number" pattern="[\s-+0-9]*" required>
-									<div class="valid-feedback">Looks good!</div>
-									<div class="invalid-feedback">Please type your phone number.</div>
+									<label for="formInputPhone"><?=$arrAllData['feedbackForm']['phone']?></label>
+									<input type="text" name="phone" class="form-control form-control-lg" id="formInputPhone" placeholder="<?=$arrAllData['feedbackForm']['pl_phone']?>" pattern="[\s-+0-9]*" required>
+									<div class="valid-feedback"><?=$arrAllData['feedbackForm']['Ok']?></div>
+									<div class="invalid-feedback"><?=$arrAllData['feedbackForm']['pl_phone']?></div>
 								</div>
 								<div class="form-group col-md-6">
-									<label for="formInputEmail">E-mail</label>
-									<input type="text" class="form-control form-control-lg" id="formInputEmail" placeholder="Type your e-mail address" pattern="([-_\.\w]+@[-_\.a-zA-Z_]+?\.[a-zA-Z]{2,6})" required>
-									<div class="valid-feedback">Looks good!</div>
-									<div class="invalid-feedback">Please type your e-mail address.</div>
+									<label for="formInputEmail"><?=$arrAllData['feedbackForm']['mail']?></label>
+									<input type="text" name="email" class="form-control form-control-lg" id="formInputEmail" placeholder="<?=$arrAllData['feedbackForm']['pl_mail']?>" pattern="([-_\.\w]+@[-_\.a-zA-Z_]+?\.[a-zA-Z]{2,6})" required>
+									<div class="valid-feedback"><?=$arrAllData['feedbackForm']['Ok']?></div>
+									<div class="invalid-feedback"><?=$arrAllData['feedbackForm']['pl_mail']?></div>
 								</div>
 							</div>
 							<div class="form-group">
-								<label for="formInputMessage">Your message</label>
-								<textarea class="form-control form-control-lg" id="formInputMessage" rows="5" placeholder="Type your message here" required></textarea>
-								<div class="valid-feedback">Looks good!</div>
-								<div class="invalid-feedback">Please type your message here.</div>
+								<label for="formInputMessage"><?=$arrAllData['feedbackForm']['message']?></label>
+								<textarea name="text" class="form-control form-control-lg" id="formInputMessage" rows="5" placeholder="<?=$arrAllData['feedbackForm']['pl_message']?>" required></textarea>
+								<div class="valid-feedback"><?=$arrAllData['feedbackForm']['Ok']?></div>
+								<div class="invalid-feedback"><?=$arrAllData['feedbackForm']['pl_message']?></div>
 							</div>
 							<div>
-								<button type="submit" class="btn btn-primary btn-lg">Send message</button>
+								<button type="submit" name="inner" value="form" class="btn btn-primary btn-lg"><?=$arrAllData['feedbackForm']['Send']?></button>
 							</div>
 						</form>
 					</div>
@@ -341,37 +389,23 @@
 						</ul>
 					</div>
 					<div class="col-md">
-						<h4>Navigation</h4>
+						<h4><?=$arrAllData['footer']['navigation']?></h4>
 						<hr>
 						<ul>
-							<li><i class="fa fa-angle-right" aria-hidden="true"></i><a href="#">Home</a></li>
-							<li><i class="fa fa-angle-right" aria-hidden="true"></i><a href="#">About Me</a></li>
-							<li><i class="fa fa-angle-right" aria-hidden="true"></i><a href="#">My Skills</a></li>
-							<li><i class="fa fa-angle-right" aria-hidden="true"></i><a href="#">Services</a></li>
-							<li><i class="fa fa-angle-right" aria-hidden="true"></i><a href="#">Portfolio</a></li>
-							<li><i class="fa fa-angle-right" aria-hidden="true"></i><a href="#">News</a></li>
-							<li><i class="fa fa-angle-right" aria-hidden="true"></i><a href="#">Contact</a></li>
+							<?php for ($i=0; $i < count($arrAllData['Navbar'])-1; $i++) {?>
+								<li><i class="fa fa-angle-right" aria-hidden="true"></i><a href="<?=$arrAllData['Navbar'][$i][1]?>"><?=$arrAllData['Navbar'][$i][0]?></a></li>
+							<?php }?>
 						</ul>
 					</div>
 					<div class="col-md">
-						<h4>Follow me</h4>
+						<h4><?=$arrAllData['footer']['follow']?></h4>
 						<hr>
 						<a href="<?=$arrAllData['Facebook']['header']?>" target="_blank"><i class="fa fa-facebook-square" aria-hidden="true"></i></a>&nbsp;
 						<a href="<?=$arrAllData['youtube']['header']?>" target="_blank"><i class="fa fa-youtube-square" aria-hidden="true"></i></a>&nbsp;
 						<a href="<?=$arrAllData['instagram']['header']?>" target="_blank"><i class="fa fa-instagram" aria-hidden="true"></i></a>&nbsp;
 						<a href="<?=$arrAllData['upwork']['header']?>" target="_blank"><i class="fa fa-upwork" aria-hidden="false"></i></a>&nbsp;
 						<br>
-						<form class="needs-validation" novalidate>
-							<label for="E-Mail">Get latest updates and offers.</label>
-							<div class="input-group mb-3">
-								<input id="E-Mail" type="text" class="form-control" placeholder="E-Mail" pattern="([-_\.\w]+@[-_\.a-zA-Z_]+?\.[a-zA-Z]{2,6})" aria-describedby="button-addon2" required>
-								<div class="input-group-append">
-									<button class="btn btn-primary" style="border-bottom-right-radius:.25rem;border-top-right-radius:.25rem;" type="submit" id="button-addon2">Send</button>
-								</div>
-								<div class="valid-feedback">Looks good!</div>
-								<div class="invalid-feedback">The email is not a valid email.</div>
-							</div>
-						</form>
+						<?=$arrAllData['footer']['followHTML']?>
 					</div>
 				</div>
 				<div class="row">
@@ -504,6 +538,7 @@
 					myСarouselHeight[i].style.height = myMaxHeightReview + 'px';
 				}
 			}
-		</script>
+    </script>
+    <?=$arrAllData['addScripts']['description']?>
   </body>
 </html>

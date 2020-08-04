@@ -258,6 +258,58 @@ function getCleaFloat($float){
   }
 }
 
+//осветвляет хеш цвета
+function alter_brightness($colourstr, $steps, $vector) {
+  $colourstr = str_replace('#','',$colourstr);
+
+  $rhex = substr($colourstr,0,2);
+  $ghex = substr($colourstr,2,2);
+  $bhex = substr($colourstr,4,2);
+
+  $r = hexdec($rhex);
+  $g = hexdec($ghex);
+  $b = hexdec($bhex);
+
+  if($vector=='up'){
+    $r = dechex(max(0,min(255,$r + $steps)));
+    $g = dechex(max(0,min(255,$g + $steps)));  
+    $b = dechex(max(0,min(255,$b + $steps)));
+  }else{
+    $r = dechex(max(0,min(255,$r - $steps)));
+    $g = dechex(max(0,min(255,$g - $steps)));  
+    $b = dechex(max(0,min(255,$b - $steps)));
+  }
+
+  $r = str_pad($r,2,"0",STR_PAD_LEFT);
+  $g = str_pad($g,2,"0",STR_PAD_LEFT);
+  $b = str_pad($b,2,"0",STR_PAD_LEFT);
+
+  $cor = '#'.$r.$g.$b;
+
+  return $cor;
+}
+
+//создает svg логотипа upwork в нужном цвете
+function getSVGupwork($strColor){
+  $colourstr = str_replace('#','',$strColor);
+
+  $rhex = substr($colourstr,0,2);
+  $ghex = substr($colourstr,2,2);
+  $bhex = substr($colourstr,4,2);
+
+  $r = hexdec($rhex);
+  $g = hexdec($ghex);
+  $b = hexdec($bhex);
+
+
+  $strColor = "rgb($r $g $b)";
+  $strColor2 = 'rgb(50 57 70)';
+  $svg = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='500' height='500'><g class='st0'><path style='display:inline;fill:".$strColor2.";' d='M425.2,257.7c0-28-22.6-50.6-50.6-50.6c-37,0-48.8,36.1-52.4,57.8v0.9l-5.4,19.9c16.3,13.5,37,22.6,56.9,22.6  C400,308.3,424.3,285.7,425.2,257.7z'/><path style='display:inline;fill:".$strColor2.";' d='M405,0H95C42.5,0,0,42.5,0,95v310c0,52.5,42.5,95,95,95h124.7l43-200.8c-13.5-19-26.2-40.6-36.1-60.5v22.6  c0,55.1-44.2,99.3-98.4,99.3c-54.2,0-98.4-44.2-98.4-99.3V128.6h48.8v131c0,24.6,18.3,45.9,42.8,48.4c28.4,3,52.9-19.7,52.9-47.6  V127.7h50.6c9.9,34.3,28,74,50.6,109.2c14.4-49.7,50.6-81.3,98.4-81.3c55.1,0,100.2,45.1,100.2,100.2  c0,57.8-45.1,102.9-100.2,102.9c-27.1,0-49.7-7.2-69.5-19.9l-33.1,161H405c52.5,0,95-42.5,95-95V95C500,42.5,457.5,0,405,0z'/></g><g><path style='fill:".$strColor.";' d='M395,196.6c-36.3,0-47.9,35.4-51.4,56.7v0.9l-5.3,19.5c16,13.3,36.3,22.2,55.8,22.2 c25.7,0,49.6-22.2,50.5-49.6C444.6,218.8,422.5,196.6,395,196.6z'/><path style='fill:".$strColor.";' d='M405,0H95C42.5,0,0,42.5,0,95v310c0,52.5,42.5,95,95,95h310c52.5,0,95-42.5,95-95V95C500,42.5,457.5,0,405,0z M394.1,345.5c-26.6,0-48.7-7.1-68.2-19.5l-21.3,105.4h-50.5l31-144.4c-13.3-18.6-25.7-39.9-35.4-59.4v22.2 c0,54.1-43.4,97.5-96.6,97.5c-53.2,0-96.6-43.4-96.6-97.5V119.5h47.9v129.4c0,25.7,21.3,47,47,47c25.7,0,47-21.3,47-47V118.6h49.6 c9.7,33.7,27.5,72.7,49.6,107.2c14.2-48.7,49.6-79.8,96.6-79.8c54.1,0,98.4,44.3,98.4,98.4C492.5,301.2,448.2,345.5,394.1,345.5z'  /> </g></svg>";
+
+
+return $svg;
+}
+
 //создает SVG плейсходры для отсутствующих картинок
 function getSVGplaceholder($intWidth, $intHeight){
   $strSVG = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='".$intWidth."' height='".$intHeight."'><rect x='0' y='0' style='fill:lightgray;' width='".$intWidth."' height='".$intHeight."'/><text transform='matrix(1 0 0 1 ".($intWidth/2)." ".($intHeight/2).")' text-anchor='middle' style='fill:white; font-family:Arial Black; font-size:".($intHeight/10)."px;'>".$intWidth."*".$intHeight."px</text></svg>";
@@ -268,11 +320,14 @@ function getSVGplaceholder($intWidth, $intHeight){
 //создает SVG тексты для блоков на фон
 function getSVGword($intWidth, $intHeight, $strText){
   global $arrAllData;
+   
+  $strText1 = mb_substr(trim($strText), 0, 1);
+  $strText2 = mb_strtoupper(mb_substr(trim($strText), 1));
 
   $strFont = str_ireplace("'", '', $arrAllData['sitefont']['header']);
   $strFont = str_ireplace('"', '', $strFont);
 
-  $strSVG = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='".$intWidth."' height='".$intHeight."'><text font-family='".$strFont."' font-weight='bold' transform='matrix(1 0 0 1 0 ".($intHeight).")' text-anchor='start' style='fill:white; font-size:".($intHeight*1.3)."px;'>".$strText."</text></svg>";
+  $strSVG = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='".$intWidth."' height='".$intHeight."'><text font-family='".$strFont."' font-weight='bold' transform='matrix(1 0 0 1 0 ".($intHeight).")' text-anchor='start' style='fill:white; font-size:".($intHeight*1.3)."px;'>".$strText1."<tspan style='font-size:".($intHeight*1.1)."px;'>".$strText2."</tspan></text></svg>";
 
   return $strSVG;  
 }
@@ -290,20 +345,15 @@ function getNumberFromTime($strHHmM){
   }
 }
 
-//отправка пдф документа в письме
-function send_pdf_to_user($strTo, $strSubj, $strMessage, $strPath, $arrFiles){
+//отправка  письма
+function send_to_user($strTo, $strSubj, $strMessage, $strPath){
   global $email_config;
 
   // Файлы phpmailer
-  require $strPath.'admin/lib/PHPMailer/PHPMailer.php';
-  require $strPath.'admin/lib/PHPMailer/SMTP.php';
-  require $strPath.'admin/lib/PHPMailer/Exception.php';
+  require $strPath.'lib/PHPMailer/PHPMailer.php';
+  require $strPath.'lib/PHPMailer/SMTP.php';
+  require $strPath.'lib/PHPMailer/Exception.php';
 
-  // Переменные, которые отправляет пользователь
-  // $name = $_POST['name'];
-  // $email = $_POST['email'];
-  // $text = $_POST['text'];
-  // $file = $_FILES['myfile'];
 
   // Формирование самого письма
   $title = $strSubj;
@@ -324,15 +374,12 @@ function send_pdf_to_user($strTo, $strSubj, $strMessage, $strPath, $arrFiles){
       $mail->Password   = $email_config['Password']; // Пароль на почте
       $mail->SMTPSecure = $email_config['SMTPSecure'];
       $mail->Port       = $email_config['Port'];
-      $mail->setFrom($email_config['Username'], 'WJM Tool'); // Адрес самой почты и имя отправителя
+      $mail->setFrom($email_config['Username'], 'Site Feedback'); // Адрес самой почты и имя отправителя
 
       // Получатель письма
       $mail->addAddress($strTo);
       //$mail->addAddress('youremail@gmail.com'); // Ещё один, если нужен
 
-      // Прикрипление файлов к письму
-  $mail->addAttachment($strPath.'admin/pdfTMP/'.$arrFiles[0], $arrFiles[0]);
-  $mail->addAttachment($strPath.'admin/pdfTMP/'.$arrFiles[1], $arrFiles[1]);
 
   // Отправка сообщения
   $mail->isHTML(true);
@@ -534,7 +581,7 @@ function getCategorys($strNeed){
     for ($i=0; $i < count($arrClear_en); $i++) { 
       shuffle($ArrayData);
       for($w=0; $w < count($ArrayData) ; $w++){ 
-        if($ArrayData[$w]['item_category']==$arrClear_en[$i]){
+        if($ArrayData[$w]['item_category_en']==$arrClear_en[$i]){
           $arrAllImagesINcategory = getImagesFromStr($ArrayData[$w]['images']);
         break;
         }
@@ -1064,7 +1111,7 @@ function Content($Stranitsa, $intUserPermis){
       }else{
         echo "<div class='container-fluid' style='margin-top:5px; text-align:center;'>Viewing is disabled (for your permission level)</div>";
       }
-    break;
+
     /*---------------------------------------------------------------------------------*/
     /*--работа в раздете инфо о чем сайт-----------------------------------------------*/
     /*---------------------------------------------------------------------------------*/

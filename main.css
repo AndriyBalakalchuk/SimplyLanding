@@ -3,7 +3,6 @@ html {
 }
 
 body {
-	font-family: 'Roboto', sans-serif;
 	padding-top: 3.5rem;
 }
 
@@ -24,7 +23,6 @@ h2 {
 .hr-for-h1 {
 	width: 160px;
 	margin-top: 10px;
-	border: 5px solid rgb(0,163,255);
 }
 
 /*
@@ -32,13 +30,9 @@ h2 {
 */
 .btn-primary {
     color: rgb(255, 255, 255);
-    background-color: rgb(0,163,255);
-    border-color: rgb(0,163,255);
 }
 .btn-primary:hover {
     color: rgb(255, 255, 255);
-    background-color: rgb(0,136,196);
-    border-color: rgb(0,136,196);
 }
 
 /*
@@ -92,13 +86,11 @@ h2 {
 
 .navbar-nav a.active {
 	text-decoration: underline;
-	color: rgb(0,163,255) !important;
 }
 
 .navbar-nav span { /* кнопка выбора языка */
 	padding: .3rem .5rem;
 	color: rgb(255, 255, 255);
-	background-color:rgb(0,163,255);
 	border-radius: .2rem;
 }
 
@@ -160,10 +152,6 @@ h2 {
 
 .progress {
 	background-color: rgb(220, 220, 220);
-}
-
-.progress-bar {
-	background-color: rgb(0,163,255);
 }
 
 /*
@@ -335,10 +323,6 @@ h2 {
 	color: rgb(120,120,120);
 }
 
-.contact-me .contact-info li > a:hover {
-	color: rgb(0,163,255);
-}
-
 .contact-me .contact-info i {
 	width: 32px;
 	text-align: center;
@@ -412,10 +396,6 @@ h2 {
 	color: rgb(255, 255, 255);
 }
 
-.footer a:hover {
-	color: rgb(0,163,255);
-}
-
 .footer hr {
 	margin-right: 70px;
 	border-bottom: 1px solid rgb(97, 104, 115);
@@ -434,7 +414,6 @@ h2 {
 	width: 32px;
 	text-align: center;
 	margin-right: 10px;
-	color: rgb(0,163,255);
 }
 
 .footer .col-md:nth-child(1) { /* контактная информация */
@@ -451,14 +430,13 @@ h2 {
 }
 
 .fa-upwork {
-	width: 35.36px !important;
-	height: 41.5px !important;
-	background-image: url(admin/images/upwork2.svg);
+	width: 36px !important;
+	height: 36px !important;
 	background-repeat: no-repeat;
 	background-position: left bottom;
-	background-size: 35.36px 41.5px;
+	background-size: 36px 36px;
 	position: relative;
-	bottom: -6px;
+	bottom: -4px;
 }
 
 .footer .col-md:nth-child(3) label { /* иконки соц сетей */
@@ -547,10 +525,6 @@ h2 {
 .page-portfolio-description hr {
 	text-align: left;
 	margin-left: 0;
-}
-
-.page-portfolio-description i {
-	color: rgb(0,163,255);
 }
 
 .page-portfolio-description-title .row:nth-child(1) {

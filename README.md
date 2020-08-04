@@ -54,6 +54,8 @@ If you need to use your own HTML design with SL CMS - add into your page (in the
 
 ### Variables list  
 
+`$arrAllData['Navbar'][0-n][0-n]`
+
 `$arrAllData['Slider']['header']`
 
 `$arrAllData['Slider']['description']`
@@ -182,3 +184,28 @@ If you need to use your own HTML design with SL CMS - add into your page (in the
 
 `$arrAllData['categories']['images'][0-n]`
 
+`$arrAllData['feedbackForm']['name']`
+
+`$arrAllData['feedbackForm']['pl_name']`
+
+`$arrAllData['feedbackForm']['phone']`
+
+`$arrAllData['feedbackForm']['pl_phone']`
+
+`$arrAllData['feedbackForm']['mail']`
+
+`$arrAllData['feedbackForm']['pl_mail']`
+
+`$arrAllData['feedbackForm']['message']`
+
+`$arrAllData['feedbackForm']['pl_message']`
+
+`$arrAllData['feedbackForm']['Send']`
+
+`$arrAllData['feedbackForm']['Ok']`
+
+`$arrAllData['footer']['follow']`
+
+`$arrAllData['footer']['navigation']`
+
+`$arrAllData['footer']['followHTML']`

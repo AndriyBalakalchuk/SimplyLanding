@@ -1,7 +1,7 @@
 <?php
 //подтягиваем контент для страниц и возвращаем в виде большого массива
 function getVariables($strForPage,$strLanguage ='',$intItemId='nAn'){
-  global $config;
+  global $config, $navbarDef, $navbarDef_en, $feedbackDef, $footerDef;
   //переменная агрегатор данных
   $arrAllData = array();
   //переменные посредники
@@ -17,6 +17,24 @@ function getVariables($strForPage,$strLanguage ='',$intItemId='nAn'){
 
   //если мы на главной странице
   if($strForPage == 'index.php'){
+    /*--------------------------------------------*/
+    /*---------подготовка формы обратной связи----*/
+    /*--------------------------------------------*/
+    $arrAllData['footer'] = array();
+    $arrAllData['footer'] = $footerDef['lang'.$strLanguage];
+    /*--------------------------------------------*/
+    /*---------подготовка формы обратной связи----*/
+    /*--------------------------------------------*/
+    $arrAllData['feedbackForm'] = array();
+    $arrAllData['feedbackForm'] = $feedbackDef['form'.$strLanguage];
+    /*--------------------------------------------*/
+    /*---------подготовка навбара-----------------*/
+    /*--------------------------------------------*/
+    if($strLanguage ==''){$arrNavbar = $navbarDef;}else{$arrNavbar = $navbarDef_en;}
+    $arrAllData['Navbar'] = array();
+    foreach ($arrNavbar as $arrElement) {
+      $arrAllData['Navbar'][] = $arrElement;
+    }
     /*--------------------------------------------*/
     /*---------таблица контента-------------------*/
     /*--------------------------------------------*/
