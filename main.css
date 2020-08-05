@@ -213,6 +213,10 @@ h2 {
 	padding-top: 40px;
 }
 
+.card-a-100{
+	text-decoration: none !important;
+}
+
 .latest-works .card,
 .latest-works .card > img {
 	border-radius: .5rem;
@@ -488,7 +492,6 @@ h2 {
 }
 
 .page-portfolio-top {
-	background-image: url(admin/images/03_portfolio.png);
     background-repeat: no-repeat;
     background-position: 20% bottom;
 }

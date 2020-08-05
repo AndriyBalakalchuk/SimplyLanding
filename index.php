@@ -231,15 +231,17 @@
 				</div>
 				<div class="row row-cols-1 row-cols-md-2">
           <?php for ($i=0; $i < count($arrAllData['categories']['names']); $i++) {?>
-            <div class="col mb-4" style='height:370px;'>
-              <div class="card h-100" id="port<?=$i?>">
-                <div class="darker">
-                  <div class="card-img-overlay">
-                    <h2 class="card-title"><?=$arrAllData['categories']['names'][$i]?></h2>
+            <a class="card-a-100" href='<?=$config['sitelink']?>category.php?category=<?=$arrAllData['categories']['names'][$i]?>'>
+              <div class="col mb-4" style='height:370px;'>
+                <div class="card h-100" id="port<?=$i?>">
+                  <div class="darker">
+                    <div class="card-img-overlay">
+                      <h2 class="card-title"><?=$arrAllData['categories']['names'][$i]?></h2>
+                    </div>
                   </div>
                 </div>
-              </div>
             </div>
+          </a>
           <?php }?>
 				</div>
 			</div>
@@ -256,15 +258,17 @@
 					</div>
 				</div>
 				<div class="row row-cols-1 row-cols-md-3">
-          <?php for ($i=0; $i < count($arrAllData['portfolio']['headers']); $i++) { if($i==3){break;}?>
+          <?php for ($i=0; $i < count($arrAllData['portfolio']['headers']); $i++) { if($i==3){break;}if(mb_strlen($arrAllData['portfolio']['images'][count($arrAllData['portfolio']['images'])-1-$i][0])<100){$strAddressImage = $config['sitelink'].'admin/images/Portfolio/';}?>
             <div class="col mb-4">
-              <div class="card h-100">
-                <img src="<?=$config['sitelink']?>admin/images/Portfolio/<?=$arrAllData['portfolio']['images'][count($arrAllData['portfolio']['images'])-1-$i][0]?>" class="card-img-top" alt="...">
-                <div class="card-body">
-                  <h5 class="card-title"><?=$arrAllData['portfolio']['headers'][$i]?></h5>
-                  <p class="card-text"><?=$arrAllData['portfolio']['texts'][$i]?></p>
-                </div>
-              </div>
+				      <a class="card-a-100" href='<?=$config['sitelink']?>page.php?item=<?=$arrAllData['portfolio']['ids'][count($arrAllData['portfolio']['images'])-1-$i]?>'>
+					      <div class="card h-100">
+						      <img src="<?=$strAddressImage?><?=$arrAllData['portfolio']['images'][count($arrAllData['portfolio']['images'])-1-$i][0]?>" class="card-img-top" alt="...">
+						      <div class="card-body">
+						        <h5 class="card-title"><?=$arrAllData['portfolio']['headers'][count($arrAllData['portfolio']['images'])-1-$i]?></h5>
+						        <p class="card-text"><?=$arrAllData['portfolio']['texts'][count($arrAllData['portfolio']['images'])-1-$i]?></p>
+						      </div>
+					      </div>
+		  		    </a>
             </div>
           <?php }?>
 				</div>
@@ -331,10 +335,21 @@
 						</ul>
 						<h5><?=$arrAllData['footer']['follow']?></h5>
 						<ul class="follow-me">
-							<li><a href="<?=$arrAllData['Facebook']['header']?>" target="_blank"><i class="fa fa-facebook-square" aria-hidden="true"></i></a></li>
-							<li><a href="<?=$arrAllData['youtube']['header']?>" target="_blank"><i class="fa fa-youtube-square" aria-hidden="true"></i></a></li>
-							<li><a href="<?=$arrAllData['instagram']['header']?>" target="_blank"><i class="fa fa-instagram" aria-hidden="true"></i></a></li>
-							<li><a href="<?=$arrAllData['upwork']['header']?>" target="_blank"><i class="fa fa-upwork" aria-hidden="false"></i></a></li>
+							<?php if($arrAllData['Facebook']['header']!='' and $arrAllData['Facebook']['header'] !=' ' and $arrAllData['Facebook']['header'] != 'Lorem ipsum'){?>
+								<li><a href="<?=$arrAllData['Facebook']['header']?>" target="_blank"><i class="fa fa-facebook-square" aria-hidden="true"></i></a></li>
+							<?php }?>
+							<?php if($arrAllData['youtube']['header']!='' and $arrAllData['youtube']['header'] !=' ' and $arrAllData['youtube']['header'] != 'Lorem ipsum'){?>
+								<li><a href="<?=$arrAllData['youtube']['header']?>" target="_blank"><i class="fa fa-youtube-square" aria-hidden="true"></i></a></li>
+							<?php }?>
+							<?php if($arrAllData['instagram']['header']!='' and $arrAllData['instagram']['header'] !=' ' and $arrAllData['instagram']['header'] != 'Lorem ipsum'){?>
+								<li><a href="<?=$arrAllData['instagram']['header']?>" target="_blank"><i class="fa fa-instagram" aria-hidden="true"></i></a></li>
+							<?php }?>
+							<?php if($arrAllData['upwork']['header']!='' and $arrAllData['upwork']['header'] !=' ' and $arrAllData['upwork']['header'] != 'Lorem ipsum'){?>
+								<li><a href="<?=$arrAllData['upwork']['header']?>" target="_blank"><i class="fa fa-upwork" aria-hidden="false"></i></a></li>
+							<?php }?>
+							<?php if($arrAllData['linkedin']['header']!='' and $arrAllData['linkedin']['header'] !=' ' and $arrAllData['linkedin']['header'] != 'Lorem ipsum'){?>
+								<li><a href="<?=$arrAllData['linkedin']['header']?>" target="_blank"><i class="fa fa-linkedin-square" aria-hidden="false"></i></a></li>
+							<?php }?>
 						</ul>
 					</div>
 					<div class="col-md-8">
@@ -393,17 +408,28 @@
 						<hr>
 						<ul>
 							<?php for ($i=0; $i < count($arrAllData['Navbar'])-1; $i++) {?>
-								<li><i class="fa fa-angle-right" aria-hidden="true"></i><a href="<?=$arrAllData['Navbar'][$i][1]?>"><?=$arrAllData['Navbar'][$i][0]?></a></li>
+								<li><i class="fa fa-angle-right" aria-hidden="true"></i><a class="to-id" href="<?=$arrAllData['Navbar'][$i][1]?>"><?=$arrAllData['Navbar'][$i][0]?></a></li>
 							<?php }?>
 						</ul>
 					</div>
 					<div class="col-md">
 						<h4><?=$arrAllData['footer']['follow']?></h4>
 						<hr>
-						<a href="<?=$arrAllData['Facebook']['header']?>" target="_blank"><i class="fa fa-facebook-square" aria-hidden="true"></i></a>&nbsp;
-						<a href="<?=$arrAllData['youtube']['header']?>" target="_blank"><i class="fa fa-youtube-square" aria-hidden="true"></i></a>&nbsp;
-						<a href="<?=$arrAllData['instagram']['header']?>" target="_blank"><i class="fa fa-instagram" aria-hidden="true"></i></a>&nbsp;
-						<a href="<?=$arrAllData['upwork']['header']?>" target="_blank"><i class="fa fa-upwork" aria-hidden="false"></i></a>&nbsp;
+						<?php if($arrAllData['Facebook']['header']!='' and $arrAllData['Facebook']['header'] !=' ' and $arrAllData['Facebook']['header'] != 'Lorem ipsum'){?>
+							<a href="<?=$arrAllData['Facebook']['header']?>" target="_blank"><i class="fa fa-facebook-square" aria-hidden="true"></i></a>&nbsp;
+						<?php }?>
+						<?php if($arrAllData['youtube']['header']!='' and $arrAllData['youtube']['header'] !=' ' and $arrAllData['youtube']['header'] != 'Lorem ipsum'){?>
+							<a href="<?=$arrAllData['youtube']['header']?>" target="_blank"><i class="fa fa-youtube-square" aria-hidden="true"></i></a>&nbsp;
+						<?php }?>
+						<?php if($arrAllData['instagram']['header']!='' and $arrAllData['instagram']['header'] !=' ' and $arrAllData['instagram']['header'] != 'Lorem ipsum'){?>
+							<a href="<?=$arrAllData['instagram']['header']?>" target="_blank"><i class="fa fa-instagram" aria-hidden="true"></i></a>&nbsp;
+						<?php }?>
+						<?php if($arrAllData['upwork']['header']!='' and $arrAllData['upwork']['header'] !=' ' and $arrAllData['upwork']['header'] != 'Lorem ipsum'){?>
+							<a href="<?=$arrAllData['upwork']['header']?>" target="_blank"><i class="fa fa-upwork" aria-hidden="false"></i></a>&nbsp;
+						<?php }?>
+						<?php if($arrAllData['linkedin']['header']!='' and $arrAllData['linkedin']['header'] !=' ' and $arrAllData['linkedin']['header'] != 'Lorem ipsum'){?>
+							<a href="<?=$arrAllData['linkedin']['header']?>" target="_blank"><i class="fa fa-linkedin-square" aria-hidden="false"></i></a>&nbsp;
+						<?php }?>
 						<br>
 						<?=$arrAllData['footer']['followHTML']?>
 					</div>
@@ -498,6 +524,8 @@
 			} // End if
 
 			});
+
+			
 
 			// меняем высоту блока отзывов в зависимости от размера максимального большого отзыва
 			// если страница загрузилась

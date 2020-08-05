@@ -567,11 +567,17 @@ function getCategorys($strNeed){
       for($w=0; $w < count($ArrayData) ; $w++){ 
         if($ArrayData[$w]['item_category']==$arrClear[$i]){
           $arrAllImagesINcategory = getImagesFromStr($ArrayData[$w]['images']);
-        break;
+          if(is_array($arrAllImagesINcategory)){
+            break;
+          }
         }
       }
       $arrResult['names'][] = $arrClear[$i];
-      $arrResult['images'][] = $config['sitelink'].'admin/images/Portfolio/'.$arrAllImagesINcategory[array_rand($arrAllImagesINcategory,1)];
+      if(is_array($arrAllImagesINcategory)){
+        $arrResult['images'][] = $config['sitelink'].'admin/images/Portfolio/'.$arrAllImagesINcategory[array_rand($arrAllImagesINcategory,1)];
+      }else{
+        $arrResult['images'][] = getSVGplaceholder(553,368);
+      }
     }
     return $arrResult;
   }elseif($strNeed=='Blocks_en'){//формируем массивы из названий категорий и картинок в них на англ языке
@@ -583,11 +589,17 @@ function getCategorys($strNeed){
       for($w=0; $w < count($ArrayData) ; $w++){ 
         if($ArrayData[$w]['item_category_en']==$arrClear_en[$i]){
           $arrAllImagesINcategory = getImagesFromStr($ArrayData[$w]['images']);
-        break;
+          if(is_array($arrAllImagesINcategory)){
+            break;
+          }
         }
       }
       $arrResult['names'][] = $arrClear_en[$i];
-      $arrResult['images'][] = $config['sitelink'].'admin/images/Portfolio/'.$arrAllImagesINcategory[array_rand($arrAllImagesINcategory,1)];
+      if(is_array($arrAllImagesINcategory)){
+        $arrResult['images'][] = $config['sitelink'].'admin/images/Portfolio/'.$arrAllImagesINcategory[array_rand($arrAllImagesINcategory,1)];
+      }else{
+        $arrResult['images'][] = getSVGplaceholder(553,368);
+      }
     }
     return $arrResult;
   }else{
@@ -2143,7 +2155,7 @@ function Content($Stranitsa, $intUserPermis){
                 </div>
               </div>
               <div class="form-row" style="padding-bottom: 15px;">
-                <div class="col-lg-4 offset-lg-4">
+                <div class="col-lg-10 offset-lg-1">
                   <label for="text_block">Text Block Ru/En*</label>
                   <div class="input-group">
                     <div class="input-group-prepend">
@@ -2154,7 +2166,7 @@ function Content($Stranitsa, $intUserPermis){
                 </div>
               </div>
               <div class="form-row" style="padding-bottom: 15px;">
-                <div class="col-lg-4 offset-lg-4">
+                <div class="col-lg-10 offset-lg-1">
                   <div class="input-group">
                     <div class="input-group-prepend">
                       <span class="input-group-text" id="inputGroupPrepend6"><i class="fa fa-font"></i></span>

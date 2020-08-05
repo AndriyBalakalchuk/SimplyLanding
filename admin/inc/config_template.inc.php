@@ -44,20 +44,21 @@ $config['password']	            = '#Password';
 # Настройки навигационной панели
 $navbarDef                      = array();
 $navbarDef_en                   = array();
-$navbarDef['Home']              = array('Главная','#hello');
-$navbarDef_en['Home']           = array('Home','#hello');
-$navbarDef['About Me']          = array('Обо мне','#about-me');
-$navbarDef_en['About Me']       = array('About Me','#about-me');
-$navbarDef['My Skills']         = array('Навыки','#my-skills');
-$navbarDef_en['My Skills']      = array('My Skills','#my-skills');
-$navbarDef['Services']          = array('Услуги','#my-services');
-$navbarDef_en['Services']       = array('Services','#my-services');
-$navbarDef['Portfolio']         = array('Работы','#latest-works');
-$navbarDef_en['Portfolio']      = array('Portfolio','#latest-works');
-$navbarDef['Contact']           = array('Контакты','#contact-me');
-$navbarDef_en['Contact']        = array('Contact','#contact-me');
-$navbarDef['LanguageSwich']     = array('<span>RU</span>',$config['sitelink'].'admin/change_lang.php');
-$navbarDef_en['LanguageSwich']  = array('<span>EN</span>',$config['sitelink'].'admin/change_lang.php');
+$navbarDef['Home']              = array('Главная','#hello',$config['sitelink'].'index.php#hello');
+$navbarDef_en['Home']           = array('Home','#hello',$config['sitelink'].'index.php#hello');
+$navbarDef['About Me']          = array('Обо мне','#about-me',$config['sitelink'].'index.php#about-me');
+$navbarDef_en['About Me']       = array('About Me','#about-me',$config['sitelink'].'index.php#about-me');
+$navbarDef['My Skills']         = array('Навыки','#my-skills',$config['sitelink'].'index.php#my-skills');
+$navbarDef_en['My Skills']      = array('My Skills','#my-skills',$config['sitelink'].'index.php#my-skills');
+$navbarDef['Services']          = array('Услуги','#my-services',$config['sitelink'].'index.php#my-services');
+$navbarDef_en['Services']       = array('Services','#my-services',$config['sitelink'].'index.php#my-services');
+$navbarDef['Portfolio']         = array('Работы','#latest-works',$config['sitelink'].'index.php#latest-works');
+$navbarDef_en['Portfolio']      = array('Portfolio','#latest-works',$config['sitelink'].'index.php#latest-works');
+$navbarDef['Contact']           = array('Контакты','#contact-me',$config['sitelink'].'#contact-me');
+$navbarDef_en['Contact']        = array('Contact','#contact-me',$config['sitelink'].'#contact-me');
+$navbarDef['LanguageSwich']     = array('<span>RU</span>',$config['sitelink'].'admin/change_lang.php',$config['sitelink'].'admin/change_lang.php');
+$navbarDef_en['LanguageSwich']  = array('<span>EN</span>',$config['sitelink'].'admin/change_lang.php',$config['sitelink'].'admin/change_lang.php');
+
 
 # Переводы формы обратной связи
 $feedbackDef                        = array();
