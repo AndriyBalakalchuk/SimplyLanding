@@ -1123,7 +1123,7 @@ function Content($Stranitsa, $intUserPermis){
       }else{
         echo "<div class='container-fluid' style='margin-top:5px; text-align:center;'>Viewing is disabled (for your permission level)</div>";
       }
-
+    break;
     /*---------------------------------------------------------------------------------*/
     /*--работа в раздете инфо о чем сайт-----------------------------------------------*/
     /*---------------------------------------------------------------------------------*/
