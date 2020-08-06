@@ -56,8 +56,8 @@ $navbarDef['Portfolio']         = array('Работы','#latest-works',$config['
 $navbarDef_en['Portfolio']      = array('Portfolio','#latest-works',$config['sitelink'].'index.php#latest-works');
 $navbarDef['Contact']           = array('Контакты','#contact-me',$config['sitelink'].'#contact-me');
 $navbarDef_en['Contact']        = array('Contact','#contact-me',$config['sitelink'].'#contact-me');
-$navbarDef['LanguageSwich']     = array('<span>RU</span>',$config['sitelink'].'admin/change_lang.php',$config['sitelink'].'admin/change_lang.php');
-$navbarDef_en['LanguageSwich']  = array('<span>EN</span>',$config['sitelink'].'admin/change_lang.php',$config['sitelink'].'admin/change_lang.php');
+$navbarDef['LanguageSwich']     = array('<span>RU</span> EN',$config['sitelink'].'admin/change_lang.php',$config['sitelink'].'admin/change_lang.php');
+$navbarDef_en['LanguageSwich']  = array('RU <span>EN</span>',$config['sitelink'].'admin/change_lang.php',$config['sitelink'].'admin/change_lang.php');
 
 
 # Переводы формы обратной связи

@@ -446,6 +446,29 @@ function getVariables($strForPage,$strLanguage ='',$intItemId='nAn'){
     }
   }elseif($strForPage == 'page.php'){//если мы на странице итема
     /*--------------------------------------------*/
+    /*---------таблица изображений----------------*/
+    /*--------------------------------------------*/
+    //проверяем есть ли данные для слайдера - создаст таблицу если ее небыло
+    CheckData('sl_images', 'image_for', 'Slider');
+    $arrMidlers = selectFromTable('sl_images', array('image_for', 'image_name'));
+    //идем по всем строкам таблици и сортируем данные в массив
+    if($arrMidlers != ''){
+      foreach($arrMidlers as $arrMidler){
+        switch ($arrMidler['image_for']) {
+          case 'FavIco':
+            $arrAllData['FavIco'] = array();
+            $arrAllData['FavIco']['image'] = $config['sitelink'].'admin/images/'.$arrMidler['image_name'];
+          break;
+        }
+      }//конец цикла по данной таблице
+    }
+    //проверяем все ли данные есть и если нету, вносим рыбу или плейсхолдеры
+    if(!is_array($arrAllData['FavIco'])){
+      $arrAllData['FavIco'] = array();
+      $arrAllData['FavIco']['image'] = $config['Favicon'];
+    }
+
+    /*--------------------------------------------*/
     /*---------таблица контента-------------------*/
     /*--------------------------------------------*/
     //проверяем есть ли данные для слайдера - создаст таблицу если ее небыло
@@ -731,6 +754,28 @@ function getVariables($strForPage,$strLanguage ='',$intItemId='nAn'){
       $arrAllData['categories']['images'] = array(getSVGplaceholder(475, 525));
     }
   }elseif($strForPage == 'category.php'){//если мы на странице итема
+    /*--------------------------------------------*/
+    /*---------таблица изображений----------------*/
+    /*--------------------------------------------*/
+    //проверяем есть ли данные для слайдера - создаст таблицу если ее небыло
+    CheckData('sl_images', 'image_for', 'Slider');
+    $arrMidlers = selectFromTable('sl_images', array('image_for', 'image_name'));
+    //идем по всем строкам таблици и сортируем данные в массив
+    if($arrMidlers != ''){
+      foreach($arrMidlers as $arrMidler){
+        switch ($arrMidler['image_for']) {
+          case 'FavIco':
+            $arrAllData['FavIco'] = array();
+            $arrAllData['FavIco']['image'] = $config['sitelink'].'admin/images/'.$arrMidler['image_name'];
+          break;
+        }
+      }//конец цикла по данной таблице
+    }
+    //проверяем все ли данные есть и если нету, вносим рыбу или плейсхолдеры
+    if(!is_array($arrAllData['FavIco'])){
+      $arrAllData['FavIco'] = array();
+      $arrAllData['FavIco']['image'] = $config['Favicon'];
+    }
     /*--------------------------------------------*/
     /*---------таблица контента-------------------*/
     /*--------------------------------------------*/
