@@ -10,7 +10,7 @@ $config['SuperUser']            = '#SuperUser';  #главный админ(до
 $config['WaitingGIF']           = $config['sitelink'].'/admin/images/load.svg';  #анимация для ожиданий
 $config['Logo']                 = $config['sitelink'].'/admin/images/SimplyLanding-logo.png';  #лого для сайта
 $config['Favicon']              = $config['sitelink'].'/admin/images/favicon-32x32.png';  #фавикон для сайта
-$config['Copyright']            = 'Created by BVStudio in 2020.';  #мелкий текст внизу интерфейса
+$config['Copyright']            = 'Created by <a target="_blank" href="http://bvstud.io/">BVStudio</a> in 2020.';  #мелкий текст внизу интерфейса
 
 # Настройки меню навигации
 $menu                           = array();
