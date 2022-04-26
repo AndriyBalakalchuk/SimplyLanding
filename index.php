@@ -231,7 +231,7 @@
 				</div>
 				<div class="row row-cols-1 row-cols-md-2">
           <?php for ($i=0; $i < count($arrAllData['categories']['names']); $i++) {?>
-            <a class="card-a-100" href='<?=$config['sitelink']?>category.php?category=<?=$arrAllData['categories']['names'][$i]?>'>
+            <a class="card-a-100" href='<?=$config['sitelink']?>category/<?=transliterateStr($arrAllData['categories']['names'][$i])?>'>
               <div class="col mb-4" style='height:370px;'>
                 <div class="card h-100" id="port<?=$i?>">
                   <div class="darker">

@@ -37,10 +37,27 @@
 	$strLanguage = $_COOKIE["Language"];
   }
 
-
   $boolShowAll = false;
   //находим первый айди для итема из гет с учетом языка
   if(isset($_GET['category'])){
+    //получаем существующие категории
+    $arrCategories = getCategorys('Blocks'.$strLanguage);
+    //нету категорий 
+    if($arrCategories=='no categories yet'){
+      $arrCategories = array();
+      $arrCategories['names'] = array('Lorem ipsum');
+      $arrCategories['images'] = array(getSVGplaceholder(475, 525));
+    }
+    //категория пришла, но она транслитерирована
+    for($i=0; $i<count($arrCategories['names']); $i++){
+      //идем по имеющимся категориям и пробуем найти совпадение с транслитерацией
+      if($_GET['category'] == transliterateStr($arrCategories['names'][$i])){
+        //задаем категорию-совпадение как выбранную фильтром
+        $_GET['category'] = $arrCategories['names'][$i];
+        break;
+      }
+    }
+
     if(!CheckData('sl_portfolio', 'item_category'.$strLanguage, $_GET['category'])){
       //категорию задали но ее не существует
       $boolShowAll = true;
@@ -51,10 +68,8 @@
   }
 
 
-
   //получаем все переменные - детали ----→ Readme
   $arrAllData = getVariables(basename(__FILE__),$strLanguage);
-  
 ?>
 
 <!DOCTYPE html>
@@ -167,8 +182,8 @@
                 <div class="card h-100">
                   <img src="<?=$strAddressImage?><?=$arrAllData['portfolio']['images'][count($arrAllData['portfolio']['images'])-1-$i][0]?>" class="card-img-top" alt="...">
                   <div class="card-body">
-                  <h5 class="card-title"><?=$arrAllData['portfolio']['headers'][count($arrAllData['portfolio']['images'])-1-$i]?></h5>
-                  <p class="card-text"><?=$arrAllData['portfolio']['texts'][count($arrAllData['portfolio']['images'])-1-$i]?></p>
+                    <h5 class="card-title"><?=$arrAllData['portfolio']['headers'][count($arrAllData['portfolio']['images'])-1-$i]?></h5>
+                    <p class="card-text"><?=$arrAllData['portfolio']['texts'][count($arrAllData['portfolio']['images'])-1-$i]?></p>
                   </div>
                 </div>
               </a>

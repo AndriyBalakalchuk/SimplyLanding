@@ -1,14 +1,57 @@
-# переадресации на страници ошибок
+# Задаем кодировку для типов text/plain или text/html.
+# Лучше UTF-8, чтобы не было проблем с русскими УРЛами
+AddDefaultCharset utf-8
+
+# Если mod_charset есть на сервере
+<IfModule mod_charset.c>
+  # Отключаем перекодировку
+  CharsetDisable On
+    
+  # Кодировка, в которой документы хранятся на диске
+  CharsetSourceEnc utf-8
+    
+  # Кодировка по-умолчанию для данного сервера
+  CharsetDefault utf-8
+</IfModule>
+
+# Если mod_rewrite есть на сервере
 <IfModule mod_rewrite.c>
+  # Позволяем следовать символическим ссылкам
+  Options +FollowSymLinks
+  Options +SymLinksIfOwnerMatch
+
   # Включает/выключает механизм mod_rewrite.
   RewriteEngine On
 
-  # если нет страници на которую перебрасывает сервер (404), переадресуем на error.php
+
+  # если сайт НЕ содержит сертификат безопасности
+  RewriteCond %{HTTPS} off
+  # если ссылка соответствует www.ТЕКСТ 
+  RewriteCond %{HTTP_HOST} ^www\.(.*)$ [NC]
+  # переделай на http://СОДЕРЖИМОЕ ПЕРЕМЕННОЙ %{HTTP_HOST} после удаления www СОДЕРЖИМОЕ переменной %{REQUEST_URI}
+  RewriteRule ^(.*)$ http://%1%{REQUEST_URI} [R=301,L]
+
+  # если сайт содержит сертификат безопасности
+  RewriteCond %{HTTPS} on
+  # если ссылка соответствует www.ТЕКСТ 
+  RewriteCond %{HTTP_HOST} ^www\.(.*)$ [NC]
+  # переделай на http://СОДЕРЖИМОЕ ПЕРЕМЕННОЙ %{HTTP_HOST} после удаления www СОДЕРЖИМОЕ переменной %{REQUEST_URI}
+  RewriteRule ^(.*)$ https://%1%{REQUEST_URI} [R=301,L]
+
+  # правила формирования ЧПУ (человекопонятных ссылок)
+  # если сайт не начинается с www
+  RewriteCond %{HTTP_HOST} ^[^www\.].*$ [NC]
+  # найди в строке сайта транслитерированную категорию и подставь ее в гет запрос категории   
+  RewriteRule category\/([a-zA-Z0-9\-]*)$ category.php?category=$1 [L]
+
+
+
+
+# если нет страници на которую перебрасывает сервер (404), переадресуем на error.php
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteCond %{REQUEST_FILENAME} !-d
   RewriteRule .* error.php [L]
 </IfModule>
-
 
 
 # Options +ExecCGI
