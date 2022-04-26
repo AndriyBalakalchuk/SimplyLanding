@@ -50,7 +50,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title><?=$arrAllData['sitetitle']['header']?></title>
+    <title><?=$arrAllData['sitetitle']['header']?>-</title>
     <!-- Настройка favicon -->
     <link rel="shortcut icon" href="<?=$arrAllData['FavIco']['image']?>" type="image/png">
     <!-- Настройка viewport -->

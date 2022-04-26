@@ -444,7 +444,7 @@ function getVariables($strForPage,$strLanguage ='',$intItemId='nAn'){
       $arrAllData['categories']['names'] = array('Lorem ipsum');
       $arrAllData['categories']['images'] = array(getSVGplaceholder(475, 525));
     }
-  }elseif($strForPage == 'page.php'){//если мы на странице итема
+  }elseif($strForPage == 'item.php'){//если мы на странице итема
     /*--------------------------------------------*/
     /*---------таблица изображений----------------*/
     /*--------------------------------------------*/

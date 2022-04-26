@@ -260,7 +260,7 @@
 				<div class="row row-cols-1 row-cols-md-3">
           <?php for ($i=0; $i < count($arrAllData['portfolio']['headers']); $i++) { if($i==3){break;}if(mb_strlen($arrAllData['portfolio']['images'][count($arrAllData['portfolio']['images'])-1-$i][0])<100){$strAddressImage = $config['sitelink'].'admin/images/Portfolio/';}?>
             <div class="col mb-4">
-				      <a class="card-a-100" href='<?=$config['sitelink']?>page.php?item=<?=$arrAllData['portfolio']['ids'][count($arrAllData['portfolio']['images'])-1-$i]?>'>
+				      <a class="card-a-100" href='<?=$config['sitelink']?>item/<?=$arrAllData['portfolio']['ids'][count($arrAllData['portfolio']['images'])-1-$i]?>-<?=transliterateStr($arrAllData['portfolio']['headers'][count($arrAllData['portfolio']['images'])-1-$i])?>'>
 					      <div class="card h-100">
 						      <img src="<?=$strAddressImage?><?=$arrAllData['portfolio']['images'][count($arrAllData['portfolio']['images'])-1-$i][0]?>" class="card-img-top" alt="...">
 						      <div class="card-body">

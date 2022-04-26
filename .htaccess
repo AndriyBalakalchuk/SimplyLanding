@@ -42,8 +42,9 @@ AddDefaultCharset utf-8
   # если сайт не начинается с www
   RewriteCond %{HTTP_HOST} ^[^www\.].*$ [NC]
   # найди в строке сайта транслитерированную категорию и подставь ее в гет запрос категории   
-  RewriteRule category\/([a-zA-Z0-9\-]*)$ category.php?category=$1 [L]
-
+  RewriteRule category\/(.*)$ category.php?category=$1 [L]
+  # найди в строке сайта id нашего итема и подставь ее в гет запрос по итемам   
+  RewriteRule item\/(\d{1,})-.*$ item.php?item=$1 [L]
 
 
 
