@@ -40,6 +40,23 @@
   //получаем все переменные - детали ----→ Readme
   $arrAllData = getVariables(basename(__FILE__),$strLanguage);
   
+  //готовим массив ключевых слов
+  $strKeyWords = '';
+  $strKeyWords .= $arrAllData['hardskill_header']['header'];
+  for ($i=0, $strDecider=','; $i < count($arrAllData['SkillHard']['headers']); $i++){
+    if($i==count($arrAllData['SkillHard']['headers'])-1){$strDecider='.';}
+    $strKeyWords .= ($i==0?",":"").$arrAllData['SkillHard']['headers'][$i].$strDecider;
+  }
+  $strKeyWords .= $arrAllData['softskill_header']['header'];
+  for ($i=0, $strDecider=','; $i < count($arrAllData['SkillSoft']['headers']); $i++){
+    if($i==count($arrAllData['SkillSoft']['headers'])-1){$strDecider='.';}
+    $strKeyWords .= ($i==0?",":"").$arrAllData['SkillSoft']['headers'][$i].$strDecider;
+  }
+  $strKeyWords .= $arrAllData['Categories']['header'];
+  for ($i=0, $strDecider=','; $i < count($arrAllData['categories']['names']); $i++){
+    if($i==count($arrAllData['categories']['names'])-1){$strDecider='.';}
+    $strKeyWords .= ($i==0?",":"").$arrAllData['categories']['names'][$i].$strDecider;
+  }
 ?>
 
 <!DOCTYPE html>
@@ -52,6 +69,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no, user-scalable=no">
     <!-- Кодировка веб-страницы -->
     <meta charset="<?php echo $config['encoding']; ?>">
+	<!-- Дескрипшин страницы-->
+	<meta name="description" content="<?=mb_strimwidth(Strip_tags(trim($arrAllData['About']['description'])), 0, 160, "...")?>">
+    <!-- Ключевые слова страницы-->
+    <meta type="keywords" content="<?=$strKeyWords?>">
     <!-- Подключаем Bootstrap CSS -->
     <link rel="stylesheet" href="<?=$config['sitelink']?>admin/lib/bootstrap-4.5.0-dist/css/bootstrap.min.css">
     <!-- Add icon library -->
@@ -437,20 +458,7 @@
 				<div class="row">
 					<div class="col-md">
 						<p>
-              <?=$arrAllData['hardskill_header']['header']?>:
-              <?php for ($i=0, $strDecider=','; $i < count($arrAllData['SkillHard']['headers']); $i++){if($i==count($arrAllData['SkillHard']['headers'])-1){$strDecider='.';}?>
-                <?=$arrAllData['SkillHard']['headers'][$i]?><?=$strDecider?>
-              <?php }?>
-              <br>
-              <?=$arrAllData['softskill_header']['header']?>:
-              <?php for ($i=0, $strDecider=','; $i < count($arrAllData['SkillSoft']['headers']); $i++){if($i==count($arrAllData['SkillSoft']['headers'])-1){$strDecider='.';}?>
-                <?=$arrAllData['SkillSoft']['headers'][$i]?><?=$strDecider?>
-              <?php }?>
-              <br>
-              <?=$arrAllData['Categories']['header']?>: 
-              <?php for ($i=0, $strDecider=','; $i < count($arrAllData['categories']['names']); $i++){if($i==count($arrAllData['categories']['names'])-1){$strDecider='.';}?>
-                <?=$arrAllData['categories']['names'][$i]?><?=$strDecider?>
-              <?php }?>
+							<?=$strKeyWords?>
 						</p>
 					</div>
 				</div>
