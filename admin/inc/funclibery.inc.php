@@ -1152,7 +1152,7 @@ function Content($Stranitsa, $intUserPermis){
       <form action="" method="post" autocomplete="off" onsubmit="winWait();">
         <div class="form-row" style="padding-bottom: 15px;">
           <div class="col-lg-2 offset-lg-4">
-            <label for="header">Header Ru*</label>
+            <label for="header">Header Ua*</label>
             <div class="input-group">
               <div class="input-group-prepend">
                 <span class="input-group-text" id="inputGroupPrepend1"><i class="fa fa-header"></i></span>
@@ -1173,7 +1173,7 @@ function Content($Stranitsa, $intUserPermis){
 
         <div class="form-row" style="padding-bottom: 15px;">
           <div class="col-lg-4 offset-lg-4">
-            <label for="text_block">Text Block Ru/En*</label>
+            <label for="text_block">Text Block Ua/En*</label>
             <div class="input-group">
               <div class="input-group-prepend">
                 <span class="input-group-text" id="inputGroupPrepend3"><i class="fa fa-font"></i></span>
@@ -1238,7 +1238,7 @@ function Content($Stranitsa, $intUserPermis){
         <form action="" method="post" autocomplete="off" onsubmit="winWait();">
           <div class="form-row" style="padding-bottom: 15px;">
             <div class="col-lg-2 offset-lg-4">
-              <label for="header">Header Ru*</label>
+              <label for="header">Header Ua*</label>
               <div class="input-group">
                 <div class="input-group-prepend">
                   <span class="input-group-text" id="inputGroupPrepend1"><i class="fa fa-header"></i></span>
@@ -1259,7 +1259,7 @@ function Content($Stranitsa, $intUserPermis){
 
           <div class="form-row" style="padding-bottom: 15px;">
             <div class="col-lg-4 offset-lg-4">
-              <label for="text_block">Text Block Ru/En*</label>
+              <label for="text_block">Text Block Ua/En*</label>
               <div class="input-group">
                 <div class="input-group-prepend">
                   <span class="input-group-text" id="inputGroupPrepend3"><i class="fa fa-font"></i></span>
@@ -1414,7 +1414,7 @@ function Content($Stranitsa, $intUserPermis){
               <form action="" method="post" autocomplete="off" onsubmit="winWait();">
                 <div class="form-row" style="padding-bottom: 15px;">
                   <div class="col-lg-2 offset-lg-4">
-                    <label for="header">Header Ru*</label>
+                    <label for="header">Header Ua*</label>
                     <div class="input-group">
                       <div class="input-group-prepend">
                         <span class="input-group-text" id="inputGroupPrepend1"><i class="fa fa-header"></i></span>
@@ -1462,7 +1462,7 @@ function Content($Stranitsa, $intUserPermis){
                         <div class="formMargerExist'.($i%2).'">
                           <div class="form-row" style="padding-bottom: 15px;">
                             <div class="col-lg-4 offset-lg-3">
-                              <label for="header">The skill name Ru*</label>
+                              <label for="header">The skill name Ua*</label>
                               <div class="input-group">
                                 <div class="input-group-prepend">
                                   <span class="input-group-text" id="inputGroupPrepend1"><i class="fa fa-header"></i></span>
@@ -1471,7 +1471,7 @@ function Content($Stranitsa, $intUserPermis){
                               </div>
                             </div>
                             <div class="col-lg-2">
-                              <label for="text_block">Skill level Ru*</label>
+                              <label for="text_block">Skill level Ua*</label>
                               <div class="input-group">
                                 <div class="input-group-prepend">
                                   <span class="input-group-text" id="inputGroupPrepend3"><i class="fa fa-font"></i></span>
@@ -1530,7 +1530,7 @@ function Content($Stranitsa, $intUserPermis){
                 <div class="formMarger">
                   <div class="form-row" style="padding-bottom: 15px;">
                     <div class="col-lg-4 offset-lg-3">
-                      <label for="header">The skill name Ru*</label>
+                      <label for="header">The skill name Ua*</label>
                       <div class="input-group">
                         <div class="input-group-prepend">
                           <span class="input-group-text" id="inputGroupPrepend1"><i class="fa fa-header"></i></span>
@@ -1539,7 +1539,7 @@ function Content($Stranitsa, $intUserPermis){
                       </div>
                     </div>
                     <div class="col-lg-2">
-                      <label for="text_block">Skill level Ru*</label>
+                      <label for="text_block">Skill level Ua*</label>
                       <div class="input-group">
                         <div class="input-group-prepend">
                           <span class="input-group-text" id="inputGroupPrepend3"><i class="fa fa-font"></i></span>
@@ -1610,7 +1610,7 @@ function Content($Stranitsa, $intUserPermis){
               <form action="" method="post" autocomplete="off" onsubmit="winWait();">
                 <div class="form-row" style="padding-bottom: 15px;">
                   <div class="col-lg-2 offset-lg-4">
-                    <label for="header">Header Ru*</label>
+                    <label for="header">Header Ua*</label>
                     <div class="input-group">
                       <div class="input-group-prepend">
                         <span class="input-group-text" id="inputGroupPrepend1"><i class="fa fa-header"></i></span>
@@ -1658,7 +1658,7 @@ function Content($Stranitsa, $intUserPermis){
                         <div class="formMargerExist'.($i%2).'">
                           <div class="form-row" style="padding-bottom: 15px;">
                             <div class="col-lg-4 offset-lg-3">
-                              <label for="header">The skill name Ru*</label>
+                              <label for="header">The skill name Ua*</label>
                               <div class="input-group">
                                 <div class="input-group-prepend">
                                   <span class="input-group-text" id="inputGroupPrepend1"><i class="fa fa-header"></i></span>
@@ -1667,7 +1667,7 @@ function Content($Stranitsa, $intUserPermis){
                               </div>
                             </div>
                             <div class="col-lg-2">
-                              <label for="text_block">Skill level Ru*</label>
+                              <label for="text_block">Skill level Ua*</label>
                               <div class="input-group">
                                 <div class="input-group-prepend">
                                   <span class="input-group-text" id="inputGroupPrepend3"><i class="fa fa-font"></i></span>
@@ -1726,7 +1726,7 @@ function Content($Stranitsa, $intUserPermis){
                 <div class="formMarger">
                   <div class="form-row" style="padding-bottom: 15px;">
                     <div class="col-lg-4 offset-lg-3">
-                      <label for="header">The skill name Ru*</label>
+                      <label for="header">The skill name Ua*</label>
                       <div class="input-group">
                         <div class="input-group-prepend">
                           <span class="input-group-text" id="inputGroupPrepend1"><i class="fa fa-header"></i></span>
@@ -1735,7 +1735,7 @@ function Content($Stranitsa, $intUserPermis){
                       </div>
                     </div>
                     <div class="col-lg-2">
-                      <label for="text_block">Skill level Ru*</label>
+                      <label for="text_block">Skill level Ua*</label>
                       <div class="input-group">
                         <div class="input-group-prepend">
                           <span class="input-group-text" id="inputGroupPrepend3"><i class="fa fa-font"></i></span>
@@ -1810,7 +1810,7 @@ function Content($Stranitsa, $intUserPermis){
               <form action="" method="post" autocomplete="off" onsubmit="winWait();">
                 <div class="form-row" style="padding-bottom: 15px;">
                   <div class="col-lg-2 offset-lg-4">
-                    <label for="header">Header Ru*</label>
+                    <label for="header">Header Ua*</label>
                     <div class="input-group">
                       <div class="input-group-prepend">
                         <span class="input-group-text" id="inputGroupPrepend1"><i class="fa fa-header"></i></span>
@@ -1831,7 +1831,7 @@ function Content($Stranitsa, $intUserPermis){
       
                 <div class="form-row" style="padding-bottom: 15px;">
                   <div class="col-lg-4 offset-lg-2">
-                    <label for="text_block">Text Block Ru*</label>
+                    <label for="text_block">Text Block Ua*</label>
                     <div class="input-group">
                       <div class="input-group-prepend">
                         <span class="input-group-text" id="inputGroupPrepend3"><i class="fa fa-font"></i></span>
@@ -2036,7 +2036,7 @@ function Content($Stranitsa, $intUserPermis){
           <form action="" method="post" autocomplete="off" onsubmit="winWait();">
             <div class="form-row" style="padding-bottom: 15px;">
               <div class="col-lg-2 offset-lg-4">
-                <label for="h_header">Header Ru*</label>
+                <label for="h_header">Header Ua*</label>
                 <div class="input-group">
                   <div class="input-group-prepend">
                     <span class="input-group-text" id="inputGroupPrepend1"><i class="fa fa-header"></i></span>
@@ -2057,7 +2057,7 @@ function Content($Stranitsa, $intUserPermis){
 
             <div class="form-row" style="padding-bottom: 15px;">
               <div class="col-lg-4 offset-lg-2">
-                <label for="text_block">Text Block Ru*</label>
+                <label for="text_block">Text Block Ua*</label>
                 <div class="input-group">
                   <div class="input-group-prepend">
                     <span class="input-group-text" id="inputGroupPrepend3"><i class="fa fa-font"></i></span>
@@ -2111,7 +2111,7 @@ function Content($Stranitsa, $intUserPermis){
             <div class="formMarger" id="newItem">
               <div class="form-row" style="padding-bottom: 15px;">
                 <div class="col-lg-2 offset-lg-4">
-                  <label for="item_category">Category Ru*</label>
+                  <label for="item_category">Category Ua*</label>
                   <div class="input-group">
                     <div class="input-group-prepend">
                       <span class="input-group-text" id="inputGroupPrepend1"><i class="fa fa-bars"></i></span>
@@ -2136,7 +2136,7 @@ function Content($Stranitsa, $intUserPermis){
               </div>
               <div class="form-row" style="padding-bottom: 15px;">
                 <div class="col-lg-2 offset-lg-4">
-                  <label for="header">Header Ru*</label>
+                  <label for="header">Header Ua*</label>
                   <div class="input-group">
                     <div class="input-group-prepend">
                       <span class="input-group-text" id="inputGroupPrepend3"><i class="fa fa-header"></i></span>
@@ -2156,7 +2156,7 @@ function Content($Stranitsa, $intUserPermis){
               </div>
               <div class="form-row" style="padding-bottom: 15px;">
                 <div class="col-lg-10 offset-lg-1">
-                  <label for="text_block">Text Block Ru/En*</label>
+                  <label for="text_block">Text Block Ua/En*</label>
                   <div class="input-group">
                     <div class="input-group-prepend">
                       <span class="input-group-text" id="inputGroupPrepend5"><i class="fa fa-font"></i></span>
@@ -2352,7 +2352,7 @@ function Content($Stranitsa, $intUserPermis){
       <form action="" method="post" autocomplete="off" onsubmit="winWait();">
         <div class="form-row" style="padding-bottom: 15px;">
           <div class="col-lg-2 offset-lg-4">
-            <label for="header">Header Ru*</label>
+            <label for="header">Header Ua*</label>
             <div class="input-group">
               <div class="input-group-prepend">
                 <span class="input-group-text" id="inputGroupPrepend1"><i class="fa fa-header"></i></span>
@@ -2373,7 +2373,7 @@ function Content($Stranitsa, $intUserPermis){
 
         <div class="form-row" style="padding-bottom: 15px;">
           <div class="col-lg-4 offset-lg-2">
-            <label for="text_block">Text Block Ru*</label>
+            <label for="text_block">Text Block Ua*</label>
             <div class="input-group">
               <div class="input-group-prepend">
                 <span class="input-group-text" id="inputGroupPrepend3"><i class="fa fa-font"></i></span>
@@ -2516,7 +2516,7 @@ function Content($Stranitsa, $intUserPermis){
           <form action="" method="post" autocomplete="off" onsubmit="winWait();">
             <div class="form-row" style="padding-bottom: 15px;">
               <div class="col-lg-2 offset-lg-4">
-                <label for="h_header">Header Ru*</label>
+                <label for="h_header">Header Ua*</label>
                 <div class="input-group">
                   <div class="input-group-prepend">
                     <span class="input-group-text" id="inputGroupPrepend1"><i class="fa fa-header"></i></span>
@@ -2573,7 +2573,7 @@ function Content($Stranitsa, $intUserPermis){
             <div class="formMarger" id="newItem">
               <div class="form-row" style="padding-bottom: 15px;">
                 <div class="col-lg-2 offset-lg-4">
-                  <label for="item_name">Customer name Ru*</label>
+                  <label for="item_name">Customer name Ua*</label>
                   <div class="input-group">
                     <div class="input-group-prepend">
                       <span class="input-group-text" id="inputGroupPrepend1"><i class="fa fa-user-circle"></i></span>
@@ -2594,7 +2594,7 @@ function Content($Stranitsa, $intUserPermis){
 
               <div class="form-row" style="padding-bottom: 15px;">
                 <div class="col-lg-2 offset-lg-4">
-                  <label for="header">Сompany and position Ru*</label>
+                  <label for="header">Сompany and position Ua*</label>
                   <div class="input-group">
                     <div class="input-group-prepend">
                       <span class="input-group-text" id="inputGroupPrepend3"><i class="fa fa-building"></i></span>
@@ -2720,7 +2720,7 @@ function Content($Stranitsa, $intUserPermis){
         <form action="" method="post" autocomplete="off" onsubmit="winWait();">
           <div class="form-row" style="padding-bottom: 15px;">
             <div class="col-lg-2 offset-lg-4">
-              <label for="h_header">Header Ru*</label>
+              <label for="h_header">Header Ua*</label>
               <div class="input-group">
                 <div class="input-group-prepend">
                   <span class="input-group-text" id="inputGroupPrepend1"><i class="fa fa-header"></i></span>
@@ -2871,7 +2871,7 @@ function Content($Stranitsa, $intUserPermis){
       <form action="" method="post" autocomplete="off" onsubmit="winWait();">
         <div class="form-row" style="padding-bottom: 15px;">
           <div class="col-lg-2 offset-lg-4">
-            <label for="h_header">Header Ru*</label>
+            <label for="h_header">Header Ua*</label>
             <div class="input-group">
               <div class="input-group-prepend">
                 <span class="input-group-text" id="inputGroupPrepend1"><i class="fa fa-address-book"></i></span>
@@ -2926,7 +2926,7 @@ function Content($Stranitsa, $intUserPermis){
       <form action="" method="post" autocomplete="off" onsubmit="winWait();">
         <div class="form-row" style="padding-bottom: 15px;">
           <div class="col-lg-2 offset-lg-4">
-            <label for="h2_header">Second header Ru*</label>
+            <label for="h2_header">Second header Ua*</label>
             <div class="input-group">
               <div class="input-group-prepend">
                 <span class="input-group-text" id="inputGroupPrepend1"><i class="fa fa-address-book-o"></i></span>
@@ -2981,7 +2981,7 @@ function Content($Stranitsa, $intUserPermis){
       <form action="" method="post" autocomplete="off" onsubmit="winWait();">
         <div class="form-row" style="padding-bottom: 15px;">
           <div class="col-lg-2 offset-lg-4">
-            <label for="phone">Phone number Ru*</label>
+            <label for="phone">Phone number Ua*</label>
             <div class="input-group">
               <div class="input-group-prepend">
                 <span class="input-group-text" id="inputGroupPrepend1"><i class="fa fa-phone"></i></span>
@@ -3036,7 +3036,7 @@ function Content($Stranitsa, $intUserPermis){
       <form action="" method="post" autocomplete="off" onsubmit="winWait();">
         <div class="form-row" style="padding-bottom: 15px;">
           <div class="col-lg-2 offset-lg-4">
-            <label for="location">Location Ru*</label>
+            <label for="location">Location Ua*</label>
             <div class="input-group">
               <div class="input-group-prepend">
                 <span class="input-group-text" id="inputGroupPrepend1"><i class="fa fa-map-marker"></i></span>
@@ -3091,7 +3091,7 @@ function Content($Stranitsa, $intUserPermis){
       <form action="" method="post" autocomplete="off" onsubmit="winWait();">
         <div class="form-row" style="padding-bottom: 15px;">
           <div class="col-lg-2 offset-lg-4">
-            <label for="Email">Email Ru*</label>
+            <label for="Email">Email Ua*</label>
             <div class="input-group">
               <div class="input-group-prepend">
                 <span class="input-group-text" id="inputGroupPrepend1"><i class="fa fa-at"></i></span>
@@ -3146,7 +3146,7 @@ function Content($Stranitsa, $intUserPermis){
       <form action="" method="post" autocomplete="off" onsubmit="winWait();">
         <div class="form-row" style="padding-bottom: 15px;">
           <div class="col-lg-2 offset-lg-4">
-            <label for="Facebook">Facebook Ru*</label>
+            <label for="Facebook">Facebook Ua*</label>
             <div class="input-group">
               <div class="input-group-prepend">
                 <span class="input-group-text" id="inputGroupPrepend1"><i class="fa fa-facebook-square"></i></span>
@@ -3201,7 +3201,7 @@ function Content($Stranitsa, $intUserPermis){
       <form action="" method="post" autocomplete="off" onsubmit="winWait();">
         <div class="form-row" style="padding-bottom: 15px;">
           <div class="col-lg-2 offset-lg-4">
-            <label for="instagram">instagram Ru*</label>
+            <label for="instagram">instagram Ua*</label>
             <div class="input-group">
               <div class="input-group-prepend">
                 <span class="input-group-text" id="inputGroupPrepend1"><i class="fa fa-instagram"></i></span>
@@ -3256,7 +3256,7 @@ function Content($Stranitsa, $intUserPermis){
       <form action="" method="post" autocomplete="off" onsubmit="winWait();">
         <div class="form-row" style="padding-bottom: 15px;">
           <div class="col-lg-2 offset-lg-4">
-            <label for="youtube">youtube Ru*</label>
+            <label for="youtube">youtube Ua*</label>
             <div class="input-group">
               <div class="input-group-prepend">
                 <span class="input-group-text" id="inputGroupPrepend1"><i class="fa fa-youtube"></i></span>
@@ -3311,7 +3311,7 @@ function Content($Stranitsa, $intUserPermis){
       <form action="" method="post" autocomplete="off" onsubmit="winWait();">
         <div class="form-row" style="padding-bottom: 15px;">
           <div class="col-lg-2 offset-lg-4">
-            <label for="upwork">upwork Ru*</label>
+            <label for="upwork">upwork Ua*</label>
             <div class="input-group">
               <div class="input-group-prepend">
                 <span class="input-group-text" id="inputGroupPrepend1"><i class="fa fa-user-circle"></i></span>
@@ -3366,7 +3366,7 @@ function Content($Stranitsa, $intUserPermis){
       <form action="" method="post" autocomplete="off" onsubmit="winWait();">
         <div class="form-row" style="padding-bottom: 15px;">
           <div class="col-lg-2 offset-lg-4">
-            <label for="linkedin">linkedin Ru*</label>
+            <label for="linkedin">linkedin Ua*</label>
             <div class="input-group">
               <div class="input-group-prepend">
                 <span class="input-group-text" id="inputGroupPrepend1"><i class="fa fa-linkedin-square"></i></span>
@@ -3426,7 +3426,7 @@ function Content($Stranitsa, $intUserPermis){
       <form action="" method="post" autocomplete="off" onsubmit="winWait();">
         <div class="form-row" style="padding-bottom: 15px;">
           <div class="col-lg-2 offset-lg-4">
-            <label for="sitetitle">Primary site title Ru*</label>
+            <label for="sitetitle">Primary site title Ua*</label>
             <div class="input-group">
               <div class="input-group-prepend">
                 <span class="input-group-text" id="inputGroupPrepend1"><i class="fa fa-header"></i></span>
@@ -3529,7 +3529,7 @@ function Content($Stranitsa, $intUserPermis){
       <form action="" method="post" autocomplete="off" onsubmit="winWait();">
         <div class="form-row" style="padding-bottom: 15px;">
           <div class="col-lg-2 offset-lg-4">
-            <label for="prColor">Primary site color Ru*</label>
+            <label for="prColor">Primary site color Ua*</label>
             <div class="input-group">
               <div class="input-group-prepend">
                 <span class="input-group-text" id="inputGroupPrepend1"><i class="fa fa-paint-brush "></i></span>
@@ -3584,7 +3584,7 @@ function Content($Stranitsa, $intUserPermis){
       <form action="" method="post" autocomplete="off" onsubmit="winWait();">
         <div class="form-row" style="padding-bottom: 15px;">
           <div class="col-lg-2 offset-lg-4">
-            <label for="sitefont">Site font Ru*</label>
+            <label for="sitefont">Site font Ua*</label>
             <div class="input-group">
               <div class="input-group-prepend">
                 <span class="input-group-text" id="inputGroupPrepend1"><i class="fa fa-font"></i></span>
@@ -3639,7 +3639,7 @@ function Content($Stranitsa, $intUserPermis){
       <form action="" method="post" autocomplete="off" onsubmit="winWait();">
         <div class="form-row" style="padding-bottom: 15px;">
           <div class="col-lg-6">
-            <label for="addScripts">Additional scripts Ru*</label>
+            <label for="addScripts">Additional scripts Ua*</label>
             <div class="input-group">
               <div class="input-group-prepend">
                 <span class="input-group-text" id="inputGroupPrepend1"><i class="fa fa-code"></i></span>
